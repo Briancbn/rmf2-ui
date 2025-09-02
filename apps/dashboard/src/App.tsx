@@ -1,12 +1,10 @@
-import { Button, HStack } from "@chakra-ui/react"
+import { createBrowserRouter, RouterProvider } from 'react-router';
+import routes from '@/routes';
 
-export const App = () => {
-  return (
-    <HStack>
-      <Button>Click me</Button>
-      <Button>Click me</Button>
-    </HStack>
-  )
+const router = createBrowserRouter(routes);
+
+function App() {
+  return <RouterProvider router={router} />;
 }
 
-export default App
+export default App;

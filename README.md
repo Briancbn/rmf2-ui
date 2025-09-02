@@ -7,31 +7,27 @@ Install `pnpm`, and node
 ```bash
 curl -fsSL https://get.pnpm.io/install.sh | sh -
 source ~/.bashrc
-pnpm env use --global 20
+pnpm env use --global 22
 ```
 
 Install dependencies
+
 ```bash
 pnpm install
 ```
 
 ## Usage Instructions
 
-Run the dashboard.
+Build the necessary packages
+
 ```bash
-pnpm start
+pnpm chakra build --watch
 ```
 
-You can also choose to create a production build.
+Launch the dashboard
 
 ```bash
-pnpm build
-```
-
-Preview production build
-
-```bash
-pnpm preview
+pnpm app dev
 ```
 
 ## Contribution Guidelines
