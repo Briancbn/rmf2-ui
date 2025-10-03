@@ -1,18 +1,26 @@
 import type { RouteObject } from 'react-router';
 import { HomeRedirect } from './home-redirect';
 
-export const dashboardRoutes: RouteObject[] = [
+export const AdminRoutes: RouteObject[] = [
   {
-    // Redirect index page to /home
-    index: true,
-    Component: HomeRedirect,
+    // Home
+    path: 'home',
+    lazy: async () => {
+      const { Home } = await import('@/pages/dashboard');
+      return { Component: Home };
+    },
   },
   {
-    path: 'home',
+    // Operation
+    path: 'operation',
+    lazy: async () => {
+      const { Home } = await import('@/pages/dashboard');
+      return { Component: Home };
+    },
     children: [
       {
-        // Home
-        index: true,
+        // Schedule
+        path: 'schedule',
         lazy: async () => {
           const { Home } = await import('@/pages/dashboard');
           return { Component: Home };
@@ -22,13 +30,24 @@ export const dashboardRoutes: RouteObject[] = [
   },
 ];
 
+export const dashboardRoutes: RouteObject[] = [
+  {
+    // Redirect index page to /home
+    index: true,
+    Component: HomeRedirect,
+  },
+  {
+    lazy: async () => {
+      const { AdminLayout } = await import('@/layouts');
+      return { Component: AdminLayout };
+    },
+    children: AdminRoutes,
+  },
+];
+
 export const routes: RouteObject[] = [
   {
     path: '/',
-    // lazy: async () => {
-    //   const { DashboardLayout } = await import('@/layouts');
-    //   return { Component: DashboardLayout };
-    // },
     children: dashboardRoutes,
   },
 ];
