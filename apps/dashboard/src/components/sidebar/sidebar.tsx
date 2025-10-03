@@ -11,8 +11,6 @@ import {
   Portal,
 } from '@chakra-ui/react';
 import { SidebarContent } from './sidebar-content';
-import { renderThumb, renderTrack, renderView } from '@/components/scrollbar';
-import { Scrollbars } from 'react-custom-scrollbars-2';
 
 // Assets
 import { IoMenuOutline } from 'react-icons/io5';
@@ -31,7 +29,7 @@ export function Sidebar(props: { routes: RoutesType[] }) {
 
   // SIDEBAR
   return (
-    <Box display={{ sm: 'none', xl: 'block' }} position="fixed" minH="100%">
+    <Box display={{ base: 'none', xl: 'block' }} position="fixed" minH="100%">
       <Box
         bg={sidebarBg}
         transition={variantChange}
@@ -42,14 +40,7 @@ export function Sidebar(props: { routes: RoutesType[] }) {
         overflowX="hidden"
         boxShadow={shadow}
       >
-        <Scrollbars
-          autoHide
-          renderTrackVertical={renderTrack}
-          renderThumbVertical={renderThumb}
-          renderView={renderView}
-        >
-          <SidebarContent routes={routes} />
-        </Scrollbars>
+        <SidebarContent routes={routes} />
       </Box>
     </Box>
   );
@@ -68,7 +59,7 @@ export function SidebarResponsive(props: { routes: RoutesType[] }) {
   //  BRAND
 
   return (
-    <Flex display={{ sm: 'flex', xl: 'none' }} alignItems="center">
+    <Flex display={{ base: 'flex', xl: 'none' }} alignItems="center">
       <Flex
         ref={btnRef}
         w="max-content"
@@ -76,41 +67,35 @@ export function SidebarResponsive(props: { routes: RoutesType[] }) {
         onClick={() => setOpen(true)}
       >
         <Icon
-          as={IoMenuOutline}
           color={menuColor}
           my="auto"
           w="20px"
           h="20px"
-          me="10px"
+          mx="10px"
           _hover={{ cursor: 'pointer' }}
-        />
+        >
+          <IoMenuOutline />
+        </Icon>
       </Flex>
       <Drawer.Root
         open={open}
         onOpenChange={(e) => setOpen(e.open)}
-        placement={document.documentElement.dir === 'rtl' ? 'start' : 'end'}
+        placement={document.documentElement.dir === 'rtl' ? 'end' : 'start'}
         finalFocusEl={() => btnRef.current}
       >
         <Portal>
           <Drawer.Backdrop />
           <Drawer.Positioner>
-            <Drawer.CloseTrigger asChild>
-              <CloseButton
-                zIndex="3"
-                _focus={{ boxShadow: 'none' }}
-                _hover={{ boxShadow: 'none' }}
-              />
-            </Drawer.CloseTrigger>
             <Drawer.Content w="285px" maxW="285px" bg={sidebarBackgroundColor}>
+              <Drawer.CloseTrigger asChild>
+                <CloseButton
+                  zIndex="3"
+                  _focus={{ boxShadow: 'none' }}
+                  _hover={{ boxShadow: 'none' }}
+                />
+              </Drawer.CloseTrigger>
               <Drawer.Body maxW="285px" px="0rem" pb="0">
-                <Scrollbars
-                  autoHide
-                  renderTrackVertical={renderTrack}
-                  renderThumbVertical={renderThumb}
-                  renderView={renderView}
-                >
-                  <SidebarContent routes={routes} />
-                </Scrollbars>
+                <SidebarContent routes={routes} />
               </Drawer.Body>
             </Drawer.Content>
           </Drawer.Positioner>

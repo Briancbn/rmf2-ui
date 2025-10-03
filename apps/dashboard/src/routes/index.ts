@@ -11,6 +11,22 @@ export const AdminRoutes: RouteObject[] = [
     },
   },
   {
+    // Network
+    path: 'network',
+    lazy: async () => {
+      const { Home } = await import('@/pages/dashboard');
+      return { Component: Home };
+    },
+  },
+  {
+    // Simulation
+    path: 'simulation',
+    lazy: async () => {
+      const { Home } = await import('@/pages/dashboard');
+      return { Component: Home };
+    },
+  },
+  {
     // Operation
     path: 'operation',
     lazy: async () => {

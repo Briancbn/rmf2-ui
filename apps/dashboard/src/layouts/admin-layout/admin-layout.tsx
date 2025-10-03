@@ -1,6 +1,7 @@
 import { Box } from '@chakra-ui/react';
 // Layout components
 import { Sidebar } from '@/components/sidebar';
+import { Navbar } from '@/components/navbar';
 import { routes } from './admin-routes';
 import { Outlet } from 'react-router';
 
@@ -26,7 +27,17 @@ export function AdminLayout() {
         transitionProperty="top, bottom, width"
         transitionTimingFunction="linear, linear, ease"
       >
-        <Outlet />
+        <Navbar routes={routes} fixed={false} />
+
+        <Box
+          mx="auto"
+          p="30px"
+          pe="20px"
+          minH="100vh"
+          pt={{ base: '180px', xl: '120px' }}
+        >
+          <Outlet />
+        </Box>
       </Box>
     </Box>
   );

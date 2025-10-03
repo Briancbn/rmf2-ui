@@ -15,7 +15,7 @@ export function SidebarLink(props: SidebarLinkProps) {
 
   const activeColor = { base: 'gray.700', _dark: 'white' };
   const activeIcon = { base: 'brand.500', _dark: 'white' };
-  const textColor = { base: 'secondaryGray.500', _dark: 'white' };
+  const textColor = { base: 'secondaryGray.500', _dark: 'secondaryGray.600' };
   const brandColor = { base: 'brand.500', _dark: 'brand.400' };
 
   return (
@@ -34,7 +34,7 @@ export function SidebarLink(props: SidebarLinkProps) {
           </Text>
         </Flex>
       </NavLink>
-      {dropdown && <Accordion.ItemIndicator />}
+      {dropdown && <Accordion.ItemIndicator _hover={{ cursor: 'pointer' }} />}
       <Box
         h="36px"
         w="4px"
@@ -85,7 +85,7 @@ export function SidebarLinks(props: { routes: RoutesType[] }) {
                 value={route.path}
                 borderBottomWidth="0px"
               >
-                <Accordion.ItemTrigger py="0px">
+                <Accordion.ItemTrigger py="0px" fontSize="inherit">
                   <SidebarLink
                     route={route}
                     dropdown
