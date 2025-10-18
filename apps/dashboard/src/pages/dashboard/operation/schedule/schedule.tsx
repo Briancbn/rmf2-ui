@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Box, Button, Flex, Spacer } from '@chakra-ui/react';
 import { Horizon } from '@rmf2-ui/chakra';
 import Card = Horizon.Card;
+import { RTOConfig, LauncherConfig } from '@/clients';
 import { LightMode } from '@/components/ui/color-mode';
 import { toaster } from '@/components/ui/toaster';
 import { DateTimeSelector } from './components/date-time-selector';
@@ -26,7 +27,7 @@ export function Schedule() {
     });
 
     try {
-      const response = await fetch('http://localhost:8084/send_task', {
+      const response = await fetch(RTOConfig.BASE + '/send_task', {
         method: 'POST',
         headers: {
           Accept: '*/*',
@@ -44,7 +45,7 @@ export function Schedule() {
     console.log('Start Send Schedule button clicked.');
 
     try {
-      const response = await fetch('http://localhost:8083/send_task', {
+      const response = await fetch(LauncherConfig.BASE + '/send_task', {
         method: 'POST',
         headers: {
           Accept: '*/*',

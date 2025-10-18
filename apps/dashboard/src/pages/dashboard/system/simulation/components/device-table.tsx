@@ -12,6 +12,7 @@ import { MdArrowUpward, MdArrowDownward } from 'react-icons/md';
 import { Horizon } from '@rmf2-ui/chakra';
 import Card = Horizon.Card;
 import type { StateMessage } from './state-message';
+import { BrokerNGSILDConfig } from '@/clients';
 
 type RowObj = {
   robotName: string;
@@ -35,7 +36,7 @@ export function DeviceTable() {
       try {
         // Fetch data from the first endpoint
         const response1 = await fetch(
-          'http://localhost:9999/ngsi-ld/v1/entities?type=StateMessage',
+          BrokerNGSILDConfig.BASE + '/v1/entities?type=StateMessage',
           {
             method: 'GET',
             headers: {
@@ -59,7 +60,7 @@ export function DeviceTable() {
         );
 
         const response2 = await fetch(
-          'http://localhost:9999/ngsi-ld/v1/entities?type=StateMessage2',
+          BrokerNGSILDConfig.BASE + '/v1/entities?type=StateMessage2',
           {
             method: 'GET',
             headers: {

@@ -6,6 +6,7 @@ import { toaster } from '@/components/ui/toaster';
 import { Banner } from '@/components/banner';
 import { NetworkStatusCard } from '@/components/card';
 import { useState, useEffect } from 'react';
+import { LauncherConfig, BrokerStatusConfig } from '@/clients';
 
 export function Network() {
   const [isStartIOCSClicked, setisStartIOCSClicked] = useState(false);
@@ -36,7 +37,7 @@ export function Network() {
   useEffect(() => {
     const fetchStatus = async () => {
       try {
-        const response = await fetch('http://localhost:8000/Status', {
+        const response = await fetch(BrokerStatusConfig.BASE + '/Status', {
           method: 'GET',
           headers: {
             Accept: '*',
@@ -93,7 +94,7 @@ export function Network() {
     localStorage.setItem('isIOCSStarted', 'false');
 
     try {
-      const response = await fetch('http://localhost:8083/stop_iocs', {
+      const response = await fetch(LauncherConfig.BASE + '/stop_iocs', {
         method: 'POST',
         headers: {
           Accept: '*',
@@ -121,7 +122,7 @@ export function Network() {
     localStorage.setItem('isIOCSStarted', 'true');
 
     try {
-      const response = await fetch('http://localhost:8083/start_iocs', {
+      const response = await fetch(LauncherConfig.BASE + '/start_iocs', {
         method: 'POST',
         headers: {
           Accept: '*',

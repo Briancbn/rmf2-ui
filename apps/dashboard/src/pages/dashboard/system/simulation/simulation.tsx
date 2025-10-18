@@ -13,6 +13,7 @@ import { DeviceTable } from './components/device-table';
 import { ServiceTable } from './components/service-table';
 import { serviceInfo } from './variables/service-info';
 import type { StateMessage } from './components/state-message';
+import { LauncherConfig, BrokerNGSILDConfig } from '@/clients';
 
 type RowObj = {
   robotName: string;
@@ -66,7 +67,7 @@ export function Simulation() {
     localStorage.setItem('isSimStarted', 'false');
 
     try {
-      const response = await fetch('http://localhost:8083/stop_sim', {
+      const response = await fetch(LauncherConfig.BASE + '/stop_sim', {
         method: 'POST',
         headers: {
           Accept: '*/*',
@@ -93,7 +94,7 @@ export function Simulation() {
     localStorage.setItem('isSimStarted', 'true');
 
     try {
-      const response = await fetch('http://localhost:8083/start_sim', {
+      const response = await fetch(LauncherConfig.BASE + '/start_sim', {
         method: 'POST',
         headers: {
           Accept: '*/*',
@@ -110,7 +111,7 @@ export function Simulation() {
   const fetchMir = async () => {
     try {
       const response = await fetch(
-        'http://localhost:9999/ngsi-ld/v1/entities?type=StateMessage',
+        BrokerNGSILDConfig.BASE + '/v1/entities?type=StateMessage',
       );
       const StateMessageStats = await response.json();
       setTotalMir(StateMessageStats.length);
@@ -123,7 +124,7 @@ export function Simulation() {
   const fetchAMR = async () => {
     try {
       const response = await fetch(
-        'http://localhost:9999/ngsi-ld/v1/entities?type=StateMessage2',
+        BrokerNGSILDConfig.BASE + '/v1/entities?type=StateMessage2',
       );
       const StateMessage2Stats = await response.json();
       const transformedData2: RowObj[] = StateMessage2Stats.map(
@@ -157,7 +158,7 @@ export function Simulation() {
     });
 
     try {
-      const response = await fetch('http://localhost:8083/device_onboard', {
+      const response = await fetch(LauncherConfig.BASE + '/device_onboard', {
         method: 'POST',
         headers: {
           Accept: '*/*',
@@ -185,7 +186,7 @@ export function Simulation() {
     });
 
     try {
-      const response = await fetch('http://localhost:8083/device_offboard', {
+      const response = await fetch(LauncherConfig.BASE + '/device_offboard', {
         method: 'POST',
         headers: {
           Accept: '*/*',
@@ -212,7 +213,7 @@ export function Simulation() {
     });
 
     try {
-      const response = await fetch('http://localhost:8083/service_onboard', {
+      const response = await fetch(LauncherConfig.BASE + '/service_onboard', {
         method: 'POST',
         headers: {
           Accept: '*/*',
@@ -240,7 +241,7 @@ export function Simulation() {
     });
 
     try {
-      const response = await fetch('http://localhost:8083/service_offboard', {
+      const response = await fetch(LauncherConfig.BASE + '/service_offboard', {
         method: 'POST',
         headers: {
           Accept: '*/*',
@@ -268,7 +269,7 @@ export function Simulation() {
     });
 
     try {
-      const response = await fetch('http://localhost:8083/init_system', {
+      const response = await fetch(LauncherConfig.BASE + '/init_system', {
         method: 'POST',
         headers: {
           Accept: '*/*',
