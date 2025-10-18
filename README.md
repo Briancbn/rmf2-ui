@@ -16,9 +16,17 @@ Install dependencies
 pnpm install
 ```
 
+## Quick start
+
+Serve the dashboard
+
+```bash
+pnpm start
+```
+
 ## Usage Instructions
 
-Build the necessary packages
+Build the necessary packages live
 
 ```bash
 pnpm chakra build --watch

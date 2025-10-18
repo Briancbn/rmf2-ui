@@ -4,6 +4,8 @@ import { FaNetworkWired } from 'react-icons/fa';
 import { SiUnrealengine } from 'react-icons/si';
 import { GrSchedules } from 'react-icons/gr';
 
+import type { RoutesType } from '@rmf2-ui/chakra';
+
 export const routes: RoutesType[] = [
   {
     name: 'Home',

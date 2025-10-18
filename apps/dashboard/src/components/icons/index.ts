@@ -1,1 +1,1 @@
-export * from './icons';
+export * from './rmf2-free-logo';

@@ -1,1 +1,2 @@
-export * from './components';
+export * as Horizon from './horizon';
+export * from './types';
