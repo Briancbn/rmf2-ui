@@ -8,7 +8,8 @@
   "types": "dist/index.es.d.ts",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "pnpm typegen && tsc -b && vite build",
+    "typegen": "npx @chakra-ui/cli typegen ./src/horizon/theme/theme.ts",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -23,6 +24,7 @@
     "vite-plugin-dts": "^4.5.4"
   },
   "devDependencies": {
+    "@chakra-ui/cli": "^3.27.1",
     "@types/node": "^24.0.12",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",

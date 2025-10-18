@@ -173,17 +173,14 @@ const radiiTokens = {
 };
 
 export const globalCss = {
-  body: {
+  'html,body': {
     overflowX: 'hidden',
-    bg: { base: 'background.100', _dark: 'background.900' },
     fontFamily: 'DM Sans',
     letterSpacing: '-0.5px',
+    bg: { base: 'background.100', _dark: 'background.900' },
   },
   input: {
     color: 'gray.700',
-  },
-  html: {
-    fontFamily: 'DM Sans',
   },
 };
 

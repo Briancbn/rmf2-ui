@@ -11,8 +11,8 @@ export function NavbarRoot(props: NavbarRootProps) {
   const defaultValue = useNavbar(props);
 
   const navbarBg = {
-    base: 'rgba(244, 247, 254, 0.2)',
-    _dark: 'rgba(11,20,55,0.5)',
+    base: 'rgba(244, 247, 254, 0.9)',
+    _dark: 'rgba(11,20,55,0.9)',
   };
 
   return (

@@ -6,40 +6,62 @@ export const AdminRoutes: RouteObject[] = [
     // Home
     path: 'home',
     lazy: async () => {
-      const { Home } = await import('@/pages/dashboard');
+      const { Home } = await import('@/pages/dashboard/home');
       return { Component: Home };
     },
   },
   {
-    // Network
-    path: 'network',
-    lazy: async () => {
-      const { Home } = await import('@/pages/dashboard');
-      return { Component: Home };
-    },
-  },
-  {
-    // Simulation
-    path: 'simulation',
-    lazy: async () => {
-      const { Home } = await import('@/pages/dashboard');
-      return { Component: Home };
-    },
+    // System
+    path: 'system',
+    children: [
+      // System Home
+      {
+        index: true,
+        lazy: async () => {
+          const { Home } = await import('@/pages/dashboard/home');
+          return { Component: Home };
+        },
+      },
+      {
+        // Network
+        path: 'network',
+        lazy: async () => {
+          const { Network } = await import('@/pages/dashboard/system/network');
+          return { Component: Network };
+        },
+      },
+      {
+        // Simulation
+        path: 'simulation',
+        lazy: async () => {
+          const { Simulation } = await import(
+            '@/pages/dashboard/system/simulation'
+          );
+          return { Component: Simulation };
+        },
+      },
+    ],
   },
   {
     // Operation
     path: 'operation',
-    lazy: async () => {
-      const { Home } = await import('@/pages/dashboard');
-      return { Component: Home };
-    },
     children: [
+      {
+        // Operation Home
+        index: true,
+        lazy: async () => {
+          const { Home } = await import('@/pages/dashboard/home');
+          return { Component: Home };
+        },
+      },
       {
         // Schedule
         path: 'schedule',
         lazy: async () => {
-          const { Home } = await import('@/pages/dashboard');
-          return { Component: Home };
+          const { Schedule } = await import(
+            '@/pages/dashboard/operation/schedule'
+          );
+          return { Component: Schedule };
         },
       },
     ],

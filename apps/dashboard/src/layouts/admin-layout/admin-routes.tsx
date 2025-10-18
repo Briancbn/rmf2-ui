@@ -2,7 +2,7 @@ import { Icon } from '@chakra-ui/react';
 import { MdOutlineTask, MdHome } from 'react-icons/md';
 import { FaNetworkWired } from 'react-icons/fa';
 import { SiUnrealengine } from 'react-icons/si';
-import { GrSchedules } from 'react-icons/gr';
+import { GrSystem, GrSchedules } from 'react-icons/gr';
 
 import type { RoutesType } from '@rmf2-ui/chakra';
 
@@ -13,21 +13,38 @@ export const routes: RoutesType[] = [
     icon: <Icon as={MdHome} width="20px" height="20px" color="inherit" />,
   },
   {
-    name: 'Network',
-    path: '/network',
-    icon: (
-      <Icon as={FaNetworkWired} width="20px" height="30px" color="inherit" />
-    ),
+    name: 'System',
+    path: '/system',
+    icon: <Icon as={GrSystem} width="20px" height="20px" color="inherit" />,
+    children: [
+      {
+        name: 'Network',
+        path: '/system/network',
+        icon: (
+          <Icon
+            as={FaNetworkWired}
+            width="20px"
+            height="30px"
+            color="inherit"
+          />
+        ),
+      },
+      {
+        name: 'Simulation',
+        icon: (
+          <Icon
+            as={SiUnrealengine}
+            width="20px"
+            height="30px"
+            color="inherit"
+          />
+        ),
+        path: '/system/simulation',
+      },
+    ],
   },
   {
-    name: 'Simulation',
-    icon: (
-      <Icon as={SiUnrealengine} width="20px" height="30px" color="inherit" />
-    ),
-    path: '/simulation',
-  },
-  {
-    name: 'Operations',
+    name: 'Operation',
     path: '/operation',
     icon: (
       <Icon as={MdOutlineTask} width="20px" height="30px" color="inherit" />

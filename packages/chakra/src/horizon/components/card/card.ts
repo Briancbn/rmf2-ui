@@ -1,4 +1,7 @@
+import type { HTMLChakraProps } from '@chakra-ui/react';
 import { chakra } from '@chakra-ui/react';
+
+export interface CardProps extends HTMLChakraProps<'div'> {}
 
 export const Card = chakra('div', {
   base: {
@@ -14,3 +17,5 @@ export const Card = chakra('div', {
     backgroundClip: 'border-box',
   },
 });
+
+Card.displayName = 'Horizon.Card';

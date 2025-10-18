@@ -2,7 +2,7 @@ import { createSystem, defineConfig, defaultConfig } from '@chakra-ui/react';
 import { globalCss, globalTokens } from './styles';
 import { buttonRecipe, inputRecipe } from './recipes';
 
-const customConfig = defineConfig({
+export const systemConfig = defineConfig({
   theme: {
     tokens: globalTokens,
     recipes: {
@@ -13,6 +13,6 @@ const customConfig = defineConfig({
   globalCss: globalCss,
 });
 
-export const system = createSystem(defaultConfig, customConfig);
+export const system = createSystem(defaultConfig, systemConfig);
 
 export default system;

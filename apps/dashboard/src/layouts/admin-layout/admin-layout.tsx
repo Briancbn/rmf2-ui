@@ -41,7 +41,7 @@ export function AdminLayout() {
           transitionProperty="top, bottom, width"
           transitionTimingFunction="linear, linear, ease"
         >
-          <Navbar.Root routes={routes}>
+          <Navbar.Root routes={routes} zIndex="10">
             <Navbar.Header>
               <Navbar.Breadcrumb />
               <Navbar.Title />
@@ -69,10 +69,10 @@ export function AdminLayout() {
               </Sidebar.Responsive>
 
               {/* Horizon Notification Button */}
-              <Horizon.HorizonNavbarNotification />
+              {/*<Horizon.HorizonNavbarNotification /> */}
 
               {/* Horizon Info Button */}
-              <Horizon.HorizonNavbarInfo />
+              {/*<Horizon.HorizonNavbarInfo />*/}
 
               {/* Color Mode Button */}
               <ColorModeButton
@@ -91,9 +91,8 @@ export function AdminLayout() {
           <Box
             mx="auto"
             p="30px"
-            pe="20px"
             minH="100vh"
-            pt={{ base: '180px', xl: '120px' }}
+            pt={{ base: '180px', md: '120px' }}
           >
             <Outlet />
           </Box>
