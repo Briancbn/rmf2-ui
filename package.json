@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "pnpm chakra build && pnpm app dev",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "pnpm chakra test && pnpm app test",
     "lint": "eslint .",
     "format": "prettier --write .",
     "prepare": "husky",
