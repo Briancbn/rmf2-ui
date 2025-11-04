@@ -1,60 +1,107 @@
-import { Box } from '@chakra-ui/react';
-import { useEffect, useRef } from 'react';
+import { chakra } from '@chakra-ui/react';
+import { useCallback, useEffect, useRef } from 'react';
 import { DataSet } from 'vis-data/esnext';
-import { Timeline } from 'vis-timeline/standalone';
+import type { DataItem, DataGroup } from 'vis-timeline/esnext';
+import { Timeline } from 'vis-timeline/esnext';
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css';
+import type { RTS } from '@rmf2-ui/data';
 import './vis-timeline-styles.css';
 
-const COLOR_CLASSES = ['red', 'green', 'magenta', 'yellow', 'orange'];
-const OPTIONS = { height: '680px', orientation: 'top' };
+const COLOR_CLASSES = ['green', 'magenta', 'yellow', 'orange'];
+const OPTIONS = { height: '680px', orientation: 'top', zoomFriction: 0 };
+const DEFAULT_ZOOM_LEVEL = 60 * 60; // Default to zoom 1hr
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function ScheduleGantt(props: { tasks: any[] }) {
-  const timelineRef = useRef<HTMLElement>(null);
+interface VisTimelineContext {
+  dataGroups: DataSet<DataGroup>;
+  dataItems: DataSet<DataItem>;
+  timeline: Timeline;
+}
+
+export function ScheduleGantt(props: { tasks: RTS.Task[] }) {
+  const { tasks } = props;
+  const visTimelineContext = useRef<VisTimelineContext>(null);
+
+  const containerRef = useCallback((node: HTMLDivElement) => {
+    if (visTimelineContext.current !== null) {
+      return;
+    }
+
+    if (node !== null) {
+      const dataGroups: DataSet<DataGroup> = new DataSet();
+      const dataItems: DataSet<DataItem> = new DataSet();
+      node.innerHTML = '';
+      visTimelineContext.current = {
+        dataGroups,
+        dataItems,
+        timeline: new Timeline(node, dataItems, dataGroups, {
+          ...OPTIONS,
+          start: new Date(Date.now() - (DEFAULT_ZOOM_LEVEL / 2) * 1000),
+          end: new Date(Date.now() + (DEFAULT_ZOOM_LEVEL / 2) * 1000),
+        }),
+      };
+    }
+  }, []);
 
   useEffect(() => {
-    let usedColorCounter = 0;
-    const colorAssignment: Record<string, string> = {};
+    // GENERATE NEW TIMELINE
+    if (!visTimelineContext.current) {
+      return;
+    }
 
-    const filteredTasks = props.tasks.filter(
+    const filteredTasks = tasks.filter(
       (task) =>
         task?.type !== 'ihi/dummy' && task?.type !== 'ihi/warehouse_task',
     );
 
-    const taskList = [];
+    const groupIds = new Set<string>();
+    const taskTypes = new Set<string>();
     for (const task of filteredTasks) {
-      if (!(task?.description in colorAssignment)) {
-        colorAssignment[task?.type] =
-          COLOR_CLASSES[usedColorCounter % COLOR_CLASSES.length];
-        usedColorCounter++; // Increment color counter
-      }
-      const taskWithColor = { ...task, color: colorAssignment[task?.type] };
-      taskList.push(taskWithColor);
+      taskTypes.add(task.type);
+      groupIds.add(task.resourceId ?? 'unassigned');
     }
+
+    // Prep color map
+    const colorMap: Record<string, string> = {};
+    Array.from(taskTypes).reduce((colorMap, taskType, index) => {
+      const colorIndex = index % COLOR_CLASSES.length;
+      colorMap[taskType] = COLOR_CLASSES[colorIndex];
+      return colorMap;
+    }, colorMap);
+
+    // Prep group map
+    const sortedGroupIds = Array.from(groupIds).sort();
+    const groupMap: Record<string, number> = {};
+    sortedGroupIds.reduce((groupMap, groupId, index) => {
+      groupMap[groupId] = index;
+      return groupMap;
+    }, groupMap);
 
     // Prep data for visualisation
-    const resourceIdList: string[] = [
-      ...new Set(taskList.map((task) => task?.resource_id)),
-    ];
-    resourceIdList.sort();
-    const groups = new DataSet(
-      resourceIdList.map((resourceId, index) => {
-        return { id: index, content: resourceId };
-      }),
+    const newDataGroups: DataGroup[] = sortedGroupIds.map((groupId, index) => {
+      return {
+        id: index,
+        content: groupId,
+      };
+    });
+    const newDataItems: DataItem[] = filteredTasks.map((task) => ({
+      id: task.id,
+      content: task.description ?? '',
+      start: task.startTime,
+      end: task.endTime ?? new Date(task.startTime.getTime() + 20 * 1000),
+      className: colorMap[task.type], // change colors in COLOR_CLASSES
+      group: groupMap[task.resourceId ?? 'unassigned'],
+      title: `${task?.resourceId} \n@ ${task?.taskDetails?.resource_zone} zone`,
+    }));
+
+    // update data
+    visTimelineContext.current.dataGroups.update(newDataGroups);
+    visTimelineContext.current.dataItems.update(newDataItems);
+
+    // Update window
+    visTimelineContext.current.timeline.setWindow(
+      new Date(Date.now() - (DEFAULT_ZOOM_LEVEL / 2) * 1000),
+      new Date(Date.now() + (DEFAULT_ZOOM_LEVEL / 2) * 1000),
     );
-    const itemList = parseTaskList(taskList, resourceIdList);
-    const items = new DataSet(itemList);
-
-    // RESET
-    if (!timelineRef.current) {
-      return;
-    }
-
-    // GENERATE NEW TIMELINE
-    timelineRef.current.innerHTML = '';
-    const newTimeline = new Timeline(timelineRef.current, items);
-    newTimeline.setOptions(OPTIONS);
-    newTimeline.setGroups(groups);
 
     // TODAY
     const todayButton = document.getElementById('todayId');
@@ -62,9 +109,11 @@ export function ScheduleGantt(props: { tasks: any[] }) {
       return;
     }
     todayButton.addEventListener('click', () => {
-      const options = { timeZone: 'Asia/Singapore' };
-      const now = new Intl.DateTimeFormat('en-US', options).format(new Date());
-      newTimeline.moveTo(now);
+      if (!visTimelineContext.current) {
+        return;
+      }
+      const now = new Date();
+      visTimelineContext.current.timeline.moveTo(now);
     });
 
     // DATETIME
@@ -73,19 +122,22 @@ export function ScheduleGantt(props: { tasks: any[] }) {
       return;
     }
     datetimeInput.addEventListener('change', (event) => {
+      if (!visTimelineContext.current) {
+        return;
+      }
       const target = event.target as HTMLInputElement;
       const selectedTime = new Date(target.value);
-      newTimeline.moveTo(selectedTime);
+      visTimelineContext.current.timeline.moveTo(selectedTime);
     });
 
     // return () => timelineRef.current = null
-  }, [props.tasks]);
+  }, [tasks]);
 
   return (
-    <Box
+    <chakra.div
+      ref={containerRef}
       minHeight="700px"
       maxHeight="900px"
-      ref={timelineRef}
       css={{
         '--vis-text-color': {
           base: 'colors.gray.700',
@@ -96,33 +148,8 @@ export function ScheduleGantt(props: { tasks: any[] }) {
           _dark: 'colors.white',
         },
       }}
-    ></Box>
+    ></chakra.div>
   );
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function parseTaskList(taskList: any[], resourceIdList: string[]): any[] {
-  return taskList.map((task) => parseTaskItem(task, resourceIdList));
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function parseTaskItem(task: any, resourceIdList: string[]): any {
-  const coordinates = task?.task_details?.coordinates;
-  const coordinatesString = Array.isArray(coordinates)
-    ? coordinates.join(', ')
-    : coordinates;
-
-  const parsedItem = {
-    id: task?.id,
-    content: task?.description || '',
-    start: new Date(task?.start_time),
-    end: new Date(task?.end_time),
-    className: task?.color, // change colors in COLOR_CLASSES
-    group: resourceIdList.indexOf(task?.resource_id),
-    title: `${task?.resource_id} \n@ ${task?.task_details?.resource_zone} zone [${coordinatesString}]`,
-  };
-  console.debug(parsedItem);
-  return parsedItem;
 }
 
 export default ScheduleGantt;

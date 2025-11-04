@@ -29,7 +29,7 @@ export function DateTimeSelector(props: { currentDate: Date }) {
       <Input
         id="datetimeInputId"
         value={selectedDatetime}
-        color="white"
+        color={{ base: 'gray.700', _dark: 'white' }}
         size="md"
         type="datetime-local"
         width={280}

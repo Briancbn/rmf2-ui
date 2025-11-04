@@ -4,12 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "pnpm chakra build && pnpm app dev",
-    "test": "pnpm chakra test && pnpm app test",
+    "start": "pnpm --filter @rmf2-ui/* build && pnpm app dev",
+    "build": "pnpm run -r build",
+    "test": "pnpm run -r test",
     "lint": "eslint .",
     "format": "prettier --write .",
     "prepare": "husky",
     "chakra": "pnpm --filter @rmf2-ui/chakra",
+    "client": "pnpm --filter @rmf2-ui/client",
+    "data": "pnpm --filter @rmf2-ui/data",
     "app": "pnpm --filter dashboard"
   },
   "keywords": [],
