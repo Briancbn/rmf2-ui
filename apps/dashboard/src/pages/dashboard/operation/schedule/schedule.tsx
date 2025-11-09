@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { Box, Button, Flex, Spacer } from '@chakra-ui/react';
+import { LuRefreshCw } from 'react-icons/lu';
+import { Box, Button, Flex, Spacer, IconButton } from '@chakra-ui/react';
 import { Horizon } from '@rmf2-ui/chakra';
 import Card = Horizon.Card;
 import type { RTS } from '@rmf2-ui/data';
@@ -8,27 +9,30 @@ import { LightMode } from '@/components/ui/color-mode';
 import { toaster } from '@/components/ui/toaster';
 import { Pending } from '@/components/pending';
 import { DateTimeSelector } from './components/date-time-selector';
-import { ScheduleGantt } from './components/schedule-gantt';
 import { useRTSClient } from '@/clients/rts';
+import { ScheduleGantt } from './components/schedule-gantt-new';
+import { ScheduleTaskViewDialog } from './components/schedule-task-view-dialog';
+import { ScheduleRoot } from './components/schedule-root';
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 
 export function Schedule() {
   // Chakra Color Mode
   const currentDate = new Date();
-  const client = useRTSClient();
+  const rtsClient = useRTSClient();
   const queryClient = useQueryClient();
   const {
     isPending: isPendingGetSchedule,
-    data: tasks,
-    error: errorGetScedule,
-    isError: isErrorGetScedule,
+    data: schedule,
+    error: errorGetSchedule,
+    isError: isErrorGetSchedule,
+    refetch: refetchGetSchedule,
   } = useQuery({
     queryKey: ['RTSSchedule'],
-    queryFn: async (): Promise<RTS.Task[]> => {
-      const schedule = await client.getSchedule({ offset: 0, limit: 100 });
-      return schedule.tasks || [];
+    queryFn: async (): Promise<RTS.Schedule> => {
+      const schedule = await rtsClient.getSchedule({ offset: 0, limit: 100 });
+      return schedule;
     },
-    staleTime: 50 * 1000,
+    staleTime: 5 * 1000,
     gcTime: 0,
   });
 
@@ -75,6 +79,10 @@ export function Schedule() {
     },
   });
 
+  function refreshSchedule() {
+    refetchGetSchedule();
+  }
+
   const convertToCSV = (tasks: RTS.Task[]) => {
     if (tasks.length === 0) {
       return '';
@@ -92,11 +100,11 @@ export function Schedule() {
   };
 
   const downloadCSV = () => {
-    if (!tasks) {
+    if (!schedule) {
       return;
     }
 
-    const csv = convertToCSV(tasks);
+    const csv = convertToCSV(schedule.tasks);
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
@@ -105,11 +113,11 @@ export function Schedule() {
   };
 
   useEffect(() => {
-    if (!isErrorGetScedule) {
+    if (!isErrorGetSchedule) {
       return;
     }
 
-    const toasterId = errorGetScedule.name;
+    const toasterId = errorGetSchedule.name;
 
     if (toaster.isVisible(toasterId)) {
       return;
@@ -118,18 +126,23 @@ export function Schedule() {
     toaster.create({
       id: toasterId,
       title: 'Error Getting Schedule',
-      description: `${errorGetScedule.name}: ${errorGetScedule.message}`,
+      description: `${errorGetSchedule.name}: ${errorGetSchedule.message}`,
       type: 'error',
       duration: 10 * 1000,
       closable: true,
     });
-  }, [isErrorGetScedule, errorGetScedule]);
+  }, [isErrorGetSchedule, errorGetSchedule]);
 
   return (
     <Box>
       <Card>
         <Flex direction="column">
-          <Flex justify="end" direction={{ base: 'column', sm: 'row' }}>
+          <Flex
+            justify="end"
+            direction={{ base: 'column', sm: 'row' }}
+            mt="5px"
+            gap="5px"
+          >
             <Button
               onClick={() => {
                 const promise = sendTaskMutation();
@@ -153,8 +166,7 @@ export function Schedule() {
                 });
               }}
               colorPalette="blue"
-              mt="5px"
-              disabled={isErrorGetScedule}
+              disabled={isErrorGetSchedule}
             >
               Send Task
             </Button>
@@ -162,18 +174,26 @@ export function Schedule() {
               <Button
                 onClick={downloadCSV}
                 colorPalette="orange"
-                mt="5px"
-                ml="5px"
-                disabled={tasks === undefined}
+                disabled={schedule === undefined}
               >
                 Export to CSV
               </Button>
             </LightMode>
+            <IconButton
+              aria-label="refresh"
+              colorPalette="gray"
+              onClick={refreshSchedule}
+            >
+              <LuRefreshCw />
+            </IconButton>
             <Spacer />
 
             <DateTimeSelector currentDate={currentDate} />
           </Flex>
-          <ScheduleGantt tasks={tasks ?? []} />
+          <ScheduleRoot schedule={schedule}>
+            <ScheduleGantt />
+            <ScheduleTaskViewDialog placement="center" />
+          </ScheduleRoot>
           {isPendingGetSchedule && (
             <Pending.Root>
               <Pending.Overlay />
