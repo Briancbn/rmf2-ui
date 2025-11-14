@@ -1,22 +1,18 @@
 import { useEffect } from 'react';
-import { Box, Button, Flex, Spacer, Text } from '@chakra-ui/react';
+import { LuRefreshCw } from 'react-icons/lu';
+import { Box, Button, Flex, Spacer, IconButton } from '@chakra-ui/react';
 import { Horizon } from '@rmf2-ui/chakra';
 import Card = Horizon.Card;
 import type { RTS } from '@rmf2-ui/data';
 import { RTOConfig, LauncherConfig } from '@/clients';
+import { LightMode } from '@/components/ui/color-mode';
 import { toaster } from '@/components/ui/toaster';
 import { Pending } from '@/components/pending';
 import { DateTimeSelector } from './components/date-time-selector';
 import { useRTSClient } from '@/clients/rts';
 import { ScheduleGantt } from './components/schedule-gantt-new';
-import { ScheduleTaskDialog } from './components/schedule-task-dialog';
+import { ScheduleTaskViewDialog } from './components/schedule-task-view-dialog';
 import { ScheduleRoot } from './components/schedule-root';
-import {
-  ScheduleAddButton,
-  ScheduleDownloadButton,
-  ScheduleLiveToggle,
-  ScheduleRefreshButton,
-} from './components/schedule-control-panel';
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 
 export function Schedule() {
@@ -83,16 +79,9 @@ export function Schedule() {
     },
   });
 
-  async function refreshSchedule() {
-    await refetchGetSchedule();
+  function refreshSchedule() {
+    refetchGetSchedule();
   }
-
-  const {
-    mutateAsync: refreshScheduleMutation,
-    isPending: refreshSchedulePending,
-  } = useMutation({
-    mutationFn: refreshSchedule,
-  });
 
   const convertToCSV = (tasks: RTS.Task[]) => {
     if (tasks.length === 0) {
@@ -146,13 +135,14 @@ export function Schedule() {
 
   return (
     <Box>
-      <Card flexDirection="column" gap="5px" p="25px">
-        <Flex justifyContent="space-between" align="center">
-          <Flex align="center" gap="20px">
-            <Text fontSize="22px" fontWeight="700" lineHeight="100%">
-              Schedule Viewer
-            </Text>
-
+      <Card>
+        <Flex direction="column">
+          <Flex
+            justify="end"
+            direction={{ base: 'column', sm: 'row' }}
+            mt="5px"
+            gap="5px"
+          >
             <Button
               onClick={() => {
                 const promise = sendTaskMutation();
@@ -176,42 +166,41 @@ export function Schedule() {
                 });
               }}
               colorPalette="blue"
-              variant="solid"
               disabled={isErrorGetSchedule}
             >
-              Send Preset Task
+              Send Task
             </Button>
-          </Flex>
-        </Flex>
-        <ScheduleRoot schedule={schedule}>
-          <Flex
-            justify="end"
-            direction={{ base: 'column', sm: 'row' }}
-            gap="5px"
-          >
-            <ScheduleAddButton disabled={schedule === undefined} />
-            <ScheduleDownloadButton
-              onClick={downloadCSV}
-              disabled={schedule === undefined}
-            />
-            <ScheduleRefreshButton
-              onClick={async () => await refreshScheduleMutation()}
-              loading={refreshSchedulePending}
-            />
-            <ScheduleLiveToggle />
+            <LightMode>
+              <Button
+                onClick={downloadCSV}
+                colorPalette="orange"
+                disabled={schedule === undefined}
+              >
+                Export to CSV
+              </Button>
+            </LightMode>
+            <IconButton
+              aria-label="refresh"
+              colorPalette="gray"
+              onClick={refreshSchedule}
+            >
+              <LuRefreshCw />
+            </IconButton>
             <Spacer />
 
             <DateTimeSelector currentDate={currentDate} />
           </Flex>
-          <ScheduleGantt />
-          <ScheduleTaskDialog placement="center" />
-        </ScheduleRoot>
-        {isPendingGetSchedule && (
-          <Pending.Root>
-            <Pending.Overlay />
-            <Pending.Spinner />
-          </Pending.Root>
-        )}
+          <ScheduleRoot schedule={schedule}>
+            <ScheduleGantt />
+            <ScheduleTaskViewDialog placement="center" />
+          </ScheduleRoot>
+          {isPendingGetSchedule && (
+            <Pending.Root>
+              <Pending.Overlay />
+              <Pending.Spinner />
+            </Pending.Root>
+          )}
+        </Flex>
       </Card>
     </Box>
   );

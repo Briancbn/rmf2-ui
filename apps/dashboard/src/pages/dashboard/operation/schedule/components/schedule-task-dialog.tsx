@@ -8,15 +8,15 @@ import {
   Tabs,
   Portal,
 } from '@chakra-ui/react';
-import { useScheduleTaskViewDialog } from './use-schedule';
+import { useScheduleTaskDialog } from './use-schedule';
 
-export interface ScheduleTaskViewDialogProps
+export interface ScheduleTaskDialogProps
   extends Omit<DialogRootProps, 'children'> {}
 
-export function ScheduleTaskViewDialog(props: ScheduleTaskViewDialogProps) {
+export function ScheduleTaskDialog(props: ScheduleTaskDialogProps) {
   const { ...rest } = props;
 
-  const { viewTask: currentTask, open, setOpen } = useScheduleTaskViewDialog();
+  const { viewTask: currentTask, open, setOpen } = useScheduleTaskDialog();
 
   const formatDate = (time: Date | undefined): string => {
     if (time === undefined) {

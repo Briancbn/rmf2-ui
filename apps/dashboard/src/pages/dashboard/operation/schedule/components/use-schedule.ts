@@ -1,21 +1,46 @@
-import { createContext, useCallback, useContext, useState } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useState,
+  useEffect,
+} from 'react';
 import type { RTS } from '@rmf2-ui/data';
+
+interface TimeViewWindow {
+  start: Date;
+  end: Date;
+}
 
 export interface UseScheduleProps {
   schedule?: RTS.Schedule;
+  live?: boolean;
+  timeViewWindow?: TimeViewWindow;
 }
 
 export function useSchedule(props: UseScheduleProps) {
-  const { schedule } = props;
+  const {
+    schedule,
+    live: defaultLive,
+    timeViewWindow: defaultTimeViewWindow,
+  } = props;
+  const [live, setLive] = useState<boolean>(defaultLive ?? false);
+  const [timeViewWindow, setTimeViewWindow] = useState<
+    TimeViewWindow | undefined
+  >(defaultTimeViewWindow);
   const [viewTask, setViewTask] = useState<RTS.Task | undefined>(undefined);
-  const [taskViewDialogOpen, setTaskViewDialogOpen] = useState<boolean>(false);
+  const [taskDialogOpen, setTaskDialogOpen] = useState<boolean>(false);
 
   return {
     schedule,
+    live,
+    setLive,
+    timeViewWindow,
+    setTimeViewWindow,
     viewTask,
     setViewTask,
-    taskViewDialogOpen,
-    setTaskViewDialogOpen,
+    taskDialogOpen,
+    setTaskDialogOpen,
   };
 }
 
@@ -36,7 +61,7 @@ const useScheduleContext = () => {
 };
 
 export function useScheduleGantt() {
-  const { schedule, setViewTask, setTaskViewDialogOpen } = useScheduleContext();
+  const { schedule, setViewTask, setTaskDialogOpen } = useScheduleContext();
 
   const openTaskViewDialog = useCallback(
     (taskId: string) => {
@@ -48,9 +73,9 @@ export function useScheduleGantt() {
       if (currentTask !== undefined) {
         setViewTask(currentTask);
       }
-      setTaskViewDialogOpen(true);
+      setTaskDialogOpen(true);
     },
-    [schedule, setViewTask, setTaskViewDialogOpen],
+    [schedule, setViewTask, setTaskDialogOpen],
   );
 
   return {
@@ -59,13 +84,60 @@ export function useScheduleGantt() {
   };
 }
 
-export function useScheduleTaskViewDialog() {
-  const { viewTask, taskViewDialogOpen, setTaskViewDialogOpen } =
-    useScheduleContext();
+export function useScheduleTaskDialog() {
+  const { viewTask, taskDialogOpen, setTaskDialogOpen } = useScheduleContext();
 
   return {
     viewTask,
-    open: taskViewDialogOpen,
-    setOpen: setTaskViewDialogOpen,
+    open: taskDialogOpen,
+    setOpen: setTaskDialogOpen,
+  };
+}
+
+export function useScheduleControlPanel() {
+  const { schedule, live, setLive, timeViewWindow, setTimeViewWindow } =
+    useScheduleContext();
+
+  return {
+    schedule,
+    live,
+    setLive,
+    timeViewWindow,
+    setTimeViewWindow,
+  };
+}
+
+export interface UseScheduleLiveToggleProps {
+  live?: boolean;
+}
+
+export function useScheduleLiveToggle(props: UseScheduleLiveToggleProps) {
+  const { schedule, live, setLive } = useScheduleContext();
+  const { live: liveExternal } = props;
+
+  useEffect(() => {
+    if (liveExternal === undefined) {
+      return;
+    }
+
+    // TODO(Briancbn): switch to useCallback?
+    setLive(liveExternal);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [liveExternal]);
+
+  return {
+    disabled: schedule === undefined,
+    live,
+    setLive,
+  };
+}
+
+export function useScheduleRefreshButton() {
+  const { schedule, live } = useScheduleContext();
+
+  return {
+    disabled: schedule === undefined,
+    loading: live,
   };
 }
