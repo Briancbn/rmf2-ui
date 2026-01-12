@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Box, Button, Flex, Spacer, Text } from '@chakra-ui/react';
 import { Horizon } from '@rmf2-ui/chakra';
 import Card = Horizon.Card;
@@ -24,6 +24,7 @@ export function Schedule() {
   const currentDate = new Date();
   const rtsClient = useRTSClient();
   const queryClient = useQueryClient();
+  const [refetchInterval, setRefetchInterval] = useState<false | number>(false);
   const {
     isPending: isPendingGetSchedule,
     data: schedule,
@@ -38,6 +39,7 @@ export function Schedule() {
     },
     staleTime: 5 * 1000,
     gcTime: 0,
+    refetchInterval,
   });
 
   const sendTaskRTS = async () => {
@@ -198,7 +200,11 @@ export function Schedule() {
               onClick={async () => await refreshScheduleMutation()}
               loading={refreshSchedulePending}
             />
-            <ScheduleLiveToggle />
+            <ScheduleLiveToggle
+              onToggleLive={(live) => {
+                setRefetchInterval(live ? 1000 : false);
+              }}
+            />
             <Spacer />
 
             <DateTimeSelector currentDate={currentDate} />

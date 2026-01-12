@@ -59,10 +59,12 @@ export function ScheduleRefreshButton(props: IconButtonProps) {
 
 export interface ScheduleLiveToggleProps
   extends IconButtonProps,
-    UseScheduleLiveToggleProps {}
+    UseScheduleLiveToggleProps {
+  onToggleLive?: (live: boolean) => void;
+}
 
 export function ScheduleLiveToggle(props: ScheduleLiveToggleProps) {
-  const { children, ...rest } = props;
+  const { children, onToggleLive, ...rest } = props;
   const { live, setLive, disabled } = useScheduleLiveToggle(
     props as UseScheduleLiveToggleProps,
   );
@@ -72,7 +74,12 @@ export function ScheduleLiveToggle(props: ScheduleLiveToggleProps) {
       aria-label="download"
       variant="outline"
       disabled={disabled}
-      onClick={() => setLive(!live)}
+      onClick={() => {
+        if (onToggleLive) {
+          onToggleLive(!live);
+        }
+        setLive(!live);
+      }}
       {...rest}
     >
       {children ?? (live ? <LuPause /> : <LuPlay />)}
