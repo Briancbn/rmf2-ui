@@ -16,6 +16,7 @@ import {
   ScheduleDownloadButton,
   ScheduleLiveToggle,
   ScheduleRefreshButton,
+  ScheduleOptimizeButton,
 } from './components/schedule-control-panel';
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 
@@ -81,6 +82,39 @@ export function Schedule() {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['RTSSchedule'],
+      });
+    },
+  });
+
+  const optimizeSchedule = async () => {
+    return await rtsClient.optimize({ optimizationDuration: 60 * 60 * 24 });
+  };
+
+  const {
+    mutateAsync: optimzeScheduleMutation,
+    isPending: optimizeSchedulePending,
+  } = useMutation({
+    mutationFn: optimizeSchedule,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: ['RTSSchedule'],
+      });
+
+      toaster.create({
+        title: 'Success Optimize Schedule',
+        description: `${data}`,
+        type: 'success',
+        duration: 10 * 1000,
+        closable: true,
+      });
+    },
+    onError: (error) => {
+      toaster.create({
+        title: 'Failed Optimize Schedule',
+        description: `${error.message}`,
+        type: 'error',
+        duration: 10 * 1000,
+        closable: true,
       });
     },
   });
@@ -204,6 +238,10 @@ export function Schedule() {
               onToggleLive={(live) => {
                 setRefetchInterval(live ? 1000 : false);
               }}
+            />
+            <ScheduleOptimizeButton
+              onClick={async () => await optimzeScheduleMutation()}
+              loading={optimizeSchedulePending}
             />
             <Spacer />
 
