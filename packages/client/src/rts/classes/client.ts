@@ -43,6 +43,7 @@ export class Client {
       actualEndTime: payload.actual_end_time
         ? new Date(payload.actual_end_time)
         : undefined,
+      deadline: payload.deadline ? new Date(payload.deadline) : undefined,
       taskDetails: payload.task_details,
     };
     return task;

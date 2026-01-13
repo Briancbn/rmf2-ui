@@ -98,6 +98,20 @@ export function ScheduleTaskDialog(props: ScheduleTaskDialogProps) {
                           {formatDate(currentTask.endTime)}
                         </DataList.ItemValue>
                       </DataList.Item>
+                      <DataList.Item
+                        color={
+                          currentTask.deadline === undefined ||
+                          currentTask.endTime === undefined ||
+                          currentTask?.deadline >= currentTask.endTime
+                            ? 'inherit'
+                            : 'red'
+                        }
+                      >
+                        <DataList.ItemLabel>Deadline</DataList.ItemLabel>
+                        <DataList.ItemValue>
+                          {formatDate(currentTask?.deadline)}
+                        </DataList.ItemValue>
+                      </DataList.Item>
                       <DataList.Item>
                         <DataList.ItemLabel>Assigned to</DataList.ItemLabel>
                         <DataList.ItemValue>

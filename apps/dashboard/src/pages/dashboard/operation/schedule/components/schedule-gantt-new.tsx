@@ -55,10 +55,12 @@ export function ScheduleGantt() {
     );
 
     const groupIds = new Set<string>();
+    const taskIds = new Set<string>();
     const taskTypes = new Set<string>();
     for (const task of filteredTasks) {
       taskTypes.add(task.type);
       groupIds.add(task.resourceId ?? 'unassigned');
+      taskIds.add(task.id);
     }
 
     // Prep color map
@@ -98,6 +100,22 @@ export function ScheduleGantt() {
     visTimelineContext.current.dataGroups.update(newDataGroups);
     visTimelineContext.current.dataItems.update(newDataItems);
 
+    // remove deleted data
+    const deletedDataItems = visTimelineContext.current.dataItems
+      .getIds()
+      .reduce((acc: (number | string)[], cur) => {
+        if (typeof cur === 'number') {
+          acc.push(cur);
+          return acc;
+        }
+        if (taskIds.has(cur)) {
+          return acc;
+        }
+        acc.push(cur);
+        return acc;
+      }, []);
+
+    visTimelineContext.current.dataItems.remove(deletedDataItems);
     // // Update window
     // visTimelineContext.current.timeline.setWindow(
     //   new Date(Date.now() - (DEFAULT_ZOOM_LEVEL / 2) * 1000),
