@@ -6,6 +6,7 @@ import type {
 import type { Task as TaskPayload } from '@/rts/generated/types.gen';
 import {
   readScheduleScheduleGet,
+  deleteTaskTasksUuidDelete,
   optimizeScheduleScheduleOptimizePost,
 } from '@/rts/generated/sdk.gen';
 import { createClient } from '@/rts/generated/client';
@@ -66,7 +67,7 @@ export class Client {
       },
     });
 
-    if (!data) {
+    if (data === undefined) {
       throw ReferenceError('Error: data is undefined.');
     }
 
@@ -82,6 +83,25 @@ export class Client {
       processes: data.processes,
     };
     return result;
+  }
+
+  async deleteTask(params: { uuid: string }): Promise<string> {
+    const { uuid } = params;
+    const { data, error } = await deleteTaskTasksUuidDelete({
+      client: this._client,
+      path: {
+        uuid: uuid,
+      },
+    });
+
+    if (error) {
+      throw error.detail;
+    }
+
+    if (data === undefined) {
+      throw ReferenceError('Error: data is undefined.');
+    }
+    return data.message;
   }
 
   async optimize(params: { optimizationDuration: number }): Promise<string> {
