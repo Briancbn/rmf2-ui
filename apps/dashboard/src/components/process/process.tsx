@@ -1,46 +1,69 @@
-import { useCallback, useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Box } from '@chakra-ui/react';
 import {
-  applyEdgeChanges,
-  applyNodeChanges,
-  Position,
   ReactFlow,
   Background,
   Controls,
-  NodeChange,
   Node,
-  EdgeChange,
   Edge,
   MarkerType,
+  Position,
+  useNodesState,
+  useEdgesState,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import Dagre from '@dagrejs/dagre';
 import type { RTS } from '@rmf2-ui/data';
 
-const getLayoutElements = (nodes: Node[], edges: Edge[]) => {
-  const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
-  g.setGraph({ rankdir: 'LR' });
-  edges.forEach((edge) => g.setEdge(edge.source, edge.target));
-  nodes.forEach((node) =>
-    g.setNode(node.id, {
+const getLayoutElements = (
+  nodes: Node[],
+  edges: Edge[],
+  direction: string = 'LR',
+) => {
+  const defaultNodeWidth = 172;
+  const defaultNodeHeight = 36;
+  const isHorizontal = direction === 'LR';
+  const dagreGraph = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
+  dagreGraph.setGraph({ rankdir: direction });
+  edges.forEach((edge) => dagreGraph.setEdge(edge.source, edge.target));
+  nodes.forEach((node) => {
+    dagreGraph.setNode(node.id, {
+      width: node.measured?.width ?? defaultNodeWidth,
+      height: node.measured?.height ?? defaultNodeHeight,
+    });
+  });
+
+  Dagre.layout(dagreGraph);
+
+  const newNodes: Node[] = nodes.map((node) => {
+    const dagreNode = dagreGraph.node(node.id);
+    const x = dagreNode.x - (node.measured?.width ?? defaultNodeWidth) / 2;
+    const y = dagreNode.y - (node.measured?.height ?? defaultNodeHeight) / 2;
+    const newNode = {
       ...node,
-      width: node.measured?.width ?? 100,
-      height: node.measured?.height ?? 100,
-    }),
-  );
-
-  Dagre.layout(g);
-
-  return {
-    nodes: nodes.map((node) => {
-      const position = g.node(node.id);
+      targetPosition: isHorizontal ? Position.Left : Position.Top,
+      sourcePosition: isHorizontal ? Position.Right : Position.Bottom,
       // We are shifting the dagre node position (anchor=center center) to the top left
       // so it matches the React Flow node anchor point (top left).
-      const x = position.x - (node.measured?.width ?? 100) / 2;
-      const y = position.y - (node.measured?.height ?? 100) / 2;
+      position: { x, y },
+    };
 
-      return { ...node, position: { x, y } };
-    }),
+    // override type
+    const dependants = dagreGraph.inEdges(node.id) ?? [];
+    const successors = dagreGraph.outEdges(node.id) ?? [];
+    if (successors.length === 0) {
+      newNode.type = 'output';
+    }
+
+    if (dependants.length === 0) {
+      newNode.type = 'input';
+    }
+
+    return newNode;
+  });
+
+  return {
+    nodes: newNodes,
     edges,
   };
 };
@@ -51,10 +74,7 @@ export interface ProcessProps {
 
 export function Process(props: ProcessProps) {
   const { schedule } = props;
-  const nodeDefaults = {
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-  };
+  const nodeDefaults = {}; // unused
 
   useEffect(() => {
     if (schedule === undefined) {
@@ -76,7 +96,6 @@ export function Process(props: ProcessProps) {
       id: element.id,
       position: { x: 0, y: 0 },
       data: { label: taskMap[element.id].description },
-      type: element.needs.length === 0 ? 'input' : undefined,
       ...nodeDefaults,
     }));
 
@@ -102,22 +121,13 @@ export function Process(props: ProcessProps) {
     );
     setNodes(layoutNodes);
     setEdges(layoutEdges);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [schedule]);
 
-  const [nodes, setNodes] = useState<Node[]>([]);
-  const [edges, setEdges] = useState<Edge[]>([]);
+  const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
 
-  const onNodesChange = useCallback(
-    (changes: NodeChange<Node>[]) =>
-      setNodes((nodesSnapshot) => applyNodeChanges(changes, nodesSnapshot)),
-    [],
-  );
-
-  const onEdgesChange = useCallback(
-    (changes: EdgeChange<Edge>[]) =>
-      setEdges((edgesSnapshot) => applyEdgeChanges(changes, edgesSnapshot)),
-    [],
-  );
   return (
     <Box w="100%" h="600px">
       <ReactFlow

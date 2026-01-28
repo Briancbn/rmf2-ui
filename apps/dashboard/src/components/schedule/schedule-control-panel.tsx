@@ -1,4 +1,4 @@
-import type { IconButtonProps } from '@chakra-ui/react';
+import type { FlexProps, IconButtonProps } from '@chakra-ui/react';
 import { chakra, Flex, IconButton } from '@chakra-ui/react';
 import { Tooltip } from '@/components/ui/tooltip';
 import { LuRefreshCw, LuDownload, LuPlay, LuPause } from 'react-icons/lu';
@@ -10,13 +10,17 @@ import {
 } from './use-schedule';
 import { PiSpinnerBold } from 'react-icons/pi';
 
-export function ScheduleControlPanel() {
+export function ScheduleControlPanel(props: FlexProps) {
+  const { children, ...rest } = props;
   return (
     <Flex
       justify="end"
       direction={{ base: 'column', sm: 'row' }}
       gap="5px"
-    ></Flex>
+      {...rest}
+    >
+      {children}
+    </Flex>
   );
 }
 

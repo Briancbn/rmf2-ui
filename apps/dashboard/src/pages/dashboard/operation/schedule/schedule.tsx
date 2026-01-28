@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Box, Button, Flex, Spacer, Tabs, Text } from '@chakra-ui/react';
+import { Box, Button, Flex, Spacer, Text } from '@chakra-ui/react';
 import { Horizon } from '@rmf2-ui/chakra';
 import Card = Horizon.Card;
 import type { RTS } from '@rmf2-ui/data';
@@ -9,7 +9,6 @@ import { Pending } from '@/components/pending';
 import { DateTimeSelector } from './components/date-time-selector';
 import { useRTSClient } from '@/clients/rts';
 import { Schedule } from '@/components/schedule';
-import { Process } from '@/components/process';
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 
 export function SchedulePage() {
@@ -233,18 +232,17 @@ export function SchedulePage() {
             </Button>
           </Flex>
         </Flex>
-        <Tabs.Root defaultValue="schedule" size="sm" variant="outline">
-          <Tabs.List>
-            <Tabs.Trigger value="schedule">Schedule</Tabs.Trigger>
-            <Tabs.Trigger value="process">Process</Tabs.Trigger>
-          </Tabs.List>
-          <Tabs.Content value="schedule">
-            <Schedule.Root schedule={schedule}>
-              <Flex
-                justify="end"
-                direction={{ base: 'column', sm: 'row' }}
-                gap="5px"
-              >
+        {/* Schedule Viewer */}
+        <Schedule.Root schedule={schedule}>
+          {/* Schedule Tabs */}
+          <Schedule.TabsRoot>
+            {/* Schedule Tabs Control */}
+            <Schedule.TabsControl />
+
+            {/* Schedule Tabs Schedule Display */}
+            <Schedule.TabsContentSchedule>
+              {/* Control Panel */}
+              <Schedule.ControlPanel>
                 <Schedule.AddButton disabled={schedule === undefined} />
                 <Schedule.DownloadButton
                   onClick={downloadCSV}
@@ -266,22 +264,26 @@ export function SchedulePage() {
                 <Spacer />
 
                 <DateTimeSelector currentDate={currentDate} />
-              </Flex>
+              </Schedule.ControlPanel>
               <Schedule.Gantt />
-              <Schedule.TaskDialog placement="center">
-                <Schedule.TaskDialogControlPanel
-                  onDelete={async (event) =>
-                    await deleteTaskMutation(event.task.id)
-                  }
-                  isDeleting={deleteTaskPending}
-                />
-              </Schedule.TaskDialog>
-            </Schedule.Root>
-          </Tabs.Content>
-          <Tabs.Content value="process">
-            <Process schedule={schedule} />
-          </Tabs.Content>
-        </Tabs.Root>
+            </Schedule.TabsContentSchedule>
+
+            {/* Schedule Tabs Process Display */}
+            <Schedule.TabsContentProcess>
+              <Schedule.Process />
+            </Schedule.TabsContentProcess>
+          </Schedule.TabsRoot>
+
+          {/* Task Dialog Popover */}
+          <Schedule.TaskDialog placement="center">
+            <Schedule.TaskDialogControlPanel
+              onDelete={async (event) =>
+                await deleteTaskMutation(event.task.id)
+              }
+              isDeleting={deleteTaskPending}
+            />
+          </Schedule.TaskDialog>
+        </Schedule.Root>
         {isPendingGetSchedule && (
           <Pending.Root>
             <Pending.Overlay />

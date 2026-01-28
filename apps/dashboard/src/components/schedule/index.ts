@@ -1,5 +1,11 @@
-export { ScheduleGantt } from './schedule-gantt';
 export { ScheduleRoot } from './schedule-root';
+export {
+  ScheduleTabsRoot,
+  ScheduleTabsControl,
+  ScheduleTabsContentSchedule,
+  ScheduleTabsContentProcess,
+} from './schedule-tabs';
+export { ScheduleGantt } from './schedule-gantt';
 export {
   ScheduleControlPanel,
   ScheduleAddButton,
@@ -12,8 +18,13 @@ export {
   ScheduleTaskDialog,
   ScheduleTaskDialogControlPanel,
 } from './schedule-task-dialog';
+export { ScheduleProcess } from './schedule-process';
 
 export type { ScheduleRootProps } from './schedule-root';
+export type {
+  ScheduleTabsRootProps,
+  ScheduleTabsControlProps,
+} from './schedule-tabs';
 export type { ScheduleLiveToggleProps } from './schedule-control-panel';
 export type {
   ScheduleTaskDialogProps,
