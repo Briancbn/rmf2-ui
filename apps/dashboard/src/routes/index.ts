@@ -1,5 +1,6 @@
 import type { RouteObject } from 'react-router';
 import { HomeRedirect } from './home-redirect';
+import { NotFound } from './not-found';
 
 export const AdminRoutes: RouteObject[] = [
   {
@@ -11,60 +12,27 @@ export const AdminRoutes: RouteObject[] = [
     },
   },
   {
-    // System
-    path: 'system',
-    children: [
-      // System Home
-      {
-        index: true,
-        lazy: async () => {
-          const { Home } = await import('@/pages/dashboard/home');
-          return { Component: Home };
-        },
-      },
-      {
-        // Network
-        path: 'network',
-        lazy: async () => {
-          const { Network } = await import('@/pages/dashboard/system/network');
-          return { Component: Network };
-        },
-      },
-      {
-        // Simulation
-        path: 'simulation',
-        lazy: async () => {
-          const { Simulation } = await import(
-            '@/pages/dashboard/system/simulation'
-          );
-          return { Component: Simulation };
-        },
-      },
-    ],
+    path: 'system/network',
+    lazy: async () => {
+      const { Network } = await import('@/pages/dashboard/system/network');
+      return { Component: Network };
+    },
   },
   {
-    // Operation
-    path: 'operation',
-    children: [
-      {
-        // Operation Home
-        index: true,
-        lazy: async () => {
-          const { Home } = await import('@/pages/dashboard/home');
-          return { Component: Home };
-        },
-      },
-      {
-        // Schedule
-        path: 'schedule',
-        lazy: async () => {
-          const { Schedule } = await import(
-            '@/pages/dashboard/operation/schedule'
-          );
-          return { Component: Schedule };
-        },
-      },
-    ],
+    path: 'system/simulation',
+    lazy: async () => {
+      const { Simulation } = await import(
+        '@/pages/dashboard/system/simulation'
+      );
+      return { Component: Simulation };
+    },
+  },
+  {
+    path: 'operation/schedule',
+    lazy: async () => {
+      const { Schedule } = await import('@/pages/dashboard/operation/schedule');
+      return { Component: Schedule };
+    },
   },
 ];
 
@@ -80,6 +48,10 @@ export const dashboardRoutes: RouteObject[] = [
       return { Component: AdminLayout };
     },
     children: AdminRoutes,
+  },
+  {
+    path: '*',
+    Component: NotFound,
   },
 ];
 
