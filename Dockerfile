@@ -9,7 +9,7 @@ COPY . /app
 
 # Setup PNPM
 RUN corepack enable && \
-    corepack prepare pnpm@latest-10 --activate
+    corepack prepare pnpm@latest-11 --activate
 
 # Install dependencies
 RUN pnpm install
