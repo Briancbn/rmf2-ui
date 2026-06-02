@@ -31,12 +31,12 @@ This project follows a `pnpm` [monorepo structure](https://pnpm.io/workspaces).
 
 ## Source Installation
 
-Install `pnpm` and `NodeJS` (22 and later)
+Install `pnpm` (10 and later) and `NodeJS` (22 and later)
 
 ```bash
 curl -fsSL https://get.pnpm.io/install.sh | sh -
 source ~/.bashrc
-pnpm env use --global 22
+pnpm env use --global 24
 ```
 
 Clone the repo
