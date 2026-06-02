@@ -5,7 +5,7 @@
 To build the docker image locally, simply run
 
 ```bash
-docker build . --tag registry.gitlab.com/rosi-ap/rmf2/rmf2-ui/dashboard:latest
+docker build . --tag ghcr.io/ros-industrial/rmf2-ui/dashboard:latest
 ```
 
 To install the dependencies back, run
