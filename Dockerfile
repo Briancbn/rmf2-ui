@@ -1,5 +1,5 @@
 # Use an official node runtime as a build image
-FROM node:22 AS build
+FROM node:24 AS build
 
 # Set the working directory to /app
 WORKDIR /app
@@ -9,7 +9,7 @@ COPY . /app
 
 # Setup PNPM
 RUN corepack enable && \
-    corepack prepare pnpm@latest-10 --activate
+    corepack prepare pnpm@latest-11 --activate
 
 # Install dependencies
 RUN pnpm install

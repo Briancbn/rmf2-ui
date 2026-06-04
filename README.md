@@ -31,18 +31,18 @@ This project follows a `pnpm` [monorepo structure](https://pnpm.io/workspaces).
 
 ## Source Installation
 
-Install `pnpm` and `NodeJS` (22 and later)
+Install `pnpm` (10 and later) and `NodeJS` (22 and later)
 
 ```bash
 curl -fsSL https://get.pnpm.io/install.sh | sh -
 source ~/.bashrc
-pnpm env use --global 22
+pnpm env use --global 24
 ```
 
 Clone the repo
 
 ```bash
-git clone git@gitlab.com:ROSI-AP/rmf2/rmf2-ui.git
+git clone git@github.com:ros-industrial/rmf2-ui.git
 cd rmf2-ui
 ```
 
@@ -122,18 +122,10 @@ pnpm app dev
 
 ## Docker Usage
 
-Create a GitLab [**Personal Access Token**](https://docs.gitlab.com/user/profile/personal_access_tokens/#create-a-personal-access-token) and enable **read_registry**.
-
-Log in using this token
-
-```bash
-docker login -u <username> -p <password> registry.gitlab.com
-```
-
 Run the dashboard
 
 ```bash
-docker run -p 3000:80 --rm registry.gitlab.com/rosi-ap/rmf2/rmf2-ui/dashboard:main
+docker run -p 3000:80 --rm ghcr.io/ros-industrial/rmf2-ui/dashboard:main
 ```
 
 The sample dashboard is accessible at http://localhost:3000. For more information, check out the [detail docker instructions](./docs/docker.md).

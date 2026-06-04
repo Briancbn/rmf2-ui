@@ -14,10 +14,10 @@ stages:
 
 # Template for pnpm setup
 .rmf2-ui:pnpm-setup:
-  image: node:22
+  image: node:24
   before_script:
     - corepack enable
-    - corepack prepare pnpm@latest-10 --activate
+    - corepack prepare pnpm@latest-11 --activate
     - pnpm config set store-dir .pnpm-store
   cache:
     key:
