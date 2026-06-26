@@ -9,6 +9,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "dev": "vite",
+    "prepare": "pnpm run build",
     "build": "pnpm generate && tsc && vite build",
     "generate": "openapi-ts",
     "preview": "vite preview"

@@ -52,6 +52,10 @@ Install dependencies
 pnpm install
 ```
 
+> [!NOTE]
+> This command runs all scripts in `prepare` before the package is packed
+> Automatically builds all packages during installation
+
 ## Usage
 
 ### Quick Start
@@ -65,8 +69,6 @@ pnpm start
 The sample dashboard is accessible at <http://localhost:3000>.
 
 > [!NOTE]
-> This command forces a clean rebuild of all the `@rmf2-ui/*` packages.
-> Watch is also disabled by default for these packages.
 > Only changes to the `dashboard` package gets live update to the webpage.
 
 ### Build and Preview

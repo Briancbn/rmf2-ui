@@ -9,6 +9,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "dev": "vite",
+    "prepare": "pnpm run build",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
