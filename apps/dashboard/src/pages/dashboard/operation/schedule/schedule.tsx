@@ -8,7 +8,7 @@ import { toaster } from '@/components/ui/toaster';
 import { Pending } from '@/components/pending';
 import { DateTimeSelector } from './components/date-time-selector';
 import { useRTSClient } from '@/clients/rts';
-import { ScheduleGantt } from './components/schedule-gantt-new';
+import { ScheduleGantt } from './components/schedule-gantt';
 import { ScheduleTaskDialog } from './components/schedule-task-dialog';
 import { ScheduleRoot } from './components/schedule-root';
 import {
