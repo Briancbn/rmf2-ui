@@ -59,6 +59,15 @@ export const AdminRoutes: RouteObject[] = [
       return { Component: Schedule };
     },
   },
+  {
+    path: 'operation/vda-visualiser',
+    lazy: async () => {
+      const { VdaVisualiser } = await import(
+        '@/pages/dashboard/operation/vda-visualiser'
+      );
+      return { Component: VdaVisualiser };
+    },
+  },
 ];
 
 export const dashboardRoutes: RouteObject[] = [

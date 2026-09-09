@@ -1,5 +1,11 @@
 import { Icon } from '@chakra-ui/react';
-import { MdDashboard, MdEventNote, MdHome, MdMap } from 'react-icons/md';
+import {
+  MdDashboard,
+  MdEventNote,
+  MdHome,
+  MdMap,
+  MdOutlineMap,
+} from 'react-icons/md';
 import { FaNetworkWired } from 'react-icons/fa';
 import { SiUnrealengine } from 'react-icons/si';
 import { GrSchedules } from 'react-icons/gr';
@@ -69,6 +75,15 @@ export const routes: DashboardRoute[] = [
           'Plan and review operation schedules with Gantt-style timelines.',
         icon: (
           <Icon as={GrSchedules} width="20px" height="30px" color="inherit" />
+        ),
+      },
+      {
+        name: 'VDA Visualiser',
+        path: '/operation/vda-visualiser',
+        description:
+          'Live VDA5050 map view with robot state, MAPF planning, and direct control.',
+        icon: (
+          <Icon as={MdOutlineMap} width="20px" height="30px" color="inherit" />
         ),
       },
     ],
