@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Box, chakra } from '@chakra-ui/react';
 import { useColorModeValue } from '@/components/ui/color-mode';
 import type { LifData, LifLayout } from '../types';
-import type { SceneBackground } from '../classes/scene-client-base';
+import type { SceneBackground } from '../../classes/scene-client-base';
 import { useSceneViewer2DViewport } from './use-scene-viewer-2d';
 
 // Fractions of viewBox width — apparent size stays constant across zoom/map scales.

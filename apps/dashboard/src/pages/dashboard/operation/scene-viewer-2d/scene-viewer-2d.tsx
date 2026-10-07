@@ -1,5 +1,6 @@
-import { SceneViewer2D } from './components';
-import { SceneViewer2DRobotPanel } from './components/scene-viewer-2d-robot-panel';
+import { SceneViewer2D } from './components/scene-viewer-2d';
+import { SceneInfo } from './components/scene-info';
+import { RobotPanel } from './components/robot-panel';
 import { MapClient } from './map-client';
 import { Vda5050MasterConfig } from '@/clients';
 import { Horizon } from '@rmf2-ui/chakra';
@@ -22,7 +23,16 @@ export function SceneViewer2DPage() {
           <SceneViewer2D.LoadingOverlay />
         </SceneViewer2D.ViewportPositioner>
 
-        <SceneViewer2DRobotPanel />
+        <SceneInfo.Root>
+          <SceneInfo.RobotContent>
+            <RobotPanel.Root>
+              <RobotPanel.InfoList />
+              <RobotPanel.SelectedCard />
+            </RobotPanel.Root>
+          </SceneInfo.RobotContent>
+          <SceneInfo.OrderContent />
+          <SceneInfo.LogContent />
+        </SceneInfo.Root>
       </SceneViewer2D.Root>
     </Card>
   );

@@ -2,13 +2,16 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useRef,
   useState,
 } from 'react';
-import type { IMapClient } from '../classes/map-client-base';
-import { FallbackMapClient } from '../classes/fallback-map-client';
-import type { ISceneClient } from '../classes/scene-client-base';
-import { FallbackSceneClient } from '../classes/fallback-scene-client';
+import type { IMapClient } from '../../classes/map-client-base';
+import { FallbackMapClient } from '../../classes/fallback-map-client';
+import type { ISceneClient } from '../../classes/scene-client-base';
+import { FallbackSceneClient } from '../../classes/fallback-scene-client';
+import type { IRobotClient, RobotState } from '../../classes/robot-client-base';
+import { FallbackRobotClient } from '../../classes/fallback-robot-client';
 
 export type LoadStatus = 'loading' | 'success' | 'error';
 
@@ -20,6 +23,7 @@ export interface LoadMessage {
 export interface UseSceneViewer2DProps {
   mapClient?: IMapClient;
   sceneClient?: ISceneClient;
+  robotClient?: IRobotClient;
 }
 
 interface ZoomState {
@@ -30,10 +34,12 @@ interface ZoomState {
 const DEFAULT_MAP_CLIENT: IMapClient = new FallbackMapClient({ delay: 2000 });
 const DEFAULT_SCENE_CLIENT: ISceneClient =
   FallbackSceneClient.fromColor('#f3f4f6');
+const DEFAULT_ROBOT_CLIENT: IRobotClient = new FallbackRobotClient();
 
 export function useSceneViewer2D(props: UseSceneViewer2DProps = {}) {
   const mapClient = props.mapClient ?? DEFAULT_MAP_CLIENT;
   const sceneClient = props.sceneClient ?? DEFAULT_SCENE_CLIENT;
+  const robotClient = props.robotClient ?? DEFAULT_ROBOT_CLIENT;
 
   const [loadStatus, setLoadStatus] = useState<LoadStatus>('loading');
   const [loadMessage, setLoadMessage] = useState<LoadMessage | undefined>();
@@ -52,6 +58,10 @@ export function useSceneViewer2D(props: UseSceneViewer2DProps = {}) {
       zoomRef.current.listeners.delete(cb);
     };
   }, []);
+
+  const [robots, setRobots] = useState<RobotState[]>([]);
+  useEffect(() => robotClient.subscribeRobotStates(setRobots), [robotClient]);
+  const [selectedRobotId, setSelectedRobotId] = useState<string | null>(null);
 
   // targetZoom: set by controls to request a zoom change; viewport effect applies it.
   const [targetZoom, setTargetZoom] = useState(100);
@@ -79,6 +89,10 @@ export function useSceneViewer2D(props: UseSceneViewer2DProps = {}) {
     setFitMode,
     triggerFit,
     fitTrigger,
+    robotClient,
+    robots,
+    selectedRobotId,
+    setSelectedRobotId,
   };
 }
 
@@ -113,6 +127,8 @@ export function useSceneViewer2DViewport() {
     targetZoom,
     fitMode,
     fitTrigger,
+    robots,
+    selectedRobotId,
   } = useSceneViewer2DContext();
   return {
     mapClient,
@@ -123,7 +139,15 @@ export function useSceneViewer2DViewport() {
     targetZoom,
     fitMode,
     fitTrigger,
+    robots,
+    selectedRobotId,
   };
+}
+
+export function useSceneViewer2DRobots() {
+  const { robots, robotClient, selectedRobotId, setSelectedRobotId } =
+    useSceneViewer2DContext();
+  return { robots, robotClient, selectedRobotId, setSelectedRobotId };
 }
 
 export function useSceneViewer2DControls() {

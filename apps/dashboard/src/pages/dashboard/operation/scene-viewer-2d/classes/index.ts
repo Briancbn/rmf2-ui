@@ -14,3 +14,6 @@ export type {
 } from './scene-client-base';
 export { FallbackSceneClient } from './fallback-scene-client';
 export type { FallbackSceneClientOptions } from './fallback-scene-client';
+
+export type { IRobotClient, RobotState } from './robot-client-base';
+export { FallbackRobotClient } from './fallback-robot-client';
