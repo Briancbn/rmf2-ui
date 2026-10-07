@@ -68,6 +68,15 @@ export const AdminRoutes: RouteObject[] = [
       return { Component: VdaVisualiser };
     },
   },
+  {
+    path: 'operation/scene-viewer-2d',
+    lazy: async () => {
+      const { SceneViewer2DPage } = await import(
+        '@/pages/dashboard/operation/scene-viewer-2d'
+      );
+      return { Component: SceneViewer2DPage };
+    },
+  },
 ];
 
 export const dashboardRoutes: RouteObject[] = [

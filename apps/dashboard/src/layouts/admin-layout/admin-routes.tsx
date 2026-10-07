@@ -86,6 +86,11 @@ export const routes: DashboardRoute[] = [
           <Icon as={MdOutlineMap} width="20px" height="30px" color="inherit" />
         ),
       },
+      {
+        name: 'Scene Viewer 2D',
+        path: '/operation/scene-viewer-2d',
+        icon: <Icon as={MdMap} width="20px" height="30px" color="inherit" />,
+      },
     ],
   },
 ];
