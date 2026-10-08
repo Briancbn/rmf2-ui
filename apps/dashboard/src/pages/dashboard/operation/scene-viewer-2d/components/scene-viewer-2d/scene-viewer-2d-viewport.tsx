@@ -1,73 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Box, chakra } from '@chakra-ui/react';
 import { useColorModeValue } from '@/components/ui/color-mode';
-import type { LifData, LifLayout } from '../types';
+import type { LifData } from '../../types';
 import type { SceneBackground } from '../../classes/scene-client-base';
 import { useSceneViewer2DViewport } from './use-scene-viewer-2d';
-
-// Fractions of viewBox width — apparent size stays constant across zoom/map scales.
-const NODE_RADIUS_FRAC = 0.018;
-const EDGE_WIDTH_FRAC = 0.004;
-const LABEL_SIZE_FRAC = 0.021;
-// Max node radius relative to median edge length; used to limit node size on dense maps.
-const NODE_RADIUS_TO_EDGE_LENGTH_MAX_RATIO = 0.125;
-
-const WHEEL_FACTOR = 1.1;
-const DRAG_THRESHOLD = 4;
-const FIT_PADDING = 0.02;
-
-interface View {
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-}
-
-function medianEdgeLength(layout: LifLayout): number {
-  const nodeById = new Map(layout.nodes.map((n) => [n.nodeId, n]));
-  const lengths: number[] = [];
-  for (const edge of layout.edges) {
-    const a = nodeById.get(edge.startNodeId);
-    const b = nodeById.get(edge.endNodeId);
-    if (a && b) {
-      const dx = b.nodePosition.x - a.nodePosition.x;
-      const dy = b.nodePosition.y - a.nodePosition.y;
-      lengths.push(Math.sqrt(dx * dx + dy * dy));
-    }
-  }
-  if (lengths.length === 0) return Infinity;
-  lengths.sort((a, b) => a - b);
-  const mid = Math.floor(lengths.length / 2);
-  return lengths.length % 2 === 0
-    ? (lengths[mid - 1] + lengths[mid]) / 2
-    : lengths[mid];
-}
-
-function calcNodeRadiusCap(layout: LifLayout, maxRatio: number): number {
-  return medianEdgeLength(layout) * maxRatio;
-}
-
-function fitView(layout: LifLayout, padding: number): View {
-  const nodes = layout.nodes;
-  if (nodes.length === 0) return { x: -5, y: -5, w: 10, h: 10 };
-
-  let minX = Infinity,
-    minY = Infinity,
-    maxX = -Infinity,
-    maxY = -Infinity;
-  for (const n of nodes) {
-    minX = Math.min(minX, n.nodePosition.x);
-    minY = Math.min(minY, n.nodePosition.y);
-    maxX = Math.max(maxX, n.nodePosition.x);
-    maxY = Math.max(maxY, n.nodePosition.y);
-  }
-
-  const w = maxX - minX || 1;
-  const h = maxY - minY || 1;
-  const pad = Math.max(w, h) * padding;
-  // Negate Y: LIF uses Y-up, SVG uses Y-down. maxY in world space becomes the top (most negative SVG y).
-  return { x: minX - pad, y: -maxY - pad, w: w + pad * 2, h: h + pad * 2 };
-}
+import {
+  calcViewBox,
+  calcNodeRadiusMax,
+  fitView,
+} from './scene-viewer-2d-viewport-helpers';
+import type { View } from './scene-viewer-2d-viewport-helpers';
 
 export interface SceneViewer2DViewportProps {
   /** Index of the initial layout to display. Defaults to 0. */
@@ -86,28 +28,47 @@ export interface SceneViewer2DViewportProps {
   dragThreshold?: number;
   /** Padding around the map bounds on fit, as a fraction of the larger dimension. */
   fitPadding?: number;
+  /** Node label horizontal offset as a multiple of node radius. */
+  labelOffsetXFactor?: number;
+  /** Node label vertical offset as a multiple of node radius. */
+  labelOffsetYFactor?: number;
+  /** Robot body radius as a multiple of the node radius. */
+  robotBaseSizeFactor?: number;
+  /** Robot label horizontal offset as a multiple of robot radius. */
+  robotLabelOffsetXFactor?: number;
+  /** Robot label vertical offset as a multiple of robot radius. */
+  robotLabelOffsetYFactor?: number;
 }
 
 export function SceneViewer2DViewport(props: SceneViewer2DViewportProps) {
   const {
     initialLayoutIndex = 0,
-    nodeRadiusFrac = NODE_RADIUS_FRAC,
-    edgeWidthFrac = EDGE_WIDTH_FRAC,
-    labelSizeFrac = LABEL_SIZE_FRAC,
-    nodeRadiusToEdgeLengthMaxRatio = NODE_RADIUS_TO_EDGE_LENGTH_MAX_RATIO,
-    wheelFactor = WHEEL_FACTOR,
-    dragThreshold = DRAG_THRESHOLD,
-    fitPadding = FIT_PADDING,
+    nodeRadiusFrac = 0.018,
+    edgeWidthFrac = 0.004,
+    labelSizeFrac = 0.021,
+    nodeRadiusToEdgeLengthMaxRatio = 0.125,
+    wheelFactor = 1.1,
+    dragThreshold = 4,
+    fitPadding = 0.02,
+    labelOffsetXFactor = 0,
+    labelOffsetYFactor = 1.4,
+    robotBaseSizeFactor = 2,
+    robotLabelOffsetXFactor = 0,
+    robotLabelOffsetYFactor = 2.2,
   } = props;
   const {
     mapClient,
     sceneClient,
+    robotClient,
     setLoadStatus,
     setLoadMessage,
     notifyZoom,
     targetZoom,
     fitMode,
     fitTrigger,
+    robots,
+    selectedRobotId,
+    setSelectedRobotId,
   } = useSceneViewer2DViewport();
   const imageFilter = useColorModeValue('none', 'invert(1)');
 
@@ -121,7 +82,7 @@ export function SceneViewer2DViewport(props: SceneViewer2DViewportProps) {
   const viewRef = useRef<View>({ x: -5, y: -5, w: 10, h: 10 });
   // Reference view at 100% zoom (set on fit); zoom % is applied relative to this.
   const fitViewRef = useRef<View | null>(null);
-  const nodeRadiusCapRef = useRef(Infinity);
+  const nodeRadiusMaxRef = useRef(Infinity);
   const lastNodeRadiusRef = useRef(-1);
 
   const svgRef = useRef<SVGSVGElement>(null);
@@ -132,14 +93,18 @@ export function SceneViewer2DViewport(props: SceneViewer2DViewportProps) {
     if (!svg) return;
     svg.setAttribute('viewBox', `${v.x} ${v.y} ${v.w} ${v.h}`);
     if (updateDimensions) {
-      const uncappedRadius = v.w * nodeRadiusFrac;
-      const nodeRadius = Math.min(uncappedRadius, nodeRadiusCapRef.current);
+      const scaledRadius = v.w * nodeRadiusFrac;
+      const nodeRadius = Math.min(scaledRadius, nodeRadiusMaxRef.current);
       // Already at the max node radius. Nothing to update.
       if (nodeRadius === lastNodeRadiusRef.current) return;
       lastNodeRadiusRef.current = nodeRadius;
       // CSS custom properties: setting them here updates all nodes, edges, and labels at once via var().
       svg.style.setProperty('--node-radius', `${nodeRadius}px`);
-      if (nodeRadius === uncappedRadius) {
+      // Robot vars derived from nodeRadius so they always stay in the same ratio.
+      const robotRadius = nodeRadius * robotBaseSizeFactor;
+      svg.style.setProperty('--robot-radius', `${robotRadius}px`);
+      svg.style.setProperty('--robot-scale', `${robotRadius}`);
+      if (nodeRadius === scaledRadius) {
         // Normal: sizes scale with viewBox width.
         svg.style.setProperty('--edge-width', `${v.w * edgeWidthFrac}px`);
         svg.style.fontSize = `${v.w * labelSizeFrac}px`;
@@ -161,12 +126,23 @@ export function SceneViewer2DViewport(props: SceneViewer2DViewportProps) {
     setLoadStatus('loading');
     let cancelled = false;
 
-    mapClient
-      .getMapData()
-      .then((data) => {
+    async function load() {
+      try {
+        const data = await mapClient.getMapData();
         if (cancelled) return;
+
+        if (data.layouts.length === 0) {
+          setLoadStatus('error');
+          setLoadMessage({
+            title: 'No layouts',
+            description: 'The map contains no layouts.',
+          });
+          return;
+        }
+
         lifDataRef.current = data;
 
+        // TODO(anyone): allow controls of multiple layouts
         const ids = data.layouts.map((l) => l.layoutId);
         const initial =
           data.layouts[initialLayoutIndex]?.layoutId ?? ids[0] ?? null;
@@ -177,7 +153,7 @@ export function SceneViewer2DViewport(props: SceneViewer2DViewportProps) {
         const initialLayout =
           data.layouts[initialLayoutIndex] ?? data.layouts[0] ?? null;
         if (initialLayout) {
-          nodeRadiusCapRef.current = calcNodeRadiusCap(
+          nodeRadiusMaxRef.current = calcNodeRadiusMax(
             initialLayout,
             nodeRadiusToEdgeLengthMaxRatio,
           );
@@ -188,16 +164,17 @@ export function SceneViewer2DViewport(props: SceneViewer2DViewportProps) {
         }
 
         setLoadStatus('success');
-      })
-      .catch((err: unknown) => {
+      } catch (err) {
         if (cancelled) return;
         setLoadStatus('error');
         setLoadMessage({
           title: 'Failed to load map',
           description: err instanceof Error ? err.message : 'Unknown error',
         });
-      });
+      }
+    }
 
+    load();
     return () => {
       cancelled = true;
     };
@@ -213,9 +190,13 @@ export function SceneViewer2DViewport(props: SceneViewer2DViewportProps) {
   useEffect(() => {
     if (!sceneClient) return;
     let cancelled = false;
-    sceneClient.getBackground().then((bg) => {
+
+    async function load() {
+      const bg = await sceneClient.getBackground();
       if (!cancelled) setBackground(bg);
-    });
+    }
+
+    load();
     return () => {
       cancelled = true;
     };
@@ -225,13 +206,12 @@ export function SceneViewer2DViewport(props: SceneViewer2DViewportProps) {
   useEffect(() => {
     const fv = fitViewRef.current;
     if (!fv) return;
-    const scale = 100 / targetZoom;
     const cx = fv.x + fv.w / 2;
     const cy = fv.y + fv.h / 2;
-    const nw = fv.w * scale;
-    const nh = fv.h * scale;
-    notifyZoom(targetZoom);
-    applyView({ x: cx - nw / 2, y: cy - nh / 2, w: nw, h: nh }, true);
+    const scale = 100 / targetZoom;
+    const newView = calcViewBox(fv, cx, cy, scale);
+    applyView(newView, true);
+    notifyZoom((fv.w / newView.w) * 100);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [targetZoom, notifyZoom]);
 
@@ -244,7 +224,7 @@ export function SceneViewer2DViewport(props: SceneViewer2DViewportProps) {
     if (!layout) return;
     // Only 'map' is implemented; future modes (robots, all) will fit to their respective bounds.
     if (fitMode === 'map') {
-      nodeRadiusCapRef.current = calcNodeRadiusCap(
+      nodeRadiusMaxRef.current = calcNodeRadiusMax(
         layout,
         nodeRadiusToEdgeLengthMaxRatio,
       );
@@ -263,7 +243,7 @@ export function SceneViewer2DViewport(props: SceneViewer2DViewportProps) {
       (l) => l.layoutId === currentLayoutId,
     );
     if (layout) {
-      nodeRadiusCapRef.current = calcNodeRadiusCap(
+      nodeRadiusMaxRef.current = calcNodeRadiusMax(
         layout,
         nodeRadiusToEdgeLengthMaxRatio,
       );
@@ -280,16 +260,12 @@ export function SceneViewer2DViewport(props: SceneViewer2DViewportProps) {
     if (!svg) return;
     const onWheel = (e: WheelEvent) => {
       e.preventDefault();
-      const rect = svg.getBoundingClientRect();
-      const { x, y, w, h } = viewRef.current;
-      const fx = (e.clientX - rect.left) / rect.width;
-      const fy = (e.clientY - rect.top) / rect.height;
-      const vx = x + fx * w;
-      const vy = y + fy * h;
+      const pt = svg.createSVGPoint();
+      pt.x = e.clientX;
+      pt.y = e.clientY;
+      const svgPt = pt.matrixTransform(svg.getScreenCTM()!.inverse());
       const factor = e.deltaY > 0 ? wheelFactor : 1 / wheelFactor;
-      const nw = w * factor;
-      const nh = h * factor;
-      viewRef.current = { x: vx - fx * nw, y: vy - fy * nh, w: nw, h: nh };
+      viewRef.current = calcViewBox(viewRef.current, svgPt.x, svgPt.y, factor);
       if (wheelRafRef.current === null) {
         wheelRafRef.current = requestAnimationFrame(() => {
           wheelRafRef.current = null;
@@ -314,15 +290,15 @@ export function SceneViewer2DViewport(props: SceneViewer2DViewportProps) {
     suppressClickRef.current = false;
     const rect = svg.getBoundingClientRect();
     const start = { cx: e.clientX, cy: e.clientY, ...viewRef.current };
-    const k = Math.max(start.w / rect.width, start.h / rect.height);
+    const svgUnitsPerPx = Math.max(start.w / rect.width, start.h / rect.height);
     svg.style.cursor = 'grabbing';
     const onMove = (ev: MouseEvent) => {
       const dx = ev.clientX - start.cx;
       const dy = ev.clientY - start.cy;
       if (Math.hypot(dx, dy) > dragThreshold) suppressClickRef.current = true;
       applyView({
-        x: start.x - dx * k,
-        y: start.y - dy * k,
+        x: start.x - dx * svgUnitsPerPx,
+        y: start.y - dy * svgUnitsPerPx,
         w: start.w,
         h: start.h,
       });
@@ -382,9 +358,9 @@ export function SceneViewer2DViewport(props: SceneViewer2DViewportProps) {
           display: 'block',
           position: 'relative',
           touchAction: 'none',
-          cursor: 'grab',
         }}
       >
+        {/* Image Background */}
         {background?.type === 'image' && (
           // Y is negated to match the Y-up coordinate system used throughout the viewport.
           <image
@@ -399,6 +375,7 @@ export function SceneViewer2DViewport(props: SceneViewer2DViewportProps) {
           />
         )}
 
+        {/* Edges */}
         {(layout?.edges ?? []).map((edge) => {
           const a = nodeById.get(edge.startNodeId);
           const b = nodeById.get(edge.endNodeId);
@@ -416,6 +393,8 @@ export function SceneViewer2DViewport(props: SceneViewer2DViewportProps) {
             />
           );
         })}
+
+        {/* Nodes */}
         {(layout?.nodes ?? []).map((node) => (
           <g key={node.nodeId}>
             <circle
@@ -428,7 +407,7 @@ export function SceneViewer2DViewport(props: SceneViewer2DViewportProps) {
               x={node.nodePosition.x}
               y={-node.nodePosition.y}
               style={{
-                transform: 'translateY(calc(-1.4 * var(--node-radius)))',
+                transform: `translate(calc(${labelOffsetXFactor} * var(--node-radius)), calc(${-labelOffsetYFactor} * var(--node-radius)))`,
               }}
               textAnchor="middle"
               fill="currentColor"
@@ -437,6 +416,64 @@ export function SceneViewer2DViewport(props: SceneViewer2DViewportProps) {
             </text>
           </g>
         ))}
+
+        {currentLayoutId != null &&
+          robots.map((robot, i) => {
+            if (robot.x == null || robot.y == null) return null;
+            const color = robotClient.getRobotColor(robot.robotId, i);
+            const isSelected = robot.robotId === selectedRobotId;
+            // Negate theta: LIF is Y-up CCW, SVG is Y-down so CCW becomes CW.
+            const headingDeg = -((robot.theta ?? 0) * 180) / Math.PI;
+            return (
+              <g
+                key={robot.robotId}
+                transform={`translate(${robot.x}, ${-robot.y})`}
+                onClick={() =>
+                  !suppressClickRef.current &&
+                  setSelectedRobotId(isSelected ? null : robot.robotId)
+                }
+                style={{ cursor: 'pointer' }}
+              >
+                {isSelected && (
+                  <circle
+                    style={
+                      {
+                        r: 'var(--robot-radius)',
+                        strokeWidth: 'calc(0.12 * var(--robot-radius))',
+                      } as React.CSSProperties
+                    }
+                    fill="none"
+                    stroke={color}
+                  />
+                )}
+                <circle
+                  style={{ r: 'var(--robot-radius)' } as React.CSSProperties}
+                  fill={color}
+                  opacity={0.25}
+                />
+                {/* Heading arrow: CSS transform drives scale via --robot-scale so it
+                  updates with zoom without a React re-render. transform-origin is
+                  the robot's SVG position so rotate/scale pivot at the robot centre. */}
+                <g
+                  style={{
+                    transform: `rotate(${headingDeg}deg) scale(var(--robot-scale))`,
+                  }}
+                >
+                  <polygon points="1,0 -0.5,0.4 -0.5,-0.4" fill={color} />
+                </g>
+                <text
+                  textAnchor="middle"
+                  fill={color}
+                  fontWeight={700}
+                  style={{
+                    transform: `translate(calc(${robotLabelOffsetXFactor} * var(--robot-radius)), calc(${-robotLabelOffsetYFactor} * var(--robot-radius)))`,
+                  }}
+                >
+                  {robot.robotId}
+                </text>
+              </g>
+            );
+          })}
       </chakra.svg>
     </Box>
   );

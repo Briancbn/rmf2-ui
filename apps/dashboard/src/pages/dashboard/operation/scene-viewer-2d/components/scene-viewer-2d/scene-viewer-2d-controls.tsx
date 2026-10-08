@@ -3,10 +3,8 @@ import { Flex, Button, IconButton, Menu, Portal, Text } from '@chakra-ui/react';
 import { Tooltip } from '@/components/ui/tooltip';
 import { LuPlus, LuMinus, LuChevronUp } from 'react-icons/lu';
 import { SceneViewer2DPanel } from './scene-viewer-2d-panel';
+import type { SceneViewer2DPanelProps } from './scene-viewer-2d-panel';
 import { useSceneViewer2DControls } from './use-scene-viewer-2d';
-
-const ZOOM_STEP = 1.25;
-const ZOOM_PRESETS = [25, 50, 100, 150, 200];
 
 const iconButtonProps = {
   size: 'sm',
@@ -18,7 +16,15 @@ const iconButtonProps = {
 
 // ─── Zoom ────────────────────────────────────────────────────────────────────
 
-export function SceneViewer2DZoomControls() {
+interface SceneViewer2DZoomControlsProps {
+  zoomStep?: number;
+  zoomPresets?: number[];
+}
+
+export function SceneViewer2DZoomControls({
+  zoomStep = 1.25,
+  zoomPresets = [25, 50, 100, 150, 200],
+}: SceneViewer2DZoomControlsProps) {
   const { registerZoomListener, setTargetZoom } = useSceneViewer2DControls();
   const [zoomDisplay, setZoomDisplay] = useState(100);
 
@@ -32,7 +38,7 @@ export function SceneViewer2DZoomControls() {
       <Tooltip content="Zoom out">
         <IconButton
           aria-label="Zoom out"
-          onClick={() => setTargetZoom(zoomDisplay / ZOOM_STEP)}
+          onClick={() => setTargetZoom(zoomDisplay / zoomStep)}
           {...iconButtonProps}
         >
           <LuMinus />
@@ -54,7 +60,7 @@ export function SceneViewer2DZoomControls() {
         <Portal>
           <Menu.Positioner>
             <Menu.Content>
-              {ZOOM_PRESETS.map((preset) => (
+              {zoomPresets.map((preset) => (
                 <Menu.Item
                   key={preset}
                   value={String(preset)}
@@ -72,7 +78,7 @@ export function SceneViewer2DZoomControls() {
       <Tooltip content="Zoom in">
         <IconButton
           aria-label="Zoom in"
-          onClick={() => setTargetZoom(zoomDisplay * ZOOM_STEP)}
+          onClick={() => setTargetZoom(zoomDisplay * zoomStep)}
           {...iconButtonProps}
         >
           <LuPlus />
@@ -86,15 +92,21 @@ export function SceneViewer2DZoomControls() {
 
 type FitMode = 'map' | 'robots' | 'all';
 
-const FIT_MODES: { value: FitMode; label: string }[] = [
+const DEFAULT_FIT_MODES: { value: FitMode; label: string }[] = [
   { value: 'map', label: 'Map' },
   { value: 'robots', label: 'Robots' },
   { value: 'all', label: 'All' },
 ];
 
-export function SceneViewer2DFitModeControls() {
+interface SceneViewer2DFitModeControlsProps {
+  fitModes?: { value: FitMode; label: string }[];
+}
+
+export function SceneViewer2DFitModeControls({
+  fitModes = DEFAULT_FIT_MODES,
+}: SceneViewer2DFitModeControlsProps) {
   const { fitMode, setFitMode, triggerFit } = useSceneViewer2DControls();
-  const current = FIT_MODES.find((m) => m.value === fitMode)?.label ?? 'Fit';
+  const current = fitModes.find((m) => m.value === fitMode)?.label ?? 'Fit';
 
   return (
     <Flex align="center">
@@ -129,7 +141,7 @@ export function SceneViewer2DFitModeControls() {
         <Portal>
           <Menu.Positioner>
             <Menu.Content>
-              {FIT_MODES.map(({ value, label }) => (
+              {fitModes.map(({ value, label }) => (
                 <Menu.Item
                   key={value}
                   value={value}
@@ -149,13 +161,14 @@ export function SceneViewer2DFitModeControls() {
 
 // ─── Combined ────────────────────────────────────────────────────────────────
 
-export function SceneViewer2DControls() {
+export function SceneViewer2DControls(props: SceneViewer2DPanelProps) {
   return (
     <SceneViewer2DPanel
       variant="bottom-left"
       borderWidth="0px"
       pointerEvents="auto"
       gap="10px"
+      {...props}
     >
       <SceneViewer2DZoomControls />
       <SceneViewer2DFitModeControls />

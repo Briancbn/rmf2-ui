@@ -32,6 +32,8 @@ const DEFAULT_ROBOTS: RobotState[] = [
   },
 ];
 
+const FALLBACK_COLORS = ['#3182ce', '#dd6b20', '#38a169', '#d53f8c', '#805ad5'];
+
 export class FallbackRobotClient implements IRobotClient {
   private readonly _robots: RobotState[];
 
@@ -59,5 +61,13 @@ export class FallbackRobotClient implements IRobotClient {
       serialNumber: r.robotId.toUpperCase(),
     }));
     return sheets.slice(skip, skip + limit);
+  }
+
+  getRobotColor(_robotId: string, index: number): string {
+    return FALLBACK_COLORS[index % FALLBACK_COLORS.length];
+  }
+
+  getRobotImage(_robotId: string): string | null {
+    return null;
   }
 }

@@ -121,6 +121,7 @@ export function useSceneViewer2DViewport() {
   const {
     mapClient,
     sceneClient,
+    robotClient,
     setLoadStatus,
     setLoadMessage,
     notifyZoom,
@@ -129,10 +130,12 @@ export function useSceneViewer2DViewport() {
     fitTrigger,
     robots,
     selectedRobotId,
+    setSelectedRobotId,
   } = useSceneViewer2DContext();
   return {
     mapClient,
     sceneClient,
+    robotClient,
     setLoadStatus,
     setLoadMessage,
     notifyZoom,
@@ -141,6 +144,7 @@ export function useSceneViewer2DViewport() {
     fitTrigger,
     robots,
     selectedRobotId,
+    setSelectedRobotId,
   };
 }
 

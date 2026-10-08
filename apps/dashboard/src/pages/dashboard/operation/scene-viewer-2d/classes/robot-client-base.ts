@@ -26,4 +26,8 @@ export interface IRobotClient {
   subscribeRobotStates(callback: (robots: RobotState[]) => void): () => void;
   getOrders(skip?: number, limit?: number): Promise<RobotOrder[]>;
   getFactsheets(skip?: number, limit?: number): Promise<RobotFactsheet[]>;
+  /** Deterministic display color for a robot. `index` is the robot's position in the list as a palette fallback. */
+  getRobotColor(robotId: string, index: number): string;
+  /** Optional image URL for a robot's avatar, or null if none. */
+  getRobotImage(robotId: string): string | null;
 }
