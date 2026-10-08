@@ -25,10 +25,10 @@ export function SceneViewer2DPage() {
 
         <SceneInfo.Root>
           <SceneInfo.RobotContent>
-            <RobotPanel.Root>
+            <SceneViewer2D.RobotPanel>
               <RobotPanel.InfoList />
               <RobotPanel.SelectedCard />
-            </RobotPanel.Root>
+            </SceneViewer2D.RobotPanel>
           </SceneInfo.RobotContent>
           <SceneInfo.OrderContent />
           <SceneInfo.LogContent />

@@ -52,7 +52,7 @@ export function SceneViewer2DViewport(props: SceneViewer2DViewportProps) {
     fitPadding = 0.02,
     labelOffsetXFactor = 0,
     labelOffsetYFactor = 1.4,
-    robotBaseSizeFactor = 2,
+    robotBaseSizeFactor = 1.5,
     robotLabelOffsetXFactor = 0,
     robotLabelOffsetYFactor = 2.2,
   } = props;
@@ -434,12 +434,14 @@ export function SceneViewer2DViewport(props: SceneViewer2DViewportProps) {
                 }
                 style={{ cursor: 'pointer' }}
               >
+                {/* Extra circle for selected robot */}
                 {isSelected && (
                   <circle
                     style={
                       {
                         r: 'var(--robot-radius)',
                         strokeWidth: 'calc(0.12 * var(--robot-radius))',
+                        strokeOpacity: '0.8',
                       } as React.CSSProperties
                     }
                     fill="none"
@@ -451,15 +453,12 @@ export function SceneViewer2DViewport(props: SceneViewer2DViewportProps) {
                   fill={color}
                   opacity={0.25}
                 />
-                {/* Heading arrow: CSS transform drives scale via --robot-scale so it
-                  updates with zoom without a React re-render. transform-origin is
-                  the robot's SVG position so rotate/scale pivot at the robot centre. */}
                 <g
                   style={{
                     transform: `rotate(${headingDeg}deg) scale(var(--robot-scale))`,
                   }}
                 >
-                  <polygon points="1,0 -0.5,0.4 -0.5,-0.4" fill={color} />
+                  <polygon points="1.5,0 -1.2,0.8 -1.2,-0.8" fill={color} />
                 </g>
                 <text
                   textAnchor="middle"

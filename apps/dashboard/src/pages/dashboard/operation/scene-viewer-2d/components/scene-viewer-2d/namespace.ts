@@ -18,3 +18,6 @@ export { SceneViewer2DAxisDisplay as AxisDisplay } from './scene-viewer-2d-axis-
 
 export { SceneViewer2DViewportPositioner as ViewportPositioner } from './scene-viewer-2d-viewport-positioner';
 export type { SceneViewer2DViewportPositionerProps as ViewportPositionerProps } from './scene-viewer-2d-viewport-positioner';
+
+export { SceneViewer2DRobotPanel as RobotPanel } from './scene-viewer-2d-robot-panel';
+export type { SceneViewer2DRobotPanelProps as RobotPanelProps } from './scene-viewer-2d-robot-panel';

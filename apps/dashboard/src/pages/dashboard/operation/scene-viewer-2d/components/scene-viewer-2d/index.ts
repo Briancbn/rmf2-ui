@@ -1,4 +1,9 @@
 export { SceneViewer2DRoot } from './scene-viewer-2d-root';
+
+export { useSceneViewer2DRobots } from './use-scene-viewer-2d';
+
+export { SceneViewer2DRobotPanel } from './scene-viewer-2d-robot-panel';
+export type { SceneViewer2DRobotPanelProps } from './scene-viewer-2d-robot-panel';
 export type { SceneViewer2DRootProps } from './scene-viewer-2d-root';
 
 export { SceneViewer2DLoadingOverlay } from './scene-viewer-2d-loading-overlay';
