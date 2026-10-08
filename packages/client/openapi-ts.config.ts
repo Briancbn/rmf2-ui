@@ -2,6 +2,14 @@ import { defineConfig } from '@hey-api/openapi-ts';
 
 export default defineConfig([
   {
+    input: 'src/vda5050-master/openapi.json',
+    output: {
+      format: 'prettier',
+      lint: 'eslint',
+      path: 'src/vda5050-master/generated',
+    },
+  },
+  {
     input: 'src/rts/openapi.json',
     output: {
       format: 'prettier',
