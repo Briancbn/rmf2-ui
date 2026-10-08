@@ -9,8 +9,8 @@ export interface SceneViewer2DRootProps
     UseSceneViewer2DProps {}
 
 export function SceneViewer2DRoot(props: SceneViewer2DRootProps) {
-  const { children, mapClient, sceneClient, ...rest } = props;
-  const context = useSceneViewer2D({ mapClient, sceneClient });
+  const { children, mapClient, sceneClient, robotClient, ...rest } = props;
+  const context = useSceneViewer2D({ mapClient, sceneClient, robotClient });
   const ctx = useMemo(() => ({ ...context }), [context]);
   return (
     <Box

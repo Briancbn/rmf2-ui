@@ -32,7 +32,17 @@ export function useRobotPanel(props: UseRobotPanelProps = {}) {
     selectedExternal !== undefined ? selectedExternal : selected;
   const setSelectedId = props.onSelect ?? setSelected;
 
-  return { robotClient, robots, robotIndexMap, selectedId, setSelectedId };
+  const [expanded, setExpanded] = useState(false);
+
+  return {
+    robotClient,
+    robots,
+    robotIndexMap,
+    selectedId,
+    setSelectedId,
+    expanded,
+    setExpanded,
+  };
 }
 
 export type UseRobotPanelReturn = ReturnType<typeof useRobotPanel>;

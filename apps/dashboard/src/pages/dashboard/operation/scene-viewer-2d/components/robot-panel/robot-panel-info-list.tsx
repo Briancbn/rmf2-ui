@@ -11,7 +11,7 @@ export interface RobotPanelInfoListProps {
 }
 
 export function RobotPanelInfoList({ pageSize = 10 }: RobotPanelInfoListProps) {
-  const { robots, robotIndexMap, selectedId, setSelectedId } =
+  const { robots, robotIndexMap, selectedId, setSelectedId, expanded } =
     useRobotPanelContext();
   const [page, setPage] = useState(0);
 
@@ -26,6 +26,8 @@ export function RobotPanelInfoList({ pageSize = 10 }: RobotPanelInfoListProps) {
     setSelectedId(robotId === selectedId ? null : robotId);
   };
 
+  if (expanded) return null;
+
   if (robots.length === 0) {
     return (
       <Text color="fg.muted" fontSize="sm">
@@ -36,18 +38,6 @@ export function RobotPanelInfoList({ pageSize = 10 }: RobotPanelInfoListProps) {
 
   return (
     <Flex direction="column" gap={0} flex="1" minH={0}>
-      <Stack gap={0} flex="1" overflowY="auto">
-        {pageRobots.map((robot) => (
-          <RobotPanelInfo
-            key={robot.robotId}
-            robot={robot}
-            index={robotIndexMap.get(robot.robotId) ?? 0}
-            selected={robot.robotId === selectedId}
-            onSelect={() => handleSelect(robot.robotId)}
-          />
-        ))}
-      </Stack>
-
       {totalPages > 1 && (
         <HStack
           justify="space-between"
@@ -79,6 +69,17 @@ export function RobotPanelInfoList({ pageSize = 10 }: RobotPanelInfoListProps) {
           </IconButton>
         </HStack>
       )}
+      <Stack gap={0} flex="1" overflowY="auto">
+        {pageRobots.map((robot) => (
+          <RobotPanelInfo
+            key={robot.robotId}
+            robot={robot}
+            index={robotIndexMap.get(robot.robotId) ?? 0}
+            selected={robot.robotId === selectedId}
+            onSelect={() => handleSelect(robot.robotId)}
+          />
+        ))}
+      </Stack>
     </Flex>
   );
 }

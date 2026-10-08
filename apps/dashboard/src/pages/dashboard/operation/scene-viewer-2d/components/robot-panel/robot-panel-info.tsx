@@ -2,19 +2,8 @@ import { Box, HStack, Text } from '@chakra-ui/react';
 import type { RobotState } from '../../classes/robot-client-base';
 import { RobotPanelBattery } from './robot-panel-battery';
 import { RobotPanelModeBadge } from './robot-panel-mode-badge';
-
-export const ROBOT_COLORS = [
-  '#3182ce',
-  '#dd6b20',
-  '#38a169',
-  '#d53f8c',
-  '#805ad5',
-  '#e53e3e',
-];
-
-export function getRobotColor(index: number): string {
-  return ROBOT_COLORS[index % ROBOT_COLORS.length]!;
-}
+import { RobotPanelConnectionBadge } from './robot-panel-connection-badge';
+import { useRobotPanelContext } from './use-robot-panel';
 
 export interface RobotPanelInfoProps {
   robot: RobotState;
@@ -29,6 +18,7 @@ export function RobotPanelInfo({
   selected = false,
   onSelect,
 }: RobotPanelInfoProps) {
+  const { robotClient } = useRobotPanelContext();
   return (
     <HStack
       px="8px"
@@ -48,12 +38,20 @@ export function RobotPanelInfo({
         w="10px"
         h="10px"
         borderRadius="full"
-        bg={getRobotColor(index)}
+        bg={robotClient.getRobotColor(robot.robotId, index)}
         flexShrink={0}
       />
       <Text fontSize="sm" fontWeight={600} flex="1" minW={0} truncate>
         {robot.robotId}
       </Text>
+      {robot.lastNodeId && (
+        <Text fontSize="xs" fontFamily="mono" color="fg.subtle" flexShrink={0}>
+          {robot.lastNodeId}
+        </Text>
+      )}
+      {robot.connection === 'OFFLINE' && (
+        <RobotPanelConnectionBadge connection={robot.connection} />
+      )}
       <RobotPanelModeBadge mode={robot.operatingMode} />
       <RobotPanelBattery percent={robot.batteryPercent} />
     </HStack>

@@ -2,6 +2,7 @@ import { SceneViewer2D } from './components/scene-viewer-2d';
 import { SceneInfo } from './components/scene-info';
 import { RobotPanel } from './components/robot-panel';
 import { MapClient } from './map-client';
+import { Vda5050RobotClient } from './classes/vda5050-robot-client';
 import { Vda5050MasterConfig } from '@/clients';
 import { Horizon } from '@rmf2-ui/chakra';
 import Card = Horizon.Card;
@@ -11,11 +12,12 @@ const BASE = (Vda5050MasterConfig.BASE ?? 'http://localhost:8000').replace(
   '',
 );
 const mapClient = new MapClient({ urls: [`${BASE}/v1/layout/download`] });
+const robotClient = new Vda5050RobotClient();
 
 export function SceneViewer2DPage() {
   return (
     <Card>
-      <SceneViewer2D.Root mapClient={mapClient}>
+      <SceneViewer2D.Root mapClient={mapClient} robotClient={robotClient}>
         <SceneViewer2D.ViewportPositioner>
           <SceneViewer2D.Viewport />
           <SceneViewer2D.Controls />

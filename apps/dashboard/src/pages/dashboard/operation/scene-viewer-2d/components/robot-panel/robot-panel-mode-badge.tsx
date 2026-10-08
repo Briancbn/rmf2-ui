@@ -7,6 +7,7 @@ export interface RobotPanelModeBadgeProps {
 export function RobotPanelModeBadge({ mode }: RobotPanelModeBadgeProps) {
   if (!mode) return null;
   const m = mode.toUpperCase();
+  const label = m === 'AUTOMATIC' ? 'IDLE' : mode;
   const palette =
     m === 'ERROR'
       ? 'red'
@@ -17,7 +18,7 @@ export function RobotPanelModeBadge({ mode }: RobotPanelModeBadgeProps) {
           : 'green';
   return (
     <Badge size="sm" colorPalette={palette} variant="subtle" flexShrink={0}>
-      {mode}
+      {label}
     </Badge>
   );
 }

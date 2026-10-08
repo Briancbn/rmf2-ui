@@ -15,5 +15,10 @@ export type {
 export { FallbackSceneClient } from './fallback-scene-client';
 export type { FallbackSceneClientOptions } from './fallback-scene-client';
 
-export type { IRobotClient, RobotState } from './robot-client-base';
+export type {
+  IRobotClient,
+  RobotState,
+  RobotConnection,
+} from './robot-client-base';
 export { FallbackRobotClient } from './fallback-robot-client';
+export { Vda5050RobotClient } from './vda5050-robot-client';
