@@ -1,5 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Box, Card, HStack, SimpleGrid, Text } from '@chakra-ui/react';
+import {
+  Accordion,
+  Box,
+  Card,
+  HStack,
+  SimpleGrid,
+  Text,
+} from '@chakra-ui/react';
 import type {
   RobotFactsheet,
   RobotState,
@@ -14,7 +21,7 @@ import { useRobotPanelContext } from './use-robot-panel';
 function Stat({ label, value }: { label: string; value: string }) {
   return (
     <Box>
-      <Text fontSize="2xs" textTransform="uppercase" color="fg.subtle">
+      <Text fontSize="2xs" textTransform="uppercase" color="fg.muted">
         {label}
       </Text>
       <Text fontSize="sm" fontFamily="mono">
@@ -80,19 +87,20 @@ export function RobotPanelCard({ robot, expanded }: RobotPanelCardProps) {
         <SimpleGrid columns={robot.lastNodeId ? 4 : 3} gap="8px">
           <Stat label="x" value={fmt(robot.x)} />
           <Stat label="y" value={fmt(robot.y)} />
-          <Stat label="θ" value={fmt(robot.theta)} />
+          <Stat label="theta" value={fmt(robot.theta)} />
           {robot.lastNodeId && (
             <Stat label="Last node" value={robot.lastNodeId} />
           )}
         </SimpleGrid>
 
         {hasFactsheet && (
-          <Box borderTopWidth="1px" borderColor="border.subtle" pt="8px">
+          <Box borderTopWidth="1px" borderColor="border" pt="8px">
             <Text
-              fontSize="2xs"
+              fontSize="xs"
+              fontWeight="bold"
               textTransform="uppercase"
-              color="fg.subtle"
-              mb={1}
+              color="fg"
+              pb="5px"
             >
               Factsheet
             </Text>
@@ -143,32 +151,56 @@ export function RobotPanelCard({ robot, expanded }: RobotPanelCardProps) {
             <HStack gap={2} mb={2} align="center">
               <Box flex="1" h="2px" bg="red.500" />
               <Text
-                fontSize="2xs"
+                fontSize="xs"
                 textTransform="uppercase"
                 color="red.500"
                 flexShrink={0}
                 fontWeight="bold"
               >
-                The following section is for debugging only
+                Debugging only
               </Text>
               <Box flex="1" h="2px" bg="red.500" />
             </HStack>
-            <Text
-              fontSize="2xs"
-              textTransform="uppercase"
-              color="fg.subtle"
-              mb={2}
-            >
-              Instant Actions
-            </Text>
-            <RobotPanelAssignShortestPath
-              robotId={robot.robotId}
-              defaultStartNodeId={robot.lastNodeId}
-            />
-            <RobotPanelInstantActions
-              robotId={robot.robotId}
-              factsheet={factsheet}
-            />
+            <Accordion.Root multiple variant="plain" size="sm">
+              <Accordion.Item value="shortest-path">
+                <Accordion.ItemTrigger>
+                  <Text
+                    fontSize="xs"
+                    fontWeight="bold"
+                    textTransform="uppercase"
+                    flex="1"
+                  >
+                    Send Shortest Path Order
+                  </Text>
+                  <Accordion.ItemIndicator />
+                </Accordion.ItemTrigger>
+                <Accordion.ItemContent>
+                  <RobotPanelAssignShortestPath
+                    robotId={robot.robotId}
+                    defaultStartNodeId={robot.lastNodeId}
+                  />
+                </Accordion.ItemContent>
+              </Accordion.Item>
+              <Accordion.Item value="instant-actions">
+                <Accordion.ItemTrigger>
+                  <Text
+                    fontSize="xs"
+                    fontWeight="bold"
+                    textTransform="uppercase"
+                    flex="1"
+                  >
+                    Send Instant Actions
+                  </Text>
+                  <Accordion.ItemIndicator />
+                </Accordion.ItemTrigger>
+                <Accordion.ItemContent>
+                  <RobotPanelInstantActions
+                    robotId={robot.robotId}
+                    factsheet={factsheet}
+                  />
+                </Accordion.ItemContent>
+              </Accordion.Item>
+            </Accordion.Root>
           </Box>
         )}
       </Card.Body>

@@ -1,4 +1,4 @@
-import { Box, HStack, Text } from '@chakra-ui/react';
+import { Box, Flex, Text } from '@chakra-ui/react';
 import type { RobotState } from '../../classes/robot-client-base';
 import { RobotPanelBattery } from './robot-panel-battery';
 import { RobotPanelModeBadge } from './robot-panel-mode-badge';
@@ -20,10 +20,11 @@ export function RobotPanelInfo({
 }: RobotPanelInfoProps) {
   const { robotClient } = useRobotPanelContext();
   return (
-    <HStack
+    <Flex
       px="8px"
       py="6px"
       gap="8px"
+      alignItems="center"
       cursor="pointer"
       borderRadius="md"
       bg={selected ? 'bg.subtle' : 'transparent'}
@@ -31,7 +32,6 @@ export function RobotPanelInfo({
       borderColor={selected ? 'border' : 'transparent'}
       _hover={{ bg: 'bg.subtle' }}
       onClick={onSelect}
-      flexShrink={0}
       minH="40px"
     >
       <Box
@@ -45,17 +45,19 @@ export function RobotPanelInfo({
         {robot.robotId}
       </Text>
       {robot.lastNodeId && (
-        <Text fontSize="xs" fontFamily="mono" color="fg.subtle" flexShrink={0}>
+        <Text fontSize="xs" fontFamily="mono" color="fg.muted">
           {robot.lastNodeId}
         </Text>
       )}
-      {robot.connection === 'OFFLINE' && (
-        <RobotPanelConnectionBadge connection={robot.connection} />
-      )}
-      {robot.connection !== 'OFFLINE' && (
-        <RobotPanelModeBadge mode={robot.operatingMode} />
-      )}
-      <RobotPanelBattery percent={robot.batteryPercent} />
-    </HStack>
+      <Flex minW="100px" alignItems="center" justify="end">
+        {robot.connection === 'OFFLINE' && (
+          <RobotPanelConnectionBadge connection={robot.connection} />
+        )}
+        {robot.connection !== 'OFFLINE' && (
+          <RobotPanelModeBadge mode={robot.operatingMode} />
+        )}
+        <RobotPanelBattery percent={robot.batteryPercent} />
+      </Flex>
+    </Flex>
   );
 }

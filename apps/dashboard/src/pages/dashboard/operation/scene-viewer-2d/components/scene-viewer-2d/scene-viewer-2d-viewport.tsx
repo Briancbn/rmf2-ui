@@ -43,10 +43,10 @@ export interface SceneViewer2DViewportProps {
 export function SceneViewer2DViewport(props: SceneViewer2DViewportProps) {
   const {
     initialLayoutIndex = 0,
-    nodeRadiusFrac = 0.018,
+    nodeRadiusFrac = 0.012,
     edgeWidthFrac = 0.004,
     labelSizeFrac = 0.021,
-    nodeRadiusToEdgeLengthMaxRatio = 0.125,
+    nodeRadiusToEdgeLengthMaxRatio = 0.1,
     wheelFactor = 1.1,
     dragThreshold = 4,
     fitPadding = 0.02,
@@ -353,7 +353,7 @@ export function SceneViewer2DViewport(props: SceneViewer2DViewportProps) {
         aria-hidden
         fontWeight="semibold"
         letterSpacing="normal"
-        color={{ base: 'gray.700', _dark: 'gray.300' }}
+        color="gray.500"
         style={{
           display: 'block',
           position: 'relative',

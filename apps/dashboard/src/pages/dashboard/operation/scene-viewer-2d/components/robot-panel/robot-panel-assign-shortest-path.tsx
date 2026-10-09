@@ -1,33 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import {
-  Badge,
-  Button,
-  Checkbox,
-  Field,
-  HStack,
-  Input,
-  Popover,
-  Stack,
-  Text,
-} from '@chakra-ui/react';
+import { Badge, Field, HStack, Input, Stack, Text } from '@chakra-ui/react';
 import { useRobotPanelContext } from './use-robot-panel';
-
-const WARN_KEY = 'rmf2.assignShortestPath.skipWarn';
-
-function readSkipWarn(): boolean {
-  try {
-    return localStorage.getItem(WARN_KEY) === 'true';
-  } catch {
-    return false;
-  }
-}
-function writeSkipWarn(v: boolean) {
-  try {
-    localStorage.setItem(WARN_KEY, String(v));
-  } catch {
-    /* ignore */
-  }
-}
+import { RobotPanelDebugConfirmButton } from './robot-panel-debug-confirm-button';
 
 export interface RobotPanelAssignShortestPathProps {
   robotId: string;
@@ -52,11 +26,8 @@ export function RobotPanelAssignShortestPath({
   const [allowedDeviationXy, setAllowedDeviationXy] = useState('');
   const [busy, setBusy] = useState(false);
   const [decision, setDecision] = useState<string | null>(null);
-  const [popoverOpen, setPopoverOpen] = useState(false);
-  const [dontWarn, setDontWarn] = useState(false);
 
   const doSend = async () => {
-    setPopoverOpen(false);
     setBusy(true);
     setDecision(null);
     try {
@@ -78,22 +49,7 @@ export function RobotPanelAssignShortestPath({
     }
   };
 
-  const canSend = startNodeId.trim() && endNodeId.trim();
-
-  const handleClick = () => {
-    if (!canSend) return;
-    if (readSkipWarn()) {
-      void doSend();
-    } else {
-      setDontWarn(false);
-      setPopoverOpen(true);
-    }
-  };
-
-  const handleConfirm = () => {
-    if (dontWarn) writeSkipWarn(true);
-    void doSend();
-  };
+  const canSend = !!(startNodeId.trim() && endNodeId.trim());
 
   const decisionPalette = (d: string) => {
     const u = d.toUpperCase();
@@ -159,72 +115,34 @@ export function RobotPanelAssignShortestPath({
         </Field.Root>
       </HStack>
 
-      <Popover.Root
-        open={popoverOpen}
-        onOpenChange={(e) => setPopoverOpen(e.open)}
+      <RobotPanelDebugConfirmButton
+        title="Assign shortest path?"
+        description={
+          <>
+            Route{' '}
+            <Text as="span" fontFamily="mono">
+              {startNodeId}
+            </Text>
+            {' → '}
+            <Text as="span" fontFamily="mono">
+              {endNodeId}
+            </Text>{' '}
+            on{' '}
+            <Text as="span" fontFamily="mono">
+              {robotId}
+            </Text>
+            .
+          </>
+        }
+        onConfirm={() => void doSend()}
+        size="xs"
+        variant="outline"
+        colorPalette="orange"
+        loading={busy}
+        disabled={!canSend}
       >
-        <Popover.Trigger asChild>
-          <Button
-            size="xs"
-            variant="outline"
-            loading={busy}
-            disabled={!canSend}
-            onClick={handleClick}
-          >
-            Assign shortest path
-          </Button>
-        </Popover.Trigger>
-        <Popover.Positioner>
-          <Popover.Content maxW="260px">
-            <Popover.Arrow />
-            <Popover.Body>
-              <Stack gap={3}>
-                <Text fontSize="sm" fontWeight="medium">
-                  Assign shortest path?
-                </Text>
-                <Text fontSize="xs" color="fg.subtle">
-                  Route{' '}
-                  <Text as="span" fontFamily="mono">
-                    {startNodeId}
-                  </Text>
-                  {' → '}
-                  <Text as="span" fontFamily="mono">
-                    {endNodeId}
-                  </Text>{' '}
-                  on{' '}
-                  <Text as="span" fontFamily="mono">
-                    {robotId}
-                  </Text>
-                  .
-                </Text>
-                <Checkbox.Root
-                  size="sm"
-                  checked={dontWarn}
-                  onCheckedChange={(e) => setDontWarn(!!e.checked)}
-                >
-                  <Checkbox.HiddenInput />
-                  <Checkbox.Control />
-                  <Checkbox.Label fontSize="xs">
-                    {"Don't show this warning again"}
-                  </Checkbox.Label>
-                </Checkbox.Root>
-                <HStack gap={2} justify="flex-end">
-                  <Button
-                    size="xs"
-                    variant="ghost"
-                    onClick={() => setPopoverOpen(false)}
-                  >
-                    Cancel
-                  </Button>
-                  <Button size="xs" colorPalette="teal" onClick={handleConfirm}>
-                    Confirm
-                  </Button>
-                </HStack>
-              </Stack>
-            </Popover.Body>
-          </Popover.Content>
-        </Popover.Positioner>
-      </Popover.Root>
+        Assign shortest path
+      </RobotPanelDebugConfirmButton>
 
       {decision && (
         <Badge
