@@ -52,7 +52,9 @@ export function RobotPanelInfo({
       {robot.connection === 'OFFLINE' && (
         <RobotPanelConnectionBadge connection={robot.connection} />
       )}
-      <RobotPanelModeBadge mode={robot.operatingMode} />
+      {robot.connection !== 'OFFLINE' && (
+        <RobotPanelModeBadge mode={robot.operatingMode} />
+      )}
       <RobotPanelBattery percent={robot.batteryPercent} />
     </HStack>
   );

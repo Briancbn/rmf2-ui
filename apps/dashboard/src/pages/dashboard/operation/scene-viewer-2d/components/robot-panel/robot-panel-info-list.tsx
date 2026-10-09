@@ -79,6 +79,18 @@ export function RobotPanelInfoList({ pageSize = 10 }: RobotPanelInfoListProps) {
             onSelect={() => handleSelect(robot.robotId)}
           />
         ))}
+        {safePage < totalPages - 1 && (
+          <Text
+            fontSize="sm"
+            fontWeight={600}
+            color="fg.subtle"
+            textAlign="center"
+            py="4px"
+            flexShrink={0}
+          >
+            …
+          </Text>
+        )}
       </Stack>
     </Flex>
   );
