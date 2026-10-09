@@ -180,7 +180,10 @@ export const globalCss = {
     bg: { base: 'background.100', _dark: 'background.900' },
   },
   input: {
-    color: 'gray.700',
+    color: { base: 'gray.700', _dark: 'gray.100' },
+  },
+  '[data-scope="accordion"][data-part="item-trigger"]': {
+    cursor: 'pointer',
   },
 };
 

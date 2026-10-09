@@ -59,7 +59,7 @@ function SidebarItem(props: SidebarItemProps) {
   return (
     <HStack w="100%" gap={active ? '22px' : '26px'} py="5px" ps="10px">
       {section ? (
-        <Box flex="1" minW={0} w="100%" cursor="pointer">
+        <Box flex="1" minW={0} w="100%">
           {label}
         </Box>
       ) : route.path ? (
@@ -71,7 +71,7 @@ function SidebarItem(props: SidebarItemProps) {
           {label}
         </Box>
       )}
-      {section && <Accordion.ItemIndicator cursor="pointer" />}
+      {section && <Accordion.ItemIndicator />}
       <Box
         h="36px"
         w="4px"
@@ -108,7 +108,6 @@ export function SidebarItems(props: SidebarItemsProps) {
             <Accordion.ItemTrigger
               py="0px"
               fontSize="inherit"
-              cursor="pointer"
               _hover={{ bg: 'transparent' }}
             >
               <SidebarItem route={route} section active={activeRoute(route)} />
