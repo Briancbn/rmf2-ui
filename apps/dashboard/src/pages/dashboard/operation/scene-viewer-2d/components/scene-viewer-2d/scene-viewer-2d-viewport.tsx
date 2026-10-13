@@ -417,6 +417,75 @@ export function SceneViewer2DViewport(props: SceneViewer2DViewportProps) {
           </g>
         ))}
 
+        {/* Active order paths */}
+        {currentLayoutId != null &&
+          robots.map((robot, i) => {
+            if (robot.nodeStates.length === 0) return null;
+            const color = robotClient.getRobotColor(robot.robotId, i);
+            const sorted = [...robot.nodeStates].sort(
+              (a, b) => a.sequenceId - b.sequenceId,
+            );
+            const startX =
+              robot.x ?? nodeById.get(robot.lastNodeId ?? '')?.nodePosition.x;
+            const startY =
+              robot.y ?? nodeById.get(robot.lastNodeId ?? '')?.nodePosition.y;
+            const points: Array<{ x: number; y: number; released: boolean }> =
+              [];
+            if (startX != null && startY != null) {
+              points.push({ x: startX, y: startY, released: true });
+            }
+            for (const ns of sorted) {
+              const pos = nodeById.get(ns.nodeId)?.nodePosition;
+              if (pos)
+                points.push({ x: pos.x, y: pos.y, released: ns.released });
+            }
+            if (points.length < 2) return null;
+            // Split into released and horizon segments
+            const releasedPts = points.filter((p) => p.released);
+            const horizonPts = points.filter((p) => !p.released);
+            const toPoints = (pts: typeof points) =>
+              pts.map((p) => `${p.x},${-p.y}`).join(' ');
+            return (
+              <g key={`order-${robot.robotId}`} opacity={0.6}>
+                {releasedPts.length >= 2 && (
+                  <polyline
+                    points={toPoints(releasedPts)}
+                    fill="none"
+                    stroke={color}
+                    style={{ strokeWidth: 'calc(1.5 * var(--edge-width))' }}
+                  />
+                )}
+                {horizonPts.length >= 2 && (
+                  <polyline
+                    points={toPoints(horizonPts)}
+                    fill="none"
+                    stroke={color}
+                    strokeDasharray="4 4"
+                    style={{ strokeWidth: 'calc(1.5 * var(--edge-width))' }}
+                  />
+                )}
+                {sorted.map((ns) => {
+                  const pos = nodeById.get(ns.nodeId)?.nodePosition;
+                  if (!pos) return null;
+                  return (
+                    <circle
+                      key={ns.nodeId}
+                      cx={pos.x}
+                      cy={-pos.y}
+                      style={
+                        {
+                          r: `calc(0.6 * var(--node-radius))`,
+                          opacity: ns.released ? 1 : 0.5,
+                        } as React.CSSProperties
+                      }
+                      fill={color}
+                    />
+                  );
+                })}
+              </g>
+            );
+          })}
+
         {currentLayoutId != null &&
           robots.map((robot, i) => {
             if (robot.x == null || robot.y == null) return null;

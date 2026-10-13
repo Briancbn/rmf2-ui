@@ -15,6 +15,12 @@ export interface RobotActionState {
   resultDescription?: string;
 }
 
+export interface RobotNodeState {
+  nodeId: string;
+  sequenceId: number;
+  released: boolean;
+}
+
 export interface RobotState {
   robotId: string;
   x: number | null;
@@ -26,6 +32,7 @@ export interface RobotState {
   connection: RobotConnection | null;
   actionStates: RobotActionState[];
   lastNodeId: string | null;
+  nodeStates: RobotNodeState[];
 }
 
 export interface RobotOrder {

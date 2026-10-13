@@ -18,6 +18,7 @@ const DEFAULT_ROBOTS: RobotState[] = [
     connection: 'ONLINE',
     actionStates: [],
     lastNodeId: 'node-1',
+    nodeStates: [],
   },
   {
     robotId: 'robot-2',
@@ -25,10 +26,11 @@ const DEFAULT_ROBOTS: RobotState[] = [
     y: 3,
     theta: Math.PI / 2,
     batteryPercent: 45,
-    operatingMode: 'IDLE',
+    operatingMode: 'AUTOMATIC',
     connection: 'ONLINE',
     actionStates: [],
     lastNodeId: 'node-5',
+    nodeStates: [],
   },
   {
     robotId: 'robot-3',
@@ -40,6 +42,7 @@ const DEFAULT_ROBOTS: RobotState[] = [
     connection: 'OFFLINE',
     actionStates: [],
     lastNodeId: null,
+    nodeStates: [],
   },
 ];
 
