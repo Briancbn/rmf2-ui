@@ -24,21 +24,29 @@ export function useSchedule(props: UseScheduleProps) {
     live: defaultLive,
     timeViewWindow: defaultTimeViewWindow,
   } = props;
+  const [tabValue, setTabValue] = useState<string | null>('schedule');
   const [live, setLive] = useState<boolean>(defaultLive ?? false);
   const [timeViewWindow, setTimeViewWindow] = useState<
     TimeViewWindow | undefined
   >(defaultTimeViewWindow);
   const [viewTask, setViewTask] = useState<RTS.Task | undefined>(undefined);
+  const [viewProcess, setViewProcess] = useState<RTS.Process | undefined>(
+    undefined,
+  );
   const [taskDialogOpen, setTaskDialogOpen] = useState<boolean>(false);
 
   return {
     schedule,
+    tabValue,
+    setTabValue,
     live,
     setLive,
     timeViewWindow,
     setTimeViewWindow,
     viewTask,
     setViewTask,
+    viewProcess,
+    setViewProcess,
     taskDialogOpen,
     setTaskDialogOpen,
   };
@@ -59,6 +67,15 @@ const useScheduleContext = () => {
   }
   return horizonScheduleContext;
 };
+
+export function useScheduleTabsRoot() {
+  const { tabValue, setTabValue } = useScheduleContext();
+
+  return {
+    tabValue,
+    setTabValue,
+  };
+}
 
 export function useScheduleGantt() {
   const { schedule, setViewTask, setTaskDialogOpen } = useScheduleContext();
@@ -139,5 +156,15 @@ export function useScheduleRefreshButton() {
   return {
     disabled: schedule === undefined,
     loading: live,
+  };
+}
+
+export function useScheduleProcess() {
+  const { schedule, viewProcess, setViewProcess } = useScheduleContext();
+
+  return {
+    schedule,
+    viewProcess,
+    setViewProcess,
   };
 }

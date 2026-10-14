@@ -1,26 +1,16 @@
-import { useEffect, useState } from 'react';
-import { Box, Button, Flex, Spacer, Text } from '@chakra-ui/react';
+import { useState, useEffect } from 'react';
+import { Box, Flex, Spacer, Text } from '@chakra-ui/react';
 import { Horizon } from '@rmf2-ui/chakra';
 import Card = Horizon.Card;
 import type { RTS } from '@rmf2-ui/data';
-import { RTOConfig, LauncherConfig } from '@/clients';
 import { toaster } from '@/components/ui/toaster';
 import { Pending } from '@/components/pending';
 import { DateTimeSelector } from './components/date-time-selector';
 import { useRTSClient } from '@/clients/rts';
-import { ScheduleGantt } from './components/schedule-gantt';
-import { ScheduleTaskDialog } from './components/schedule-task-dialog';
-import { ScheduleRoot } from './components/schedule-root';
-import {
-  ScheduleAddButton,
-  ScheduleDownloadButton,
-  ScheduleLiveToggle,
-  ScheduleRefreshButton,
-  ScheduleOptimizeButton,
-} from './components/schedule-control-panel';
+import { Schedule } from '@/components/schedule';
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 
-export function Schedule() {
+export function SchedulePage() {
   // Chakra Color Mode
   const currentDate = new Date();
   const rtsClient = useRTSClient();
@@ -41,49 +31,6 @@ export function Schedule() {
     staleTime: 5 * 1000,
     gcTime: 0,
     refetchInterval,
-  });
-
-  const sendTaskRTS = async () => {
-    // TODO(anyone): fix response header to remove the try-catch
-    try {
-      await fetch(LauncherConfig.BASE + '/send_task', {
-        method: 'POST',
-        headers: {
-          Accept: '*',
-        },
-      });
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const sendTaskRTO = async () => {
-    // TODO(anyone): fix response header to remove the try-catch
-    try {
-      await fetch(RTOConfig.BASE + '/send_task', {
-        method: 'POST',
-        headers: {
-          Accept: '*',
-        },
-      });
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const sendTask = async () => {
-    await sendTaskRTS();
-    await sendTaskRTO();
-    await new Promise((resolve) => setTimeout(resolve, 5 * 1000));
-  };
-
-  const { mutateAsync: sendTaskMutation, error: errorSendTask } = useMutation({
-    mutationFn: sendTask,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['RTSSchedule'],
-      });
-    },
   });
 
   const optimizeSchedule = async () => {
@@ -129,6 +76,29 @@ export function Schedule() {
   } = useMutation({
     mutationFn: refreshSchedule,
   });
+
+  async function deleteTask(uuid: string) {
+    return await rtsClient.deleteTask({ uuid: uuid });
+  }
+
+  const { mutateAsync: deleteTaskMutation, isPending: deleteTaskPending } =
+    useMutation({
+      mutationFn: deleteTask,
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: ['RTSSchedule'],
+        });
+      },
+      onError: (error) => {
+        toaster.create({
+          title: 'Error Deleting Task',
+          description: `${error}`,
+          type: 'error',
+          duration: 10 * 1000,
+          closable: true,
+        });
+      },
+    });
 
   const convertToCSV = (tasks: RTS.Task[]) => {
     if (tasks.length === 0) {
@@ -184,72 +154,62 @@ export function Schedule() {
     <Box>
       <Card flexDirection="column" gap="5px" p="25px">
         <Flex justifyContent="space-between" align="center">
-          <Flex align="center" gap="20px">
-            <Text fontSize="22px" fontWeight="700" lineHeight="100%">
-              Schedule Viewer
-            </Text>
-
-            <Button
-              onClick={() => {
-                const promise = sendTaskMutation();
-                toaster.promise(promise, {
-                  success: {
-                    title: 'Successfully Send Task',
-                    description: 'Work Order',
-                    duration: 5000,
-                    closable: true,
-                  },
-                  error: {
-                    title: 'Error Send Task',
-                    description: `${errorSendTask?.name}: ${errorSendTask?.message}`,
-                    duration: 5000,
-                    closable: true,
-                  },
-                  loading: {
-                    title: 'Sending Task...',
-                    description: 'Work Order',
-                  },
-                });
-              }}
-              colorPalette="blue"
-              variant="solid"
-              disabled={isErrorGetSchedule}
-            >
-              Send Preset Task
-            </Button>
-          </Flex>
+          <Text fontSize="22px" fontWeight="700" lineHeight="100%">
+            Schedule Viewer
+          </Text>
         </Flex>
-        <ScheduleRoot schedule={schedule}>
-          <Flex
-            justify="end"
-            direction={{ base: 'column', sm: 'row' }}
-            gap="5px"
-          >
-            <ScheduleAddButton disabled={schedule === undefined} />
-            <ScheduleDownloadButton
-              onClick={downloadCSV}
-              disabled={schedule === undefined}
-            />
-            <ScheduleRefreshButton
-              onClick={async () => await refreshScheduleMutation()}
-              loading={refreshSchedulePending}
-            />
-            <ScheduleLiveToggle
-              onToggleLive={(live) => {
-                setRefetchInterval(live ? 1000 : false);
-              }}
-            />
-            <ScheduleOptimizeButton
-              onClick={async () => await optimzeScheduleMutation()}
-              loading={optimizeSchedulePending}
-            />
-            <Spacer />
+        {/* Schedule Viewer */}
+        <Schedule.Root schedule={schedule}>
+          {/* Schedule Tabs */}
+          <Schedule.TabsRoot>
+            {/* Schedule Tabs Control */}
+            <Schedule.TabsControl />
 
-            <DateTimeSelector currentDate={currentDate} />
-          </Flex>
-          <ScheduleGantt />
-          <ScheduleTaskDialog placement="center" />
-        </ScheduleRoot>
+            {/* Schedule Tabs Schedule Display */}
+            <Schedule.TabsContentSchedule>
+              {/* Control Panel */}
+              <Schedule.ControlPanel>
+                <Schedule.AddButton disabled={schedule === undefined} />
+                <Schedule.DownloadButton
+                  onClick={downloadCSV}
+                  disabled={schedule === undefined}
+                />
+                <Schedule.RefreshButton
+                  onClick={async () => await refreshScheduleMutation()}
+                  loading={refreshSchedulePending}
+                />
+                <Schedule.LiveToggle
+                  onToggleLive={(live) => {
+                    setRefetchInterval(live ? 1000 : false);
+                  }}
+                />
+                <Schedule.OptimizeButton
+                  onClick={async () => await optimzeScheduleMutation()}
+                  loading={optimizeSchedulePending}
+                />
+                <Spacer />
+
+                <DateTimeSelector currentDate={currentDate} />
+              </Schedule.ControlPanel>
+              <Schedule.Gantt />
+            </Schedule.TabsContentSchedule>
+
+            {/* Schedule Tabs Process Display */}
+            <Schedule.TabsContentProcess>
+              <Schedule.Process />
+            </Schedule.TabsContentProcess>
+          </Schedule.TabsRoot>
+
+          {/* Task Dialog Popover */}
+          <Schedule.TaskDialog placement="center">
+            <Schedule.TaskDialogControlPanel
+              onDelete={async (event) =>
+                await deleteTaskMutation(event.task.id)
+              }
+              isDeleting={deleteTaskPending}
+            />
+          </Schedule.TaskDialog>
+        </Schedule.Root>
         {isPendingGetSchedule && (
           <Pending.Root>
             <Pending.Overlay />
