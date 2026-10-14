@@ -18,14 +18,6 @@ export function SceneInfoRobotContent({ children }: { children?: ReactNode }) {
   );
 }
 
-export function SceneInfoOrderContent({ children }: { children?: ReactNode }) {
-  return (
-    <Tabs.Content value="orders" {...tabContentProps}>
-      {children}
-    </Tabs.Content>
-  );
-}
-
 export function SceneInfoPlanContent({ children }: { children?: ReactNode }) {
   return (
     <Tabs.Content value="plans" {...tabContentProps}>
