@@ -1,77 +1,61 @@
-// Chakra imports
 import { Box, Stack, Table } from '@chakra-ui/react';
-
-// Custom components
 import { NetworkStatusRow } from '@/components/card';
 import { useState, useEffect } from 'react';
-import { BrokerStatusConfig } from '@/clients';
+import {
+  Vda5050MasterConfig,
+  PlanServerConfig,
+  PlanExecutorConfig,
+} from '@/clients';
+
+const MQTT_BASE = import.meta.env.VITE_MQTT_BASE ?? 'http://localhost:1883';
+const AMQP_BASE = import.meta.env.VITE_AMQP_BASE ?? 'http://localhost:5672';
+const ORCHESTRATOR_BASE =
+  import.meta.env.VITE_ORCHESTRATOR_BASE ??
+  'http://localhost:8080/orchestrator';
+
+async function checkHealth(url: string): Promise<boolean> {
+  try {
+    const res = await fetch(url, {
+      method: 'GET',
+      signal: AbortSignal.timeout(3000),
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
 
 export function Network() {
-  const [servicesStatus, setServicesStatus] = useState({
-    proxy: false,
-    mongodb: false,
-    redis: false,
-    rabbitmq: false,
-    postgres: false,
-    it_connector: false,
-    swagger: false,
-    event_mgr: false,
-    rmf_proxy: false,
-    rmf_logger: false,
-    test_logger_database: false,
+  const [status, setStatus] = useState({
+    planServer: false,
+    planExecutor: false,
+    vda5050Master: false,
   });
 
   useEffect(() => {
-    const fetchStatus = async () => {
-      try {
-        const response = await fetch(BrokerStatusConfig.BASE + '/status', {
-          method: 'GET',
-          headers: {
-            Accept: '*',
-          },
-        });
-        const data = await response.json();
-        setServicesStatus({
-          proxy: data.data.redis.status,
-          mongodb: data.data.mongodb.status,
-          redis: data.data.redis.status,
-          rabbitmq: data.data.rabbitmq.status,
-          postgres: data.data.postgres.status,
-          it_connector: data.data.it_connector.status,
-          swagger: data.data.swagger.status,
-          event_mgr: data.data.event_mgr.status,
-          rmf_proxy: data.data.rmf_proxy.status,
-          rmf_logger: data.data.rmf_logger.status,
-          test_logger_database: data.data['test-logger-database'].status,
-        });
-      } catch (_error) {
-        // console.error('Error fetching status:', error);
+    const planServerBase =
+      PlanServerConfig.BASE ?? 'http://localhost:8080/plan_server';
+    const planExecutorBase =
+      PlanExecutorConfig.BASE ?? 'http://localhost:8080/plan_executor';
+    const vda5050Base =
+      Vda5050MasterConfig.BASE ?? 'http://localhost:8080/vda5050_master';
 
-        setServicesStatus({
-          proxy: false,
-          mongodb: false,
-          redis: false,
-          rabbitmq: false,
-          postgres: false,
-          it_connector: false,
-          swagger: false,
-          event_mgr: false,
-          rmf_proxy: false,
-          rmf_logger: false,
-          test_logger_database: false,
-        });
-      }
+    const poll = async () => {
+      const [planServer, planExecutor, vda5050Master] = await Promise.all([
+        checkHealth(planServerBase + '/health'),
+        checkHealth(planExecutorBase + '/health'),
+        checkHealth(vda5050Base + '/health'),
+      ]);
+      setStatus({ planServer, planExecutor, vda5050Master });
     };
 
-    fetchStatus();
-    const intervalId = setInterval(fetchStatus, 1000);
-    return () => clearInterval(intervalId);
+    poll();
+    const id = setInterval(poll, 5000);
+    return () => clearInterval(id);
   }, []);
 
   return (
     <Box>
-      {/* Main Fields */}
-
       <Stack>
         <Table.ScrollArea maxW="full">
           <Table.Root
@@ -90,60 +74,86 @@ export function Network() {
             </Table.Header>
             <Table.Body>
               <NetworkStatusRow
-                name="Monitoring Service"
-                description="Used for monitoring internal IOCS servicesr"
-                isOnline={servicesStatus.mongodb}
-                endpointBase={BrokerStatusConfig.BASE}
-                responseKey="mongodb"
+                name="Task Scheduler"
+                description="Schedule and optimize tasks across processes and series"
+                isOnline={true}
+                endpointBase="http://localhost:8080/task_scheduler"
+                responseKey="scheduler"
+                statusPath="/health"
+                docsUrl="http://localhost:8080/task_scheduler/docs"
               />
               <NetworkStatusRow
-                name="Proxy Service"
-                description="Used for forwarding messages to databases, handling routing and message transformation."
-                isOnline={servicesStatus.proxy}
-                endpointBase={BrokerStatusConfig.BASE}
-                responseKey="redis"
+                name="Task Orchestrator"
+                description="Design and execute complex multi-step workflows across services and robots"
+                isOnline={true}
+                endpointBase={ORCHESTRATOR_BASE}
+                responseKey="orchestrator"
+                statusPath="/health"
+                docsUrl={ORCHESTRATOR_BASE + '/docs'}
               />
               <NetworkStatusRow
-                name="Logging Service"
-                description="Service for storing data into database"
-                isOnline={servicesStatus.rmf_logger}
-                endpointBase={BrokerStatusConfig.BASE}
-                responseKey="rmf_logger"
+                name="Plan Server"
+                description="MAPF (Multi-Agent Path Finding) planner that computes collision-free paths and caches motion plans for fleet execution"
+                isOnline={status.planServer}
+                endpointBase={
+                  PlanServerConfig.BASE ?? 'http://localhost:8080/plan_server'
+                }
+                responseKey="planServer"
+                statusPath="/health"
+                docsUrl={
+                  (PlanServerConfig.BASE ??
+                    'http://localhost:8080/plan_server') + '/docs'
+                }
               />
               <NetworkStatusRow
-                name="RabbitMQ Service"
-                description="Service bus data broadcasting using exchange "
-                isOnline={servicesStatus.rabbitmq}
-                endpointBase={BrokerStatusConfig.BASE}
-                responseKey="rabbitmq"
+                name="Plan Executor"
+                description="Executes pre-computed motion plans deterministically, following each step in sequence with guaranteed ordering"
+                isOnline={status.planExecutor}
+                endpointBase={
+                  PlanExecutorConfig.BASE ??
+                  'http://localhost:8080/plan_executor'
+                }
+                responseKey="planExecutor"
+                statusPath="/health"
+                docsUrl={
+                  (PlanExecutorConfig.BASE ??
+                    'http://localhost:8080/plan_executor') + '/docs'
+                }
               />
               <NetworkStatusRow
-                name="Postgres Service"
-                description="Used for Data analytics, NGSI-LD Context broker, IT Connectors Configuration "
-                isOnline={servicesStatus.postgres}
-                endpointBase={BrokerStatusConfig.BASE}
-                responseKey="postgres"
+                name="VDA5050 Master"
+                description="VDA5050 master control that dispatches orders and monitors state for AMRs and AGVs"
+                isOnline={status.vda5050Master}
+                endpointBase={
+                  Vda5050MasterConfig.BASE ??
+                  'http://localhost:8080/vda5050_master'
+                }
+                responseKey="vda5050Master"
+                statusPath="/health"
+                docsUrl={
+                  (Vda5050MasterConfig.BASE ??
+                    'http://localhost:8080/vda5050_master') + '/docs'
+                }
               />
               <NetworkStatusRow
-                name="Data Model Repository Service"
-                description="Internal storage for data model "
-                isOnline={servicesStatus.redis}
-                endpointBase={BrokerStatusConfig.BASE}
-                responseKey="redis"
+                name="MQTT Broker"
+                description="Connects to robots and edge devices such as VDA5050 agents"
+                isOnline={true}
+                endpointBase={MQTT_BASE}
+                responseKey="mqtt"
+                statusPath=""
               />
               <NetworkStatusRow
-                name="IT-Connector Service"
-                description="IT data pipeline from external data source to context broker"
-                isOnline={servicesStatus.it_connector}
-                endpointBase={BrokerStatusConfig.BASE}
-                responseKey="it_connector"
-              />
-              <NetworkStatusRow
-                name="EventManager Service"
-                description="Processes and managers system event triggers"
-                isOnline={servicesStatus.event_mgr}
-                endpointBase={BrokerStatusConfig.BASE}
-                responseKey="event_mgr"
+                name="AMQP Broker"
+                description="Handles inter-service communication with reliable message passing between backend services"
+                isOnline={true}
+                endpointBase={AMQP_BASE}
+                responseKey="amqp"
+                statusPath=""
+                docsUrl={
+                  import.meta.env.VITE_AMQP_ADMIN_BASE ??
+                  'http://localhost:15672'
+                }
               />
             </Table.Body>
           </Table.Root>

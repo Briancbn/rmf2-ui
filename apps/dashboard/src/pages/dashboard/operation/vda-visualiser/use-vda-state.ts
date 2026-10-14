@@ -5,10 +5,9 @@ import { Vda5050MasterConfig } from '@/clients';
 
 import type { AgvState, MapData, MapNode, SocketStatus } from './types';
 
-const BASE = (Vda5050MasterConfig.BASE ?? 'http://localhost:8000').replace(
-  /\/$/,
-  '',
-);
+const BASE = (
+  Vda5050MasterConfig.BASE ?? 'http://localhost:8080/vda5050_master'
+).replace(/\/$/, '');
 const AGV_POLL_MS = 1000;
 
 // Parse a LIF layout object (camelCase) into the visualiser's MapData (snake_case).
@@ -43,8 +42,7 @@ function lifToMapData(layout: Record<string, unknown>): MapData {
     const interactionIds =
       (station.interactionNodeIds as string[] | undefined) ?? [];
     const stationPos = station.stationPosition as
-      | Record<string, number>
-      | undefined;
+      Record<string, number> | undefined;
     const anchorNode = nodeById.get(interactionIds[0] ?? '');
     return {
       station_id: station.stationId as string,
@@ -65,9 +63,7 @@ function agvStatusToState(raw: Record<string, unknown>): AgvState {
   const state = raw.state as Record<string, unknown> | null | undefined;
   const pos = state?.agvPosition as Record<string, unknown> | null | undefined;
   const actionStates = state?.actionStates as
-    | Record<string, unknown>[]
-    | null
-    | undefined;
+    Record<string, unknown>[] | null | undefined;
 
   const jackAction = actionStates?.find((a) => {
     const t = (a.actionType as string | undefined)?.toUpperCase() ?? '';

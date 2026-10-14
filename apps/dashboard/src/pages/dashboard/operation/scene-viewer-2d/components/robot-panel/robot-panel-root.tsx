@@ -15,8 +15,16 @@ export function RobotPanelRoot({
   robotClient,
   selected,
   onSelect,
+  initialExpanded,
+  autoSelectFirst,
 }: RobotPanelRootProps) {
-  const ctx = useRobotPanel({ robotClient, selected, onSelect });
+  const ctx = useRobotPanel({
+    robotClient,
+    selected,
+    onSelect,
+    initialExpanded,
+    autoSelectFirst,
+  });
   return (
     <RobotPanelContext.Provider value={ctx}>
       <Flex direction="column" flex="1" minH={0}>

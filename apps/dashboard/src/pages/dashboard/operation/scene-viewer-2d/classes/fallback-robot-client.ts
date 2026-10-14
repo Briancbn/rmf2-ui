@@ -18,7 +18,15 @@ const DEFAULT_ROBOTS: RobotState[] = [
     connection: 'ONLINE',
     actionStates: [],
     lastNodeId: 'node-1',
-    nodeStates: [],
+    // Active order: released up to node-2, horizon to node-3 (subset of plan)
+    nodeStates: [
+      { nodeId: 'node-2', sequenceId: 2, released: true, position: [2, 0] },
+      { nodeId: 'node-3', sequenceId: 4, released: false, position: [2, 2] },
+    ],
+    edgeStates: [
+      { edgeId: 'edge-1-2', sequenceId: 1, released: true },
+      { edgeId: 'edge-2-3', sequenceId: 3, released: false },
+    ],
   },
   {
     robotId: 'robot-2',
@@ -26,11 +34,19 @@ const DEFAULT_ROBOTS: RobotState[] = [
     y: 3,
     theta: Math.PI / 2,
     batteryPercent: 45,
-    operatingMode: 'AUTOMATIC',
+    operatingMode: 'DRIVING',
     connection: 'ONLINE',
     actionStates: [],
     lastNodeId: 'node-5',
-    nodeStates: [],
+    // Active order: released to node-6, horizon to node-7
+    nodeStates: [
+      { nodeId: 'node-6', sequenceId: 2, released: true, position: [4, 3] },
+      { nodeId: 'node-7', sequenceId: 4, released: false, position: [4, 5] },
+    ],
+    edgeStates: [
+      { edgeId: 'edge-5-6', sequenceId: 1, released: true },
+      { edgeId: 'edge-6-7', sequenceId: 3, released: false },
+    ],
   },
   {
     robotId: 'robot-3',
@@ -43,6 +59,7 @@ const DEFAULT_ROBOTS: RobotState[] = [
     actionStates: [],
     lastNodeId: null,
     nodeStates: [],
+    edgeStates: [],
   },
 ];
 

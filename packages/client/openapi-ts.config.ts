@@ -1,28 +1,21 @@
+import type { UserConfig } from '@hey-api/openapi-ts';
 import { defineConfig } from '@hey-api/openapi-ts';
 
+function serviceConfig(name: string): UserConfig {
+  return {
+    input: `src/${name}/openapi.json`,
+    output: {
+      format: 'prettier',
+      lint: 'eslint',
+      path: `src/${name}/generated`,
+    },
+  };
+}
+
 export default defineConfig([
-  {
-    input: 'src/vda5050-master/openapi.json',
-    output: {
-      format: 'prettier',
-      lint: 'eslint',
-      path: 'src/vda5050-master/generated',
-    },
-  },
-  {
-    input: 'src/rts/openapi.json',
-    output: {
-      format: 'prettier',
-      lint: 'eslint',
-      path: 'src/rts/generated',
-    },
-  },
-  {
-    input: 'src/map/openapi.json',
-    output: {
-      format: 'prettier',
-      lint: 'eslint',
-      path: 'src/map/generated',
-    },
-  },
+  serviceConfig('vda5050-master'),
+  serviceConfig('rts'),
+  serviceConfig('map'),
+  serviceConfig('plan-server'),
+  serviceConfig('plan-executor'),
 ]);

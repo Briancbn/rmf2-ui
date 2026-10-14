@@ -6,7 +6,7 @@ import { Vda5050MasterConfig } from '@/clients';
 
 import type { MapImageMeta } from './types';
 
-const BASE = Vda5050MasterConfig.BASE ?? 'http://localhost:8000';
+const BASE = Vda5050MasterConfig.BASE ?? 'http://localhost:8080/vda5050_master';
 
 export function useMapImage(): MapImageMeta | null {
   const [meta, setMeta] = useState<MapImageMeta | null>(null);

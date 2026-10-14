@@ -12,6 +12,18 @@ import type { ISceneClient } from '../../classes/scene-client-base';
 import { FallbackSceneClient } from '../../classes/fallback-scene-client';
 import type { IRobotClient, RobotState } from '../../classes/robot-client-base';
 import { FallbackRobotClient } from '../../classes/fallback-robot-client';
+import type { IPlanClient, PlanWaypoint } from '../../classes/plan-client-base';
+import { FallbackPlanClient } from '../../classes/fallback-plan-client';
+
+export interface PlanData {
+  byRobot: Record<string, PlanWaypoint[]>;
+  maxSteps: number;
+}
+
+export interface GoalInfo {
+  armedRobotId: string | null;
+  goals: Record<string, string>; // robotId → goalNodeId
+}
 
 export type LoadStatus = 'loading' | 'success' | 'error';
 
@@ -24,6 +36,7 @@ export interface UseSceneViewer2DProps {
   mapClient?: IMapClient;
   sceneClient?: ISceneClient;
   robotClient?: IRobotClient;
+  planClient?: IPlanClient;
 }
 
 interface ZoomState {
@@ -35,11 +48,13 @@ const DEFAULT_MAP_CLIENT: IMapClient = new FallbackMapClient({ delay: 2000 });
 const DEFAULT_SCENE_CLIENT: ISceneClient =
   FallbackSceneClient.fromColor('#f3f4f6');
 const DEFAULT_ROBOT_CLIENT: IRobotClient = new FallbackRobotClient();
+const DEFAULT_PLAN_CLIENT: IPlanClient = new FallbackPlanClient();
 
 export function useSceneViewer2D(props: UseSceneViewer2DProps = {}) {
   const mapClient = props.mapClient ?? DEFAULT_MAP_CLIENT;
   const sceneClient = props.sceneClient ?? DEFAULT_SCENE_CLIENT;
   const robotClient = props.robotClient ?? DEFAULT_ROBOT_CLIENT;
+  const planClient = props.planClient ?? DEFAULT_PLAN_CLIENT;
 
   const [loadStatus, setLoadStatus] = useState<LoadStatus>('loading');
   const [loadMessage, setLoadMessage] = useState<LoadMessage | undefined>();
@@ -62,6 +77,35 @@ export function useSceneViewer2D(props: UseSceneViewer2DProps = {}) {
   const [robots, setRobots] = useState<RobotState[]>([]);
   useEffect(() => robotClient.subscribeRobotStates(setRobots), [robotClient]);
   const [selectedRobotId, setSelectedRobotId] = useState<string | null>(null);
+
+  // Plan scrubber — ref owned by the context; written by usePlanPanel on each render.
+  const plansByRobotRef = useRef<PlanData>({ byRobot: {}, maxSteps: 0 });
+  const [planStep, setPlanStep] = useState(0);
+  // Single counter: bumped by usePlanPanel after writing the ref, so the viewport re-renders.
+  const [planDataRevision, setPlanDataRevision] = useState(0);
+  const bumpPlanRevision = useCallback(
+    () => setPlanDataRevision((n) => n + 1),
+    [],
+  );
+
+  // Plan mode — goal assignment via map node click
+  const [planModeActive, setPlanModeActive] = useState(false);
+  const [goalInfo, setGoalInfo] = useState<GoalInfo>({
+    armedRobotId: null,
+    goals: {},
+  });
+
+  const pickNode = useCallback((nodeId: string) => {
+    setGoalInfo((prev) => {
+      if (!prev.armedRobotId) return prev;
+      return { ...prev, goals: { ...prev.goals, [prev.armedRobotId]: nodeId } };
+    });
+  }, []);
+
+  const clearPlanMode = useCallback(() => {
+    setPlanModeActive(false);
+    setGoalInfo({ armedRobotId: null, goals: {} });
+  }, []);
 
   // targetZoom: set by controls to request a zoom change; viewport effect applies it.
   const [targetZoom, setTargetZoom] = useState(100);
@@ -93,6 +137,18 @@ export function useSceneViewer2D(props: UseSceneViewer2DProps = {}) {
     robots,
     selectedRobotId,
     setSelectedRobotId,
+    planClient,
+    plansByRobotRef,
+    planStep,
+    setPlanStep,
+    planDataRevision,
+    bumpPlanRevision,
+    planModeActive,
+    setPlanModeActive,
+    goalInfo,
+    setGoalInfo,
+    pickNode,
+    clearPlanMode,
   };
 }
 
@@ -131,6 +187,12 @@ export function useSceneViewer2DViewport() {
     robots,
     selectedRobotId,
     setSelectedRobotId,
+    plansByRobotRef,
+    planStep,
+    planDataRevision,
+    planModeActive,
+    goalInfo,
+    pickNode,
   } = useSceneViewer2DContext();
   return {
     mapClient,
@@ -145,6 +207,43 @@ export function useSceneViewer2DViewport() {
     robots,
     selectedRobotId,
     setSelectedRobotId,
+    plansByRobotRef,
+    planStep,
+    planDataRevision,
+    planModeActive,
+    goalInfo,
+    pickNode,
+  };
+}
+
+export function useSceneViewer2DPlanScrubber() {
+  const {
+    plansByRobotRef,
+    planStep,
+    setPlanStep,
+    bumpPlanRevision,
+    planClient,
+    robotClient,
+    robots,
+    planModeActive,
+    setPlanModeActive,
+    goalInfo,
+    setGoalInfo,
+    clearPlanMode,
+  } = useSceneViewer2DContext();
+  return {
+    plansByRobotRef,
+    planStep,
+    setPlanStep,
+    bumpPlanRevision,
+    planClient,
+    robotClient,
+    robots,
+    planModeActive,
+    setPlanModeActive,
+    goalInfo,
+    setGoalInfo,
+    clearPlanMode,
   };
 }
 

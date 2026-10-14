@@ -35,9 +35,8 @@ export const AdminRoutes: RouteObject[] = [
         // Simulation
         path: 'simulation',
         lazy: async () => {
-          const { Simulation } = await import(
-            '@/pages/dashboard/system/simulation'
-          );
+          const { Simulation } =
+            await import('@/pages/dashboard/system/simulation');
           return { Component: Simulation };
         },
       },
@@ -62,18 +61,23 @@ export const AdminRoutes: RouteObject[] = [
   {
     path: 'operation/vda-visualiser',
     lazy: async () => {
-      const { VdaVisualiser } = await import(
-        '@/pages/dashboard/operation/vda-visualiser'
-      );
+      const { VdaVisualiser } =
+        await import('@/pages/dashboard/operation/vda-visualiser');
       return { Component: VdaVisualiser };
+    },
+  },
+  {
+    path: 'operation/device',
+    lazy: async () => {
+      const { DevicePage } = await import('@/pages/dashboard/operation/device');
+      return { Component: DevicePage };
     },
   },
   {
     path: 'operation/scene-viewer-2d',
     lazy: async () => {
-      const { SceneViewer2DPage } = await import(
-        '@/pages/dashboard/operation/scene-viewer-2d'
-      );
+      const { SceneViewer2DPage } =
+        await import('@/pages/dashboard/operation/scene-viewer-2d');
       return { Component: SceneViewer2DPage };
     },
   },

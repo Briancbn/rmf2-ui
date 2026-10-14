@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 const TABS = [
   { value: 'robots', label: 'Robots' },
   { value: 'orders', label: 'Orders' },
+  { value: 'plans', label: 'Plans' },
   { value: 'logs', label: 'Logs' },
 ] as const;
 

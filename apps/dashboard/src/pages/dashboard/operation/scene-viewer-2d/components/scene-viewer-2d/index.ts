@@ -26,4 +26,7 @@ export { SceneViewer2DAxisDisplay } from './scene-viewer-2d-axis-display';
 export { SceneViewer2DViewportPositioner } from './scene-viewer-2d-viewport-positioner';
 export type { SceneViewer2DViewportPositionerProps } from './scene-viewer-2d-viewport-positioner';
 
+export { SceneViewer2DPlanPanel } from './scene-viewer-2d-plan-panel';
+export type { SceneViewer2DPlanPanelProps } from './scene-viewer-2d-plan-panel';
+
 export * as SceneViewer2D from './namespace';

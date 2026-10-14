@@ -1,45 +1,47 @@
-// Chakra imports
-import { Badge, HStack, Icon, Table, Text, VStack } from '@chakra-ui/react';
-// Assets
-import { IoWifi } from 'react-icons/io5'; // Online icon
-import { FiWifiOff } from 'react-icons/fi'; // Offline icon
+import {
+  Badge,
+  HStack,
+  Icon,
+  Link,
+  Table,
+  Text,
+  VStack,
+} from '@chakra-ui/react';
+import { IoWifi } from 'react-icons/io5';
+import { FiWifiOff } from 'react-icons/fi';
+import { LuExternalLink } from 'react-icons/lu';
 
 export interface NetworkStatusRowProps {
   name: string;
   description: string;
   isOnline: boolean;
-  endpointBase: string; // e.g. BrokerStatusConfig.BASE
-  responseKey: string; // e.g. 'mongodb' -> renders data.mongodb.status
+  endpointBase: string;
+  responseKey: string;
   statusPath?: string;
+  docsUrl?: string;
 }
 
-function parseEndpoint(base: string): { protocol: string; host: string } {
+function parseEndpoint(base: string): { protocol: string; endpoint: string } {
   try {
     const url = new URL(base);
+    const pathname = url.pathname.replace(/\/$/, '');
     return {
       protocol: url.protocol.replace(':', '').toUpperCase(),
-      host: url.host,
+      endpoint: url.host + pathname,
     };
   } catch {
-    return { protocol: 'HTTP', host: base };
+    return { protocol: 'HTTP', endpoint: base };
   }
 }
 
 export function NetworkStatusRow(props: NetworkStatusRowProps) {
-  const {
-    name,
-    description,
-    isOnline,
-    endpointBase,
-    // responseKey,
-    statusPath = '/status',
-  } = props;
+  const { name, description, isOnline, endpointBase, docsUrl } = props;
 
   const StatusIcon = isOnline ? IoWifi : FiWifiOff;
   const iconColor = isOnline ? 'green.500' : 'red.500';
   const statusLabel = isOnline ? 'Online' : 'Offline';
   const statusColor = isOnline ? 'green.600' : 'red.600';
-  const { protocol, host } = parseEndpoint(endpointBase);
+  const { protocol, endpoint } = parseEndpoint(endpointBase);
 
   return (
     <Table.Row>
@@ -61,12 +63,23 @@ export function NetworkStatusRow(props: NetworkStatusRowProps) {
               {protocol}
             </Badge>
             <Text fontSize="xs" fontFamily="mono" color="fg.muted">
-              {host + statusPath}
+              {endpoint}
             </Text>
           </HStack>
-          <Text fontSize="xs" fontFamily="mono" color="fg.subtle">
-            ↳
-          </Text>
+          {docsUrl && (
+            <Link
+              href={docsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              fontSize="xs"
+              color="blue.500"
+            >
+              <HStack gap="1">
+                <Text>Docs</Text>
+                <Icon as={LuExternalLink} boxSize="3" />
+              </HStack>
+            </Link>
+          )}
         </VStack>
       </Table.Cell>
       <Table.Cell verticalAlign="top" color="fg.muted">

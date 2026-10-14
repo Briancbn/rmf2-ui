@@ -1,0 +1,1103 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "RMF2 Plan Executor",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": ["health"],
+        "summary": "Health",
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/info": {
+      "get": {
+        "tags": ["info"],
+        "summary": "Info",
+        "operationId": "info_info_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InfoResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/robots": {
+      "get": {
+        "tags": ["robots"],
+        "summary": "Get Onboarded Robots",
+        "operationId": "get_onboarded_robots_v1_robots_get",
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "title": "Skip"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RobotStatus"
+                  },
+                  "title": "Response Get Onboarded Robots V1 Robots Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["robots"],
+        "summary": "Onboard Robot",
+        "operationId": "onboard_robot_v1_robots_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RobotOnboardRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RobotOnboardResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/robots/{manufacturer}/{serial_number}": {
+      "get": {
+        "tags": ["robots"],
+        "summary": "Get Robot By Manufacturer Serial",
+        "operationId": "get_robot_by_manufacturer_serial_v1_robots__manufacturer___serial_number__get",
+        "parameters": [
+          {
+            "name": "manufacturer",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Manufacturer"
+            }
+          },
+          {
+            "name": "serial_number",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Serial Number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RobotStatus"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/robots/{robot_id}": {
+      "get": {
+        "tags": ["robots"],
+        "summary": "Get Robot",
+        "operationId": "get_robot_v1_robots__robot_id__get",
+        "parameters": [
+          {
+            "name": "robot_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Robot Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RobotStatus"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/tasks": {
+      "get": {
+        "tags": ["tasks"],
+        "summary": "Get Task Statuses",
+        "operationId": "get_task_statuses_v1_tasks_get",
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "title": "Skip"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TaskRecordStatus"
+                  },
+                  "title": "Response Get Task Statuses V1 Tasks Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/tasks/{task_id}": {
+      "get": {
+        "tags": ["tasks"],
+        "summary": "Get Task Status",
+        "operationId": "get_task_status_v1_tasks__task_id__get",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskRecordStatus"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/layout": {
+      "get": {
+        "tags": ["layout"],
+        "summary": "Get Layout Summary",
+        "description": "Return layoutIds and metaInformation for the active LIF.",
+        "operationId": "get_layout_summary_v1_layout_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LifSummary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/layout/download": {
+      "get": {
+        "tags": ["layout"],
+        "summary": "Download Layout",
+        "description": "Download the active LIF as a JSON file.",
+        "operationId": "download_layout_v1_layout_download_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/participants": {
+      "post": {
+        "tags": ["participants"],
+        "summary": "Discover Participants",
+        "operationId": "discover_participants_v1_participants_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ParticipantDiscoveryRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ParticipantDiscoveryResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/plans": {
+      "get": {
+        "tags": ["plans"],
+        "summary": "Get Plan Statuses",
+        "operationId": "get_plan_statuses_v1_plans_get",
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "title": "Skip"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PlanRecordStatus"
+                  },
+                  "title": "Response Get Plan Statuses V1 Plans Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/plans/{plan_id}": {
+      "get": {
+        "tags": ["plans"],
+        "summary": "Get Plan Status",
+        "operationId": "get_plan_status_v1_plans__plan_id__get",
+        "parameters": [
+          {
+            "name": "plan_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Plan Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlanRecordStatus"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/plans/{robot_id}": {
+      "post": {
+        "tags": ["plans"],
+        "summary": "Inject Plan",
+        "description": "Inject a plan directly for a robot, bypassing the plan server AMQP path.\n\nThe request body must be a serialised Plan object matching the res_mapf Plan JSON schema.",
+        "operationId": "inject_plan_v1_plans__robot_id__post",
+        "parameters": [
+          {
+            "name": "robot_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Robot Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true,
+                "title": "Body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlanInjectResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/committed_locations": {
+      "get": {
+        "tags": ["committed_locations"],
+        "summary": "Get Committed Locations Requests",
+        "operationId": "get_committed_locations_requests_v1_committed_locations_get",
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "title": "Skip"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CommittedLocationsRecordStatus"
+                  },
+                  "title": "Response Get Committed Locations Requests V1 Committed Locations Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/committed_locations/{request_id}": {
+      "get": {
+        "tags": ["committed_locations"],
+        "summary": "Get Committed Locations Request",
+        "operationId": "get_committed_locations_request_v1_committed_locations__request_id__get",
+        "parameters": [
+          {
+            "name": "request_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Request Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommittedLocationsRecordStatus"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/committed_locations/request": {
+      "post": {
+        "tags": ["committed_locations"],
+        "summary": "Request Committed Locations",
+        "description": "Trigger a committed-locations request, equivalent to the AMQP committed_locations/request message.",
+        "operationId": "request_committed_locations_v1_committed_locations_request_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommittedLocationsRequestResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CommittedLocationStatus": {
+        "properties": {
+          "robot_id": {
+            "type": "string",
+            "title": "Robot Id"
+          },
+          "location": {
+            "type": "string",
+            "title": "Location"
+          },
+          "waypoint_index": {
+            "type": "integer",
+            "title": "Waypoint Index"
+          },
+          "progress": {
+            "type": "number",
+            "title": "Progress"
+          },
+          "task_id": {
+            "type": "string",
+            "title": "Task Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "robot_id",
+          "location",
+          "waypoint_index",
+          "progress",
+          "task_id"
+        ],
+        "title": "CommittedLocationStatus"
+      },
+      "CommittedLocationsRecordStatus": {
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "title": "Request Id"
+          },
+          "committed_locations": {
+            "items": {
+              "$ref": "#/components/schemas/CommittedLocationStatus"
+            },
+            "type": "array",
+            "title": "Committed Locations"
+          },
+          "stationary_agents": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Stationary Agents"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "request_id",
+          "committed_locations",
+          "stationary_agents",
+          "updated_at"
+        ],
+        "title": "CommittedLocationsRecordStatus"
+      },
+      "CommittedLocationsRequestResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "request_id": {
+            "type": "string",
+            "title": "Request Id"
+          }
+        },
+        "type": "object",
+        "required": ["status", "request_id"],
+        "title": "CommittedLocationsRequestResponse"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "HealthResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          }
+        },
+        "type": "object",
+        "required": ["status"],
+        "title": "HealthResponse"
+      },
+      "InfoResponse": {
+        "properties": {
+          "service_version": {
+            "type": "string",
+            "title": "Service Version"
+          },
+          "api_version": {
+            "type": "string",
+            "title": "Api Version"
+          }
+        },
+        "type": "object",
+        "required": ["service_version", "api_version"],
+        "title": "InfoResponse"
+      },
+      "LifSummary": {
+        "properties": {
+          "layout_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Layout Ids"
+          },
+          "project_identification": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Project Identification"
+          },
+          "creator": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Creator"
+          },
+          "export_timestamp": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Export Timestamp"
+          },
+          "lif_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lif Version"
+          },
+          "loaded_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Loaded At"
+          }
+        },
+        "type": "object",
+        "required": ["layout_ids", "loaded_at"],
+        "title": "LifSummary"
+      },
+      "ParticipantDiscoveryRequest": {
+        "properties": {
+          "participants": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Participants"
+          }
+        },
+        "type": "object",
+        "required": ["participants"],
+        "title": "ParticipantDiscoveryRequest"
+      },
+      "ParticipantDiscoveryResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "participants": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Participants"
+          }
+        },
+        "type": "object",
+        "required": ["status", "participants"],
+        "title": "ParticipantDiscoveryResponse"
+      },
+      "PlanInjectResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "robot_id": {
+            "type": "string",
+            "title": "Robot Id"
+          }
+        },
+        "type": "object",
+        "required": ["status", "robot_id"],
+        "title": "PlanInjectResponse"
+      },
+      "PlanRecordStatus": {
+        "properties": {
+          "plan_id": {
+            "type": "string",
+            "title": "Plan Id"
+          },
+          "robot_id": {
+            "type": "string",
+            "title": "Robot Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "reached_waypoint": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reached Waypoint"
+          },
+          "target_waypoint": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Waypoint"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": ["plan_id", "robot_id", "status", "updated_at"],
+        "title": "PlanRecordStatus"
+      },
+      "RobotOnboardRequest": {
+        "properties": {
+          "robot_id": {
+            "type": "string",
+            "title": "Robot Id"
+          },
+          "start_location": {
+            "type": "string",
+            "title": "Start Location"
+          }
+        },
+        "type": "object",
+        "required": ["robot_id", "start_location"],
+        "title": "RobotOnboardRequest"
+      },
+      "RobotOnboardResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "robot_id": {
+            "type": "string",
+            "title": "Robot Id"
+          }
+        },
+        "type": "object",
+        "required": ["status", "robot_id"],
+        "title": "RobotOnboardResponse"
+      },
+      "RobotStatus": {
+        "properties": {
+          "robot_id": {
+            "type": "string",
+            "title": "Robot Id"
+          },
+          "start_location": {
+            "type": "string",
+            "title": "Start Location"
+          },
+          "is_onboarded": {
+            "type": "boolean",
+            "title": "Is Onboarded"
+          },
+          "onboarded_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Onboarded At"
+          }
+        },
+        "type": "object",
+        "required": ["robot_id", "start_location", "is_onboarded"],
+        "title": "RobotStatus"
+      },
+      "TaskRecordStatus": {
+        "properties": {
+          "task_id": {
+            "type": "string",
+            "title": "Task Id"
+          },
+          "robot_id": {
+            "type": "string",
+            "title": "Robot Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          },
+          "superseded_by": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Superseded By"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": ["task_id", "robot_id", "status", "source", "updated_at"],
+        "title": "TaskRecordStatus"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": ["loc", "msg", "type"],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

@@ -4,7 +4,7 @@ import { Vda5050MasterConfig } from '@/clients';
 import type { MapfPlansByRobot } from './types';
 
 const MASTER_BASE = (
-  Vda5050MasterConfig.BASE ?? 'http://localhost:8000'
+  Vda5050MasterConfig.BASE ?? 'http://localhost:8080/vda5050_master'
 ).replace(/\/$/, '');
 
 export async function fetchMapfPlans(): Promise<MapfPlansByRobot> {

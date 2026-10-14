@@ -21,3 +21,6 @@ export type { SceneViewer2DViewportPositionerProps as ViewportPositionerProps } 
 
 export { SceneViewer2DRobotPanel as RobotPanel } from './scene-viewer-2d-robot-panel';
 export type { SceneViewer2DRobotPanelProps as RobotPanelProps } from './scene-viewer-2d-robot-panel';
+
+export { SceneViewer2DPlanPanel as PlanPanel } from './scene-viewer-2d-plan-panel';
+export type { SceneViewer2DPlanPanelProps as PlanPanelProps } from './scene-viewer-2d-plan-panel';

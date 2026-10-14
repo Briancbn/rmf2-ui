@@ -1,12 +1,7 @@
 export type RobotConnection = 'ONLINE' | 'OFFLINE';
 
 export type RobotActionStatus =
-  | 'WAITING'
-  | 'INITIALIZING'
-  | 'RUNNING'
-  | 'PAUSED'
-  | 'FINISHED'
-  | 'FAILED';
+  'WAITING' | 'INITIALIZING' | 'RUNNING' | 'PAUSED' | 'FINISHED' | 'FAILED';
 
 export interface RobotActionState {
   actionId: string;
@@ -17,6 +12,14 @@ export interface RobotActionState {
 
 export interface RobotNodeState {
   nodeId: string;
+  sequenceId: number;
+  released: boolean;
+  /** Inline position (LIF Y-up). Used when map layout is unavailable. */
+  position?: [number, number];
+}
+
+export interface RobotEdgeState {
+  edgeId: string;
   sequenceId: number;
   released: boolean;
 }
@@ -33,6 +36,7 @@ export interface RobotState {
   actionStates: RobotActionState[];
   lastNodeId: string | null;
   nodeStates: RobotNodeState[];
+  edgeStates: RobotEdgeState[];
 }
 
 export interface RobotOrder {

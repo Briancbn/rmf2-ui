@@ -13,7 +13,7 @@ export const SCHEDULER_ROBOTS: readonly SchedulerRobotId[] = [
 ];
 
 const SCHEDULER_BASE = (
-  SchedulerConfig.BASE ?? 'http://localhost:8089'
+  SchedulerConfig.BASE ?? 'http://localhost:8080/task_scheduler/v1'
 ).replace(/\/$/, '');
 
 // The live AGV's robot_id IS the scheduler robot id now (unified) — identity map.

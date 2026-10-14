@@ -58,13 +58,11 @@ function vdaStateToFields(
       resultDescription: a.resultDescription ?? undefined,
     })),
     lastNodeId: state.lastNodeId ?? null,
-    nodeStates: (state.nodeStates ?? []).map(
-      (n): RobotNodeState => ({
-        nodeId: n.nodeId,
-        sequenceId: n.sequenceId,
-        released: n.released,
-      }),
-    ),
+    nodeStates: (state.nodeStates ?? []).map((n): RobotNodeState => ({
+      nodeId: n.nodeId,
+      sequenceId: n.sequenceId,
+      released: n.released,
+    })),
   };
 }
 
@@ -102,7 +100,7 @@ export class Vda5050RobotClient implements IRobotClient {
     const url = (
       baseUrl ??
       Vda5050MasterConfig.BASE ??
-      'http://localhost:8000'
+      'http://localhost:8080/vda5050_master'
     ).replace(/\/$/, '');
     this._client = VDA5050MasterAPI.createClient(
       VDA5050MasterAPI.createConfig({ baseUrl: url }),

@@ -69,6 +69,12 @@ export function SceneViewer2DViewport(props: SceneViewer2DViewportProps) {
     robots,
     selectedRobotId,
     setSelectedRobotId,
+    plansByRobotRef,
+    planStep,
+    planDataRevision: _planDataRevision,
+    planModeActive,
+    goalInfo,
+    pickNode,
   } = useSceneViewer2DViewport();
   const imageFilter = useColorModeValue('none', 'invert(1)');
 
@@ -395,33 +401,83 @@ export function SceneViewer2DViewport(props: SceneViewer2DViewportProps) {
         })}
 
         {/* Nodes */}
-        {(layout?.nodes ?? []).map((node) => (
-          <g key={node.nodeId}>
-            <circle
-              cx={node.nodePosition.x}
-              cy={-node.nodePosition.y}
-              style={{ r: 'var(--node-radius)' } as React.CSSProperties}
-              fill="currentColor"
-            />
-            <text
-              x={node.nodePosition.x}
-              y={-node.nodePosition.y}
-              style={{
-                transform: `translate(calc(${labelOffsetXFactor} * var(--node-radius)), calc(${-labelOffsetYFactor} * var(--node-radius)))`,
-              }}
-              textAnchor="middle"
-              fill="currentColor"
+        {(layout?.nodes ?? []).map((node) => {
+          const ownerEntry = Object.entries(goalInfo.goals).find(
+            ([, g]) => g === node.nodeId,
+          );
+          const ownerRobotId = ownerEntry?.[0] ?? null;
+          const ownerIdx = ownerRobotId
+            ? robots.findIndex((r) => r.robotId === ownerRobotId)
+            : -1;
+          const goalColor = ownerRobotId
+            ? robotClient.getRobotColor(
+                ownerRobotId,
+                ownerIdx >= 0 ? ownerIdx : 0,
+              )
+            : null;
+          const isArmedGoal =
+            goalInfo.armedRobotId != null &&
+            goalInfo.goals[goalInfo.armedRobotId] === node.nodeId;
+          return (
+            <g
+              key={node.nodeId}
+              onClick={planModeActive ? () => pickNode(node.nodeId) : undefined}
+              style={{ cursor: planModeActive ? 'crosshair' : undefined }}
             >
-              {node.nodeId}
-            </text>
-          </g>
-        ))}
+              {/* Outer ring for armed/selected goal */}
+              {isArmedGoal && (
+                <circle
+                  cx={node.nodePosition.x}
+                  cy={-node.nodePosition.y}
+                  style={
+                    {
+                      r: 'calc(2.4 * var(--node-radius))',
+                    } as React.CSSProperties
+                  }
+                  fill={goalColor}
+                  opacity={0.3}
+                />
+              )}
+              {/* Inner ring for any pending goal */}
+              {goalColor && (
+                <circle
+                  cx={node.nodePosition.x}
+                  cy={-node.nodePosition.y}
+                  style={
+                    {
+                      r: 'calc(1.8 * var(--node-radius))',
+                    } as React.CSSProperties
+                  }
+                  fill="currentColor"
+                  opacity={0.35}
+                />
+              )}
+              <circle
+                cx={node.nodePosition.x}
+                cy={-node.nodePosition.y}
+                style={{ r: 'var(--node-radius)' } as React.CSSProperties}
+                fill={goalColor ?? 'currentColor'}
+              />
+              <text
+                x={node.nodePosition.x}
+                y={-node.nodePosition.y}
+                style={{
+                  transform: `translate(calc(${labelOffsetXFactor} * var(--node-radius)), calc(${-labelOffsetYFactor} * var(--node-radius)))`,
+                }}
+                textAnchor="middle"
+                fill="currentColor"
+              >
+                {node.nodeId}
+              </text>
+            </g>
+          );
+        })}
 
-        {/* Active order paths */}
+        {/* Active order paths — robot color, solid released / dashed horizon */}
         {currentLayoutId != null &&
           robots.map((robot, i) => {
             if (robot.nodeStates.length === 0) return null;
-            const color = robotClient.getRobotColor(robot.robotId, i);
+            const ORDER_COLOR = robotClient.getRobotColor(robot.robotId, i);
             const sorted = [...robot.nodeStates].sort(
               (a, b) => a.sequenceId - b.sequenceId,
             );
@@ -435,7 +491,10 @@ export function SceneViewer2DViewport(props: SceneViewer2DViewportProps) {
               points.push({ x: startX, y: startY, released: true });
             }
             for (const ns of sorted) {
-              const pos = nodeById.get(ns.nodeId)?.nodePosition;
+              const layoutPos = nodeById.get(ns.nodeId)?.nodePosition;
+              const pos =
+                layoutPos ??
+                (ns.position ? { x: ns.position[0], y: ns.position[1] } : null);
               if (pos)
                 points.push({ x: pos.x, y: pos.y, released: ns.released });
             }
@@ -446,12 +505,12 @@ export function SceneViewer2DViewport(props: SceneViewer2DViewportProps) {
             const toPoints = (pts: typeof points) =>
               pts.map((p) => `${p.x},${-p.y}`).join(' ');
             return (
-              <g key={`order-${robot.robotId}`} opacity={0.6}>
+              <g key={`order-${robot.robotId}`} opacity={1}>
                 {releasedPts.length >= 2 && (
                   <polyline
                     points={toPoints(releasedPts)}
                     fill="none"
-                    stroke={color}
+                    stroke={ORDER_COLOR}
                     style={{ strokeWidth: 'calc(1.5 * var(--edge-width))' }}
                   />
                 )}
@@ -459,13 +518,18 @@ export function SceneViewer2DViewport(props: SceneViewer2DViewportProps) {
                   <polyline
                     points={toPoints(horizonPts)}
                     fill="none"
-                    stroke={color}
+                    stroke={ORDER_COLOR}
                     strokeDasharray="4 4"
                     style={{ strokeWidth: 'calc(1.5 * var(--edge-width))' }}
                   />
                 )}
                 {sorted.map((ns) => {
-                  const pos = nodeById.get(ns.nodeId)?.nodePosition;
+                  const layoutPos = nodeById.get(ns.nodeId)?.nodePosition;
+                  const pos =
+                    layoutPos ??
+                    (ns.position
+                      ? { x: ns.position[0], y: ns.position[1] }
+                      : null);
                   if (!pos) return null;
                   return (
                     <circle
@@ -478,7 +542,7 @@ export function SceneViewer2DViewport(props: SceneViewer2DViewportProps) {
                           opacity: ns.released ? 1 : 0.5,
                         } as React.CSSProperties
                       }
-                      fill={color}
+                      fill={ORDER_COLOR}
                     />
                   );
                 })}
@@ -542,6 +606,96 @@ export function SceneViewer2DViewport(props: SceneViewer2DViewportProps) {
               </g>
             );
           })}
+
+        {/* Plan paths — rendered last so they appear on top of everything */}
+        {currentLayoutId != null &&
+          Object.entries(plansByRobotRef.current.byRobot).map(
+            ([robotId, waypoints]) => {
+              if (waypoints.length === 0) return null;
+              const robotIdx = robots.findIndex((r) => r.robotId === robotId);
+              const PLAN_COLOR = robotClient.getRobotColor(
+                robotId,
+                robotIdx >= 0 ? robotIdx : 0,
+              );
+              const clampedStep = Math.min(planStep, waypoints.length - 1);
+              const nodePos = (wp: (typeof waypoints)[number]) => {
+                const n = nodeById.get(wp.name);
+                return n ? { x: n.nodePosition.x, y: -n.nodePosition.y } : null;
+              };
+              const toSvgPt = (wp: (typeof waypoints)[number]) => {
+                const p = nodePos(wp);
+                return p ? `${p.x},${p.y}` : null;
+              };
+              const allPts = waypoints.map(toSvgPt).filter(Boolean).join(' ');
+              const reachedPts = waypoints
+                .slice(0, clampedStep + 1)
+                .map(toSvgPt)
+                .filter(Boolean)
+                .join(' ');
+              const ghost = waypoints[clampedStep];
+              const ghostPos = ghost ? nodePos(ghost) : null;
+              return (
+                <g key={`plan-${robotId}`}>
+                  <polyline
+                    points={allPts}
+                    fill="none"
+                    stroke={PLAN_COLOR}
+                    opacity={0.2}
+                    strokeDasharray="8 4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    style={{ strokeWidth: 'calc(6 * var(--edge-width))' }}
+                  />
+                  {clampedStep > 0 && (
+                    <polyline
+                      points={reachedPts}
+                      fill="none"
+                      stroke={PLAN_COLOR}
+                      opacity={0.55}
+                      strokeDasharray="8 4"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      style={{ strokeWidth: 'calc(6 * var(--edge-width))' }}
+                    />
+                  )}
+                  {waypoints.map((wp, wi) => {
+                    const p = nodePos(wp);
+                    if (!p) return null;
+                    return (
+                      <rect
+                        key={wi}
+                        x={p.x}
+                        y={p.y}
+                        fill={PLAN_COLOR}
+                        opacity={wi <= clampedStep ? 0.9 : 0.3}
+                        style={
+                          {
+                            width: 'calc(0.8 * var(--node-radius))',
+                            height: 'calc(0.8 * var(--node-radius))',
+                            transform: `translate(calc(-0.4 * var(--node-radius)), calc(-0.4 * var(--node-radius))) rotate(45deg)`,
+                            transformOrigin: `${p.x}px ${p.y}px`,
+                          } as React.CSSProperties
+                        }
+                      />
+                    );
+                  })}
+                  {ghostPos && (
+                    <circle
+                      cx={ghostPos.x}
+                      cy={ghostPos.y}
+                      fill={PLAN_COLOR}
+                      opacity={0.55}
+                      style={
+                        {
+                          r: `calc(1.2 * var(--node-radius))`,
+                        } as React.CSSProperties
+                      }
+                    />
+                  )}
+                </g>
+              );
+            },
+          )}
       </chakra.svg>
     </Box>
   );

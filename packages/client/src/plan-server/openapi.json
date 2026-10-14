@@ -1,0 +1,1217 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "RMF2 Plan Server",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": ["health"],
+        "summary": "Health",
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/info": {
+      "get": {
+        "tags": ["info"],
+        "summary": "Info",
+        "operationId": "info_info_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InfoResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/robots": {
+      "get": {
+        "tags": ["robots"],
+        "summary": "Get Onboarded Robots",
+        "operationId": "get_onboarded_robots_v1_robots_get",
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "title": "Skip"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RobotStatus"
+                  },
+                  "title": "Response Get Onboarded Robots V1 Robots Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["robots"],
+        "summary": "Onboard Robots",
+        "operationId": "onboard_robots_v1_robots_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/RobotOnboardMsg"
+                },
+                "title": "Robots"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RobotOnboardBatchResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/robots/{manufacturer}/{serial_number}": {
+      "get": {
+        "tags": ["robots"],
+        "summary": "Get Robot By Manufacturer Serial",
+        "operationId": "get_robot_by_manufacturer_serial_v1_robots__manufacturer___serial_number__get",
+        "parameters": [
+          {
+            "name": "manufacturer",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Manufacturer"
+            }
+          },
+          {
+            "name": "serial_number",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Serial Number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RobotStatus"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/robots/{robot_id}": {
+      "get": {
+        "tags": ["robots"],
+        "summary": "Get Robot",
+        "operationId": "get_robot_v1_robots__robot_id__get",
+        "parameters": [
+          {
+            "name": "robot_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Robot Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RobotStatus"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/tasks": {
+      "get": {
+        "tags": ["tasks"],
+        "summary": "Get Task Statuses",
+        "operationId": "get_task_statuses_v1_tasks_get",
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "title": "Skip"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TaskRecordStatus"
+                  },
+                  "title": "Response Get Task Statuses V1 Tasks Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["tasks"],
+        "summary": "Submit Tasks",
+        "description": "Compute or dispatch plans for a batch of tasks, depending on ``mode``:\n\n- ``\"dry_run\"`` (default): plan locally via the coordinator, using only the\n  shared agent context's last-known state \u2014 no committed-locations round\n  trip. Rejects if any robot has an ongoing plan, since a dry run assumes a\n  static world snapshot and would otherwise silently ignore it; use\n  ``\"plan\"`` instead (note that requesting committed locations can\n  interrupt ongoing plans).\n- ``\"plan\"``: requests real committed locations from the executor and plans\n  against them, so ongoing plans for other robots are properly accounted\n  for. Still does not dispatch anything. The resulting plan is cached by\n  the exact ``{robot_id: goal}`` problem it solved, so a follow-up\n  ``\"submit\"`` for the same problem can dispatch it directly.\n- ``\"submit\"``: if a ``\"plan\"`` call already cached a plan for the exact\n  same problem, dispatches that cached plan directly (skipping committed\n  locations and solving entirely) and clears the cache entry. Otherwise\n  blocks to plan the same way ``\"plan\"`` does, then dispatches \u2014 without\n  caching, since only ``\"plan\"`` populates the cache. Either way,\n  dispatching (publishing) the result registers it with the real\n  PlanServer's tracking so its progress/error callbacks recognize it.",
+        "operationId": "submit_tasks_v1_tasks_post",
+        "parameters": [
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": ["dry_run", "plan", "submit"],
+              "type": "string",
+              "default": "dry_run",
+              "title": "Mode"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/TaskRequestMsg"
+                },
+                "title": "Tasks"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskSubmitResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/tasks/{task_id}": {
+      "get": {
+        "tags": ["tasks"],
+        "summary": "Get Task Status",
+        "operationId": "get_task_status_v1_tasks__task_id__get",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskRecordStatus"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/tasks/random": {
+      "post": {
+        "tags": ["tasks"],
+        "summary": "Submit Random Tasks",
+        "description": "Generate a random reachable goal for each robot and submit it exactly like\n``POST /tasks``. Useful for stress-testing without hand-picking waypoints.\n\n- ``robot_ids``: robots to generate a task for; defaults to all onboarded robots.\n  Supports glob wildcards against onboarded robot_ids, e.g. ``Manufacturer/*``\n  or just ``*`` for all of them.\n- ``seed``: makes the goal selection reproducible across calls.\n\nGoals are drawn, without replacement, from non-obstacle nodes present in the\nsolver's grid \u2014 MAPFCoordinator.solve() rejects a batch outright if two robots\nare given the same goal, so goals in one batch are always distinct.",
+        "operationId": "submit_random_tasks_v1_tasks_random_post",
+        "parameters": [
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": ["dry_run", "plan", "submit"],
+              "type": "string",
+              "default": "submit",
+              "title": "Mode"
+            }
+          },
+          {
+            "name": "robot_ids",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Robot Ids"
+            }
+          },
+          {
+            "name": "seed",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Seed"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskSubmitResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/tasks/random/nearby": {
+      "post": {
+        "tags": ["tasks"],
+        "summary": "Submit Random Nearby Tasks",
+        "description": "Like ``POST /tasks/random``, but each robot's goal is drawn from nodes within\n``steps`` grid hops of its ``start_location`` instead of anywhere reachable on\nthe map \u2014 for exercising short, mostly-independent moves rather than long,\nconflict-heavy crossings.\n\n- ``robot_ids``: robots to generate a task for; defaults to all onboarded robots.\n  Supports glob wildcards against onboarded robot_ids, e.g. ``Manufacturer/*``\n  or just ``*`` for all of them.\n- ``seed``: makes the goal selection reproducible across calls.\n\n``start_location`` only reflects where a robot was onboarded, not its live\nposition, so the neighbourhood this draws from can be stale for a robot\nthat has since moved. Goals are picked one robot at a time and excluded from\nlater robots' candidate pools, so a batch never assigns the same goal twice \u2014\nMAPFCoordinator.solve() would otherwise reject the whole batch.",
+        "operationId": "submit_random_nearby_tasks_v1_tasks_random_nearby_post",
+        "parameters": [
+          {
+            "name": "steps",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Max grid hops from each robot's start_location",
+              "title": "Steps"
+            },
+            "description": "Max grid hops from each robot's start_location"
+          },
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": ["dry_run", "plan", "submit"],
+              "type": "string",
+              "default": "submit",
+              "title": "Mode"
+            }
+          },
+          {
+            "name": "robot_ids",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Robot Ids"
+            }
+          },
+          {
+            "name": "seed",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Seed"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskSubmitResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/plans/cache": {
+      "get": {
+        "tags": ["plans"],
+        "summary": "Get Plan Cache",
+        "operationId": "get_plan_cache_v1_plans_cache_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/PlanCacheEntry"
+                  },
+                  "type": "array",
+                  "title": "Response Get Plan Cache V1 Plans Cache Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/plans": {
+      "get": {
+        "tags": ["plans"],
+        "summary": "Get Plan Statuses",
+        "operationId": "get_plan_statuses_v1_plans_get",
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "title": "Skip"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PlanRecordStatus"
+                  },
+                  "title": "Response Get Plan Statuses V1 Plans Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/plans/{plan_id}": {
+      "get": {
+        "tags": ["plans"],
+        "summary": "Get Plan Status",
+        "operationId": "get_plan_status_v1_plans__plan_id__get",
+        "parameters": [
+          {
+            "name": "plan_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Plan Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlanRecordStatus"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/layout": {
+      "get": {
+        "tags": ["layout"],
+        "summary": "Get Layout Summary",
+        "description": "Return layoutIds and metaInformation for the active LIF.",
+        "operationId": "get_layout_summary_v1_layout_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LifSummary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/layout/download": {
+      "get": {
+        "tags": ["layout"],
+        "summary": "Download Layout",
+        "description": "Download the active LIF as a JSON file.",
+        "operationId": "download_layout_v1_layout_download_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "HealthResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          }
+        },
+        "type": "object",
+        "required": ["status"],
+        "title": "HealthResponse"
+      },
+      "InfoResponse": {
+        "properties": {
+          "service_version": {
+            "type": "string",
+            "title": "Service Version"
+          },
+          "api_version": {
+            "type": "string",
+            "title": "Api Version"
+          }
+        },
+        "type": "object",
+        "required": ["service_version", "api_version"],
+        "title": "InfoResponse"
+      },
+      "LifSummary": {
+        "properties": {
+          "layout_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Layout Ids"
+          },
+          "project_identification": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Project Identification"
+          },
+          "creator": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Creator"
+          },
+          "export_timestamp": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Export Timestamp"
+          },
+          "lif_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lif Version"
+          },
+          "loaded_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Loaded At"
+          }
+        },
+        "type": "object",
+        "required": ["layout_ids", "loaded_at"],
+        "title": "LifSummary"
+      },
+      "Plan": {
+        "properties": {
+          "waypoints": {
+            "items": {
+              "$ref": "#/components/schemas/Waypoint"
+            },
+            "type": "array",
+            "title": "Waypoints"
+          },
+          "start_time": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Start Time"
+          },
+          "plan_id": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PlanId"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "workflow": {
+            "type": "string",
+            "title": "Workflow",
+            "default": ""
+          },
+          "map_name": {
+            "type": "string",
+            "title": "Map Name",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "title": "Plan"
+      },
+      "PlanCacheEntry": {
+        "properties": {
+          "problem": {
+            "items": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Problem"
+          },
+          "plans": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/Plan"
+            },
+            "type": "object",
+            "title": "Plans"
+          }
+        },
+        "type": "object",
+        "required": ["problem", "plans"],
+        "title": "PlanCacheEntry"
+      },
+      "PlanId": {
+        "properties": {
+          "destination_session": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Destination Session"
+          },
+          "plan_version": {
+            "type": "integer",
+            "title": "Plan Version"
+          }
+        },
+        "type": "object",
+        "required": ["destination_session", "plan_version"],
+        "title": "PlanId"
+      },
+      "PlanRecordStatus": {
+        "properties": {
+          "plan_id": {
+            "type": "string",
+            "title": "Plan Id"
+          },
+          "robot_id": {
+            "type": "string",
+            "title": "Robot Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "reached_waypoint": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reached Waypoint"
+          },
+          "target_waypoint": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Waypoint"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": ["plan_id", "robot_id", "status", "updated_at"],
+        "title": "PlanRecordStatus"
+      },
+      "RobotOnboardBatchResponse": {
+        "properties": {
+          "onboarded": {
+            "items": {
+              "$ref": "#/components/schemas/RobotOnboardMsg"
+            },
+            "type": "array",
+            "title": "Onboarded"
+          },
+          "failed": {
+            "items": {
+              "$ref": "#/components/schemas/RobotOnboardMsg"
+            },
+            "type": "array",
+            "title": "Failed"
+          },
+          "skipped_already_onboarded": {
+            "items": {
+              "$ref": "#/components/schemas/RobotOnboardMsg"
+            },
+            "type": "array",
+            "title": "Skipped Already Onboarded"
+          }
+        },
+        "type": "object",
+        "required": ["onboarded", "failed", "skipped_already_onboarded"],
+        "title": "RobotOnboardBatchResponse"
+      },
+      "RobotOnboardMsg": {
+        "properties": {
+          "robot_id": {
+            "type": "string",
+            "title": "Robot Id"
+          },
+          "start_location": {
+            "type": "string",
+            "title": "Start Location"
+          }
+        },
+        "type": "object",
+        "required": ["robot_id", "start_location"],
+        "title": "RobotOnboardMsg"
+      },
+      "RobotStatus": {
+        "properties": {
+          "robot_id": {
+            "type": "string",
+            "title": "Robot Id"
+          },
+          "start_location": {
+            "type": "string",
+            "title": "Start Location"
+          },
+          "is_onboarded": {
+            "type": "boolean",
+            "title": "Is Onboarded"
+          },
+          "onboarded_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Onboarded At"
+          }
+        },
+        "type": "object",
+        "required": ["robot_id", "start_location", "is_onboarded"],
+        "title": "RobotStatus"
+      },
+      "TaskRecordStatus": {
+        "properties": {
+          "task_id": {
+            "type": "string",
+            "title": "Task Id"
+          },
+          "robot_id": {
+            "type": "string",
+            "title": "Robot Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          },
+          "superseded_by": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Superseded By"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": ["task_id", "robot_id", "status", "source", "updated_at"],
+        "title": "TaskRecordStatus"
+      },
+      "TaskRequestMsg": {
+        "properties": {
+          "task_id": {
+            "type": "string",
+            "title": "Task Id"
+          },
+          "robot_id": {
+            "type": "string",
+            "title": "Robot Id"
+          },
+          "goal": {
+            "type": "string",
+            "title": "Goal"
+          }
+        },
+        "type": "object",
+        "required": ["task_id", "robot_id", "goal"],
+        "title": "TaskRequestMsg"
+      },
+      "TaskSubmitResponse": {
+        "properties": {
+          "decision": {
+            "type": "string",
+            "title": "Decision"
+          },
+          "errors": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Errors"
+          },
+          "plans": {
+            "items": {
+              "$ref": "#/components/schemas/Plan"
+            },
+            "type": "array",
+            "title": "Plans"
+          }
+        },
+        "type": "object",
+        "required": ["decision", "errors", "plans"],
+        "title": "TaskSubmitResponse"
+      },
+      "TrafficDependency": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "plan_id": {
+            "$ref": "#/components/schemas/PlanId"
+          },
+          "required_progress": {
+            "type": "number",
+            "title": "Required Progress"
+          }
+        },
+        "type": "object",
+        "required": ["name", "plan_id", "required_progress"],
+        "title": "TrafficDependency"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": ["loc", "msg", "type"],
+        "title": "ValidationError"
+      },
+      "Waypoint": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "position": {
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "type": "array",
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Position"
+          },
+          "progress": {
+            "type": "number",
+            "title": "Progress"
+          },
+          "departure_blockers": {
+            "items": {
+              "$ref": "#/components/schemas/TrafficDependency"
+            },
+            "type": "array",
+            "title": "Departure Blockers"
+          },
+          "departure_action": {
+            "type": "string",
+            "title": "Departure Action",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "required": ["name", "position", "progress"],
+        "title": "Waypoint"
+      }
+    }
+  }
+}

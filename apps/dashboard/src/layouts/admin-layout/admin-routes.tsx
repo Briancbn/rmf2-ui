@@ -4,10 +4,9 @@ import {
   MdEventNote,
   MdHome,
   MdMap,
-  MdOutlineMap,
+  MdDevices,
 } from 'react-icons/md';
 import { FaNetworkWired } from 'react-icons/fa';
-import { SiUnrealengine } from 'react-icons/si';
 import { GrSchedules } from 'react-icons/gr';
 
 import type { RoutesType } from '@rmf2-ui/chakra';
@@ -32,7 +31,7 @@ export const routes: DashboardRoute[] = [
         name: 'Network',
         path: '/system/network',
         description:
-          'Start and check brokers, databases, Redis, and related middleware status.',
+          'Monitor RMF2 services: scheduler, planner, VDA5050 master, and message brokers.',
         icon: (
           <Icon
             as={FaNetworkWired}
@@ -43,23 +42,11 @@ export const routes: DashboardRoute[] = [
         ),
       },
       {
-        name: 'Simulation',
+        name: 'Device',
+        path: '/operation/device',
         icon: (
-          <Icon
-            as={SiUnrealengine}
-            width="20px"
-            height="30px"
-            color="inherit"
-          />
+          <Icon as={MdDevices} width="20px" height="30px" color="inherit" />
         ),
-        path: '/system/simulation',
-        description:
-          'Onboard devices and services, run UE5 simulation via the Python launcher API.',
-      },
-      {
-        name: 'Map',
-        path: '/system/map',
-        icon: <Icon as={MdMap} width="20px" height="30px" color="inherit" />,
       },
     ],
   },
@@ -78,16 +65,7 @@ export const routes: DashboardRoute[] = [
         ),
       },
       {
-        name: 'VDA Visualiser',
-        path: '/operation/vda-visualiser',
-        description:
-          'Live VDA5050 map view with robot state, MAPF planning, and direct control.',
-        icon: (
-          <Icon as={MdOutlineMap} width="20px" height="30px" color="inherit" />
-        ),
-      },
-      {
-        name: 'Scene Viewer 2D',
+        name: 'Scene',
         path: '/operation/scene-viewer-2d',
         icon: <Icon as={MdMap} width="20px" height="30px" color="inherit" />,
       },

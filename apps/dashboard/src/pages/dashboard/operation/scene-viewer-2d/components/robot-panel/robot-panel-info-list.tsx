@@ -8,9 +8,13 @@ import { RobotPanelInfo } from './robot-panel-info';
 
 export interface RobotPanelInfoListProps {
   pageSize?: number;
+  alwaysVisible?: boolean;
 }
 
-export function RobotPanelInfoList({ pageSize = 10 }: RobotPanelInfoListProps) {
+export function RobotPanelInfoList({
+  pageSize = 10,
+  alwaysVisible = false,
+}: RobotPanelInfoListProps) {
   const { robots, robotIndexMap, selectedId, setSelectedId, expanded } =
     useRobotPanelContext();
   const [page, setPage] = useState(0);
@@ -26,7 +30,7 @@ export function RobotPanelInfoList({ pageSize = 10 }: RobotPanelInfoListProps) {
     setSelectedId(robotId === selectedId ? null : robotId);
   };
 
-  if (expanded) return null;
+  if (expanded && !alwaysVisible) return null;
 
   if (robots.length === 0) {
     return (

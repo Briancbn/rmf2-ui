@@ -8,8 +8,10 @@ import { Vda5050MasterConfig } from '@/clients';
 import type { SocketStatus, VdaLogEntry } from './types';
 
 const WS_URL =
-  (Vda5050MasterConfig.BASE ?? 'http://localhost:8000').replace(/^http/, 'ws') +
-  '/ws/logs';
+  (Vda5050MasterConfig.BASE ?? 'http://localhost:8080/vda5050_master').replace(
+    /^http/,
+    'ws',
+  ) + '/ws/logs';
 
 const MAX_CLIENT_LOGS = 1000;
 
