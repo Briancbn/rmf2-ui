@@ -1,0 +1,11 @@
+@import '@fontsource/dm-sans/400.css';
+@import '@fontsource/dm-sans/500.css';
+@import '@fontsource/dm-sans/700.css';
+
+/* Reset global font injection from Chakra's globalCss so DM Sans is
+   only applied through the Horizon component wrapper below. */
+html,
+body {
+  font-family: inherit !important;
+  letter-spacing: normal !important;
+}
