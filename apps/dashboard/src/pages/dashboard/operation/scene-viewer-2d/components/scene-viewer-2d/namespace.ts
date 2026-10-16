@@ -4,8 +4,8 @@ export type { SceneViewer2DRootProps as RootProps } from './scene-viewer-2d-root
 export { SceneViewer2DLoadingOverlay as LoadingOverlay } from './scene-viewer-2d-loading-overlay';
 export type { SceneViewer2DLoadingOverlayProps as LoadingOverlayProps } from './scene-viewer-2d-loading-overlay';
 
-export { SceneViewer2DViewport as Viewport } from './scene-viewer-2d-viewport';
-export type { SceneViewer2DViewportProps as ViewportProps } from './scene-viewer-2d-viewport';
+export { SceneViewer2DViewport as Viewport } from './scene-viewer-2d-viewport-new';
+export type { SceneViewer2DViewportProps as ViewportProps } from './scene-viewer-2d-viewport-new';
 
 export { SceneViewer2DPanel as Panel } from './scene-viewer-2d-panel';
 export type { SceneViewer2DPanelProps as PanelProps } from './scene-viewer-2d-panel';
