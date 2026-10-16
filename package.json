@@ -13,7 +13,9 @@
     "chakra": "pnpm --filter @rmf2-ui/chakra",
     "client": "pnpm --filter @rmf2-ui/client",
     "data": "pnpm --filter @rmf2-ui/data",
-    "app": "pnpm --filter dashboard"
+    "app": "pnpm --filter dashboard",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +25,17 @@
   },
   "type": "module",
   "devDependencies": {
+    "@chakra-ui/react": "^3.22.0",
+    "@fontsource/dm-sans": "^5.1.1",
+    "@emotion/react": "^11.14.0",
+    "@storybook/react-vite": "^10.6.1",
+    "@vitejs/plugin-react": "^4.6.0",
+    "next-themes": "^0.4.6",
+    "react": "^19.1.0",
+    "react-router": "^7.6.3",
+    "react-dom": "^19.1.0",
+    "storybook": "^10.6.1",
+    "vite": "^7.0.3",
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
     "@eslint/js": "^9.34.0",
