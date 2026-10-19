@@ -5,6 +5,7 @@ import {
   MdHome,
   MdMap,
   MdDevices,
+  MdAccountTree,
 } from 'react-icons/md';
 import { FaNetworkWired } from 'react-icons/fa';
 import { GrSchedules } from 'react-icons/gr';
@@ -68,6 +69,14 @@ export const routes: DashboardRoute[] = [
         name: 'Scene',
         path: '/operation/scene-viewer-2d',
         icon: <Icon as={MdMap} width="20px" height="30px" color="inherit" />,
+      },
+      {
+        name: 'Workflow',
+        path: '/operation/workflow',
+        description: 'Design and execute Crossflow workflow diagrams.',
+        icon: (
+          <Icon as={MdAccountTree} width="20px" height="30px" color="inherit" />
+        ),
       },
     ],
   },

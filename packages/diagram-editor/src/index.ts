@@ -1,0 +1,1 @@
+export { DiagramEditorWidget } from './widget';

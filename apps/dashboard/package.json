@@ -15,6 +15,7 @@
     "@dagrejs/dagre": "^1.1.8",
     "@fontsource/dm-sans": "^5.2.8",
     "@rmf2-ui/chakra": "workspace:*",
+    "@rmf2-ui/diagram-editor": "workspace:*",
     "@rmf2-ui/client": "workspace:*",
     "@rmf2-ui/data": "workspace:*",
     "@tanstack/react-query": "^5.90.5",

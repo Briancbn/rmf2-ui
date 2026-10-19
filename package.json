@@ -13,6 +13,7 @@
     "chakra": "pnpm --filter @rmf2-ui/chakra",
     "client": "pnpm --filter @rmf2-ui/client",
     "data": "pnpm --filter @rmf2-ui/data",
+    "diagram-editor": "pnpm --filter @rmf2-ui/diagram-editor",
     "app": "pnpm --filter dashboard"
   },
   "keywords": [],

@@ -81,6 +81,14 @@ export const AdminRoutes: RouteObject[] = [
       return { Component: SceneViewer2DPage };
     },
   },
+  {
+    path: 'operation/workflow',
+    lazy: async () => {
+      const { WorkflowPage } =
+        await import('@/pages/dashboard/operation/workflow');
+      return { Component: WorkflowPage };
+    },
+  },
 ];
 
 export const dashboardRoutes: RouteObject[] = [
