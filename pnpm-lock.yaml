@@ -243,8 +243,8 @@ importers:
         specifier: ^12.9.3
         version: 12.11.3(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       crossflow-diagram-editor:
-        specifier: file:../../../../../crossflow/diagram-editor
-        version: file:../../../crossflow/diagram-editor(@babel/runtime@7.29.7)(@codemirror/autocomplete@6.20.3)(@codemirror/lint@6.9.7)(@codemirror/search@6.7.2)(@codemirror/state@6.7.6)(@codemirror/theme-one-dark@6.1.3)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(codemirror@6.0.2)
+        specifier: git+https://github.com/Briancbn/crossflow#914180e30b4dccbbcb0579bc28ba4ea66c674a9a&path:diagram-editor
+        version: https://codeload.github.com/Briancbn/crossflow/tar.gz/914180e30b4dccbbcb0579bc28ba4ea66c674a9a#path:diagram-editor(@babel/runtime@7.29.7)(@codemirror/autocomplete@6.20.3)(@codemirror/lint@6.9.7)(@codemirror/search@6.7.2)(@codemirror/state@6.7.6)(@codemirror/theme-one-dark@6.1.3)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(codemirror@6.0.2)
       next-themes:
         specifier: ^0.4.6
         version: 0.4.6(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -2035,8 +2035,9 @@ packages:
     resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
     engines: {node: '>= 8'}
 
-  crossflow-diagram-editor@file:../../../crossflow/diagram-editor:
-    resolution: {directory: ../../../crossflow/diagram-editor, type: directory}
+  crossflow-diagram-editor@https://codeload.github.com/Briancbn/crossflow/tar.gz/914180e30b4dccbbcb0579bc28ba4ea66c674a9a#path:diagram-editor:
+    resolution: {gitHosted: true, integrity: sha512-fadoaj6Rf7fLwi9CZ6/BIbE3nMmzt+p3wdN8E9l/Lc4FqaTD2rHjaWrvH1QBGkBnwt+N9DgC2ktA0IaS2cTRyA==, tarball: https://codeload.github.com/Briancbn/crossflow/tar.gz/914180e30b4dccbbcb0579bc28ba4ea66c674a9a}
+    version: 1.0.0
 
   cssfilter@0.0.10:
     resolution: {integrity: sha512-FAaLDaplstoRsDR8XGYH51znUN0UY7nMc6Z9/fvE8EXGwvJE9hu7W2vHwx1+bd6gCYnln9nLbzxFTrcO9YQDZw==}
@@ -6101,7 +6102,7 @@ snapshots:
       shebang-command: 2.0.0
       which: 2.0.2
 
-  crossflow-diagram-editor@file:../../../crossflow/diagram-editor(@babel/runtime@7.29.7)(@codemirror/autocomplete@6.20.3)(@codemirror/lint@6.9.7)(@codemirror/search@6.7.2)(@codemirror/state@6.7.6)(@codemirror/theme-one-dark@6.1.3)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(codemirror@6.0.2):
+  crossflow-diagram-editor@https://codeload.github.com/Briancbn/crossflow/tar.gz/914180e30b4dccbbcb0579bc28ba4ea66c674a9a#path:diagram-editor(@babel/runtime@7.29.7)(@codemirror/autocomplete@6.20.3)(@codemirror/lint@6.9.7)(@codemirror/search@6.7.2)(@codemirror/state@6.7.6)(@codemirror/theme-one-dark@6.1.3)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(codemirror@6.0.2):
     dependencies:
       '@codemirror/commands': 6.11.1
       '@codemirror/lang-python': 6.2.1
