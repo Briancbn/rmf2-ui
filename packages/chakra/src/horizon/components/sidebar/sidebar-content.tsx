@@ -5,10 +5,11 @@ export interface SidebarContentProps extends BoxProps {}
 
 export function SidebarContent(props: SidebarContentProps) {
   const { children, ...rest } = props;
-  // SIDEBAR
   return (
-    <Box mt="8px" mb="auto" ps="20px" {...rest}>
-      {children}
+    <Box flex="1" overflowY="auto" css={{ direction: 'rtl' }} {...rest}>
+      <Box mt="8px" mb="auto" ps="20px" css={{ direction: 'ltr' }}>
+        {children}
+      </Box>
     </Box>
   );
 }
