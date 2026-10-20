@@ -1,7 +1,10 @@
 import React from 'react';
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@/test/utils';
-import { HSeparator, VSeparator } from '@/horizon/components/separator/separator';
+import {
+  HSeparator,
+  VSeparator,
+} from '@/horizon/components/separator/separator';
 
 describe('HSeparator', () => {
   it('renders without crashing', () => {

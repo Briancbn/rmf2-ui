@@ -2,15 +2,8 @@ import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Box, Text } from '@chakra-ui/react';
 import { MdDashboard, MdPerson, MdSettings, MdSecurity } from 'react-icons/md';
-import { SidebarRoot } from '@/horizon/components/sidebar/sidebar-root';
-import { SidebarContent } from '@/horizon/components/sidebar/sidebar-content';
-import { SidebarHeader } from '@/horizon/components/sidebar/sidebar-header';
-import { SidebarFooter } from '@/horizon/components/sidebar/sidebar-footer';
-import { SidebarItems } from '@/horizon/components/sidebar/sidebar-items';
-import { SidebarPositioner } from '@/horizon/components/sidebar/sidebar-positioner';
-import { SidebarResponsive } from '@/horizon/components/sidebar/sidebar-responsive';
-import { HorizonSidebarCard } from '@/horizon/components/sidebar/horizon-sidebar-card';
-import type { RoutesType } from '@/types';
+import { Sidebar, HorizonSidebarCard } from '../src/horizon/components/sidebar';
+import type { RoutesType } from '../src/types';
 
 const sampleRoutes: RoutesType[] = [
   { name: 'Dashboard', path: '/dashboard', icon: <MdDashboard /> },
@@ -35,11 +28,11 @@ export default meta;
 export const Header: StoryObj = {
   render: () => (
     <Box w="300px" p={4}>
-      <SidebarHeader>
+      <Sidebar.Header>
         <Text fontWeight="bold" fontSize="xl">
           RMF2 Dashboard
         </Text>
-      </SidebarHeader>
+      </Sidebar.Header>
     </Box>
   ),
 };
@@ -47,11 +40,11 @@ export const Header: StoryObj = {
 export const Footer: StoryObj = {
   render: () => (
     <Box w="300px" bg="white" _dark={{ bg: 'navy.800' }} p={4}>
-      <SidebarFooter>
+      <Sidebar.Footer>
         <Text fontSize="sm" color="gray.400">
           v1.0.0 — RMF2 UI
         </Text>
-      </SidebarFooter>
+      </Sidebar.Footer>
     </Box>
   ),
 };
@@ -59,9 +52,9 @@ export const Footer: StoryObj = {
 export const Content: StoryObj = {
   render: () => (
     <Box w="300px" bg="white" _dark={{ bg: 'navy.800' }}>
-      <SidebarContent>
+      <Sidebar.Content>
         <Text>Content area children go here.</Text>
-      </SidebarContent>
+      </Sidebar.Content>
     </Box>
   ),
 };
@@ -69,9 +62,9 @@ export const Content: StoryObj = {
 export const Items: StoryObj = {
   render: () => (
     <Box w="300px" bg="white" _dark={{ bg: 'navy.800' }} p={4}>
-      <SidebarRoot routes={sampleRoutes}>
-        <SidebarItems />
-      </SidebarRoot>
+      <Sidebar.Root routes={sampleRoutes}>
+        <Sidebar.Items />
+      </Sidebar.Root>
     </Box>
   ),
 };
@@ -80,9 +73,9 @@ export const ItemsActiveRoute: StoryObj = {
   parameters: { initialRoute: '/settings/account' },
   render: () => (
     <Box w="300px" bg="white" _dark={{ bg: 'navy.800' }} p={4}>
-      <SidebarRoot routes={sampleRoutes}>
-        <SidebarItems />
-      </SidebarRoot>
+      <Sidebar.Root routes={sampleRoutes}>
+        <Sidebar.Items />
+      </Sidebar.Root>
     </Box>
   ),
 };
@@ -98,21 +91,21 @@ export const SidebarCard: StoryObj = {
 export const FullSidebar: StoryObj = {
   render: () => (
     <Box position="relative" w="300px" h="600px">
-      <SidebarRoot routes={sampleRoutes}>
-        <SidebarPositioner position="relative" h="600px" display="block">
-          <SidebarHeader>
+      <Sidebar.Root routes={sampleRoutes}>
+        <Sidebar.Positioner position="relative" h="600px" display="block">
+          <Sidebar.Header>
             <Text fontWeight="bold" fontSize="lg">
               RMF2 Dashboard
             </Text>
-          </SidebarHeader>
-          <SidebarContent>
-            <SidebarItems />
-          </SidebarContent>
-          <SidebarFooter>
+          </Sidebar.Header>
+          <Sidebar.Content>
+            <Sidebar.Items />
+          </Sidebar.Content>
+          <Sidebar.Footer>
             <HorizonSidebarCard />
-          </SidebarFooter>
-        </SidebarPositioner>
-      </SidebarRoot>
+          </Sidebar.Footer>
+        </Sidebar.Positioner>
+      </Sidebar.Root>
     </Box>
   ),
 };
@@ -120,17 +113,17 @@ export const FullSidebar: StoryObj = {
 export const ResponsiveSidebar: StoryObj = {
   parameters: { viewport: { defaultViewport: 'mobile1' } },
   render: () => (
-    <SidebarRoot routes={sampleRoutes}>
-      <SidebarResponsive>
-        <SidebarHeader>
+    <Sidebar.Root routes={sampleRoutes}>
+      <Sidebar.Responsive>
+        <Sidebar.Header>
           <Text fontWeight="bold" fontSize="lg">
             RMF2 Dashboard
           </Text>
-        </SidebarHeader>
-        <SidebarContent>
-          <SidebarItems />
-        </SidebarContent>
-      </SidebarResponsive>
-    </SidebarRoot>
+        </Sidebar.Header>
+        <Sidebar.Content>
+          <Sidebar.Items />
+        </Sidebar.Content>
+      </Sidebar.Responsive>
+    </Sidebar.Root>
   ),
 };

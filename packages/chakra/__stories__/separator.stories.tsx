@@ -1,6 +1,9 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { HSeparator, VSeparator } from '@/horizon/components/separator/separator';
+import {
+  HSeparator,
+  VSeparator,
+} from '../src/horizon/components/separator/separator';
 
 const meta = {
   title: 'Horizon/Separator',
@@ -14,9 +17,7 @@ export const Horizontal: StoryObj = {
 };
 
 export const Vertical: StoryObj = {
-  render: () => (
-    <VSeparator h="100px" />
-  ),
+  render: () => <VSeparator h="100px" />,
 };
 
 export const HorizontalCustomColor: StoryObj = {

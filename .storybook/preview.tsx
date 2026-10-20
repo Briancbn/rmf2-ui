@@ -2,6 +2,7 @@ import React from 'react';
 import type { Preview } from '@storybook/react';
 import { Box, ChakraProvider } from '@chakra-ui/react';
 import { MemoryRouter } from 'react-router';
+import { ThemeProvider } from 'next-themes';
 import system from '../packages/chakra/src/horizon/theme/theme';
 import './horizon-fonts.css';
 
@@ -32,21 +33,27 @@ const preview: Preview = {
   decorators: [
     (Story, context) => {
       const colorScheme = (context.globals.colorScheme as string) ?? 'light';
-      const initialRoute = (context.parameters.initialRoute as string) ?? '/dashboard';
+      const initialRoute =
+        (context.parameters.initialRoute as string) ?? '/dashboard';
 
       return (
         <MemoryRouter initialEntries={[initialRoute]}>
           <ChakraProvider value={system}>
-            <Box
-              className={colorScheme}
-              minH="100vh"
-              bg="bg"
-              fontFamily="DM Sans"
-              letterSpacing="-0.5px"
-              p={4}
+            <ThemeProvider
+              attribute="class"
+              forcedTheme={colorScheme}
+              disableTransitionOnChange
             >
-              <Story />
-            </Box>
+              <Box
+                minH="100vh"
+                bg="bg"
+                fontFamily="DM Sans"
+                letterSpacing="-0.5px"
+                p={4}
+              >
+                <Story />
+              </Box>
+            </ThemeProvider>
           </ChakraProvider>
         </MemoryRouter>
       );

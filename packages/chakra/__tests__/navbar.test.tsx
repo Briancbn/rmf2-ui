@@ -60,9 +60,7 @@ describe('HorizonNavbarInfo', () => {
     const user = userEvent.setup();
     render(<HorizonNavbarInfo />);
     await user.click(screen.getByRole('button'));
-    expect(
-      screen.getByText(/Buy Horizon UI PRO/i),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Buy Horizon UI PRO/i)).toBeInTheDocument();
   });
 });
 

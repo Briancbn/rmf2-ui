@@ -1,14 +1,12 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Button } from '@chakra-ui/react';
-import { NavbarRoot } from '@/horizon/components/navbar/navbar-root';
-import { NavbarHeader } from '@/horizon/components/navbar/navbar-header';
-import { NavbarBreadcrumb } from '@/horizon/components/navbar/navbar-breadcrumb';
-import { NavbarTitle } from '@/horizon/components/navbar/navbar-title';
-import { NavbarToolbar } from '@/horizon/components/navbar/navbar-toolbar';
-import { HorizonNavbarInfo } from '@/horizon/components/navbar/horizon-navbar-info';
-import { HorizonNavbarNotification } from '@/horizon/components/navbar/horizon-navbar-notifications';
-import type { RoutesType } from '@/types';
+import {
+  Navbar,
+  HorizonNavbarInfo,
+  HorizonNavbarNotification,
+} from '../src/horizon/components/navbar';
+import type { RoutesType } from '../src/types';
 
 const sampleRoutes: RoutesType[] = [
   { name: 'Dashboard', path: '/dashboard' },
@@ -31,20 +29,20 @@ export default meta;
 
 export const Header: StoryObj = {
   render: () => (
-    <NavbarRoot routes={sampleRoutes} position="static" w="100%">
-      <NavbarHeader>
-        <NavbarTitle />
-      </NavbarHeader>
-    </NavbarRoot>
+    <Navbar.Root routes={sampleRoutes} position="static" w="100%">
+      <Navbar.Header>
+        <Navbar.Title />
+      </Navbar.Header>
+    </Navbar.Root>
   ),
 };
 
 export const Toolbar: StoryObj = {
   render: () => (
-    <NavbarToolbar>
+    <Navbar.Toolbar>
       <HorizonNavbarNotification />
       <HorizonNavbarInfo />
-    </NavbarToolbar>
+    </Navbar.Toolbar>
   ),
 };
 
@@ -58,44 +56,44 @@ export const InfoMenu: StoryObj = {
 
 export const FullNavbar: StoryObj = {
   render: () => (
-    <NavbarRoot routes={sampleRoutes} position="static" w="100%">
-      <NavbarHeader>
-        <NavbarBreadcrumb />
-        <NavbarTitle />
-      </NavbarHeader>
-      <NavbarToolbar>
+    <Navbar.Root routes={sampleRoutes} position="static" w="100%">
+      <Navbar.Header>
+        <Navbar.Breadcrumb />
+        <Navbar.Title />
+      </Navbar.Header>
+      <Navbar.Toolbar>
         <HorizonNavbarNotification />
         <HorizonNavbarInfo />
         <Button size="sm" variant="brand" ms={2}>
           Sign In
         </Button>
-      </NavbarToolbar>
-    </NavbarRoot>
+      </Navbar.Toolbar>
+    </Navbar.Root>
   ),
 };
 
 export const NavbarOnMatchedRoute: StoryObj = {
   parameters: { initialRoute: '/settings/account' },
   render: () => (
-    <NavbarRoot routes={sampleRoutes} position="static" w="100%">
-      <NavbarHeader>
-        <NavbarBreadcrumb />
-        <NavbarTitle />
-      </NavbarHeader>
-      <NavbarToolbar>
+    <Navbar.Root routes={sampleRoutes} position="static" w="100%">
+      <Navbar.Header>
+        <Navbar.Breadcrumb />
+        <Navbar.Title />
+      </Navbar.Header>
+      <Navbar.Toolbar>
         <HorizonNavbarNotification />
         <HorizonNavbarInfo />
-      </NavbarToolbar>
-    </NavbarRoot>
+      </Navbar.Toolbar>
+    </Navbar.Root>
   ),
 };
 
 export const TitleOnly: StoryObj = {
   render: () => (
-    <NavbarRoot routes={sampleRoutes} position="static" w="100%">
-      <NavbarHeader>
-        <NavbarTitle>Custom Title</NavbarTitle>
-      </NavbarHeader>
-    </NavbarRoot>
+    <Navbar.Root routes={sampleRoutes} position="static" w="100%">
+      <Navbar.Header>
+        <Navbar.Title>Custom Title</Navbar.Title>
+      </Navbar.Header>
+    </Navbar.Root>
   ),
 };

@@ -31,9 +31,7 @@ const icons = [
 describe('Horizon Icons', () => {
   icons.forEach((IconComponent) => {
     it(`renders ${IconComponent.displayName ?? 'icon'} without crashing`, () => {
-      const { container } = render(
-        <Icon as={IconComponent} w={6} h={6} />,
-      );
+      const { container } = render(<Icon as={IconComponent} w={6} h={6} />);
       expect(container.firstChild).toBeInTheDocument();
     });
   });
