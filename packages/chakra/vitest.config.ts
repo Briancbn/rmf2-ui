@@ -12,18 +12,13 @@ export default defineConfig({
   test: {
     environment: 'happy-dom',
     globals: true,
-    setupFiles: ['./src/test/setup.ts'],
+    setupFiles: ['./__tests__/setup.ts'],
     include: ['__tests__/**/*.test.{ts,tsx}'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html', 'lcov'],
       include: ['src/**/*.{ts,tsx}'],
-      exclude: [
-        'src/**/*.stories.*',
-        'src/**/*.test.*',
-        'src/test/**',
-        'src/vite-env.d.ts',
-      ],
+      exclude: ['src/vite-env.d.ts'],
     },
   },
 });

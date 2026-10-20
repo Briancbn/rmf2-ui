@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect } from 'vitest';
-import { render } from '@/test/utils';
+import { render } from './utils';
 import { Icon } from '@chakra-ui/react';
 import {
   HorizonLogo,

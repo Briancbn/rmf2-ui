@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect } from 'vitest';
-import { render, screen } from '@/test/utils';
+import { render, screen } from './utils';
 import userEvent from '@testing-library/user-event';
 import { MdDashboard, MdPerson, MdSettings } from 'react-icons/md';
 import { SidebarRoot } from '@/horizon/components/sidebar/sidebar-root';

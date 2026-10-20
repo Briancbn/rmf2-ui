@@ -2,7 +2,7 @@ import React from 'react';
 import { render, type RenderOptions } from '@testing-library/react';
 import { ChakraProvider } from '@chakra-ui/react';
 import { MemoryRouter, type MemoryRouterProps } from 'react-router';
-import system from '@/horizon/theme/theme';
+import system from '../src/horizon/theme/theme';
 
 interface WrapperProps {
   children: React.ReactNode;

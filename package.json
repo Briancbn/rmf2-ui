@@ -8,6 +8,7 @@
     "prepare": "husky",
     "build": "pnpm run -r build",
     "test": "pnpm run -r test",
+    "coverage": "pnpm run -r --if-present coverage",
     "lint": "eslint .",
     "format": "prettier --write .",
     "chakra": "pnpm --filter @rmf2-ui/chakra",

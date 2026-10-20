@@ -34,6 +34,29 @@ jobs:
       - name: Test
         run: pnpm test
 
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install pnpm
+        uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6.0.8
+        with:
+          version: 11
+      - name: Use Node.js 22
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install
+      - name: Coverage
+        run: pnpm coverage
+      - name: Upload to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          files: packages/*/coverage/lcov.info
+          token: ${{ secrets.CODECOV_TOKEN }}
+
   storybook:
     runs-on: ubuntu-latest
     steps:

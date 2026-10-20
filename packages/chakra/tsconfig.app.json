@@ -27,5 +27,5 @@
     "noUncheckedSideEffectImports": true
   },
   "include": ["src"],
-  "exclude": ["__stories__", "__tests__", "src/test/**"]
+  "exclude": ["__stories__", "__tests__"]
 }
