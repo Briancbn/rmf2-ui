@@ -15,8 +15,8 @@ React Library and Sample Web Dashboard for RMF2
   - [Quick Start](#quick-start)
   - [Build and Preview](#build-and-preview)
   - [Other Useful Commands](#other-useful-commands)
-- [Storybook](#storybook)
 - [Docker Usage](#docker-usage)
+- [Storybook](#storybook)
 
 ## Project Structure
 
@@ -123,6 +123,16 @@ Launch the dashboard
 pnpm app dev
 ```
 
+## Docker Usage
+
+Run the dashboard
+
+```bash
+docker run -p 3000:80 --rm ghcr.io/ros-industrial/rmf2-ui/dashboard:main
+```
+
+The sample dashboard is accessible at http://localhost:3000. For more information, check out the [detail docker instructions](./docs/docker.md).
+
 ## Storybook
 
 Storybook provides an interactive component explorer for the `@rmf2-ui/chakra` package, letting you develop and visually test components in isolation without running the full dashboard.
@@ -144,16 +154,6 @@ Storybook is accessible at <http://localhost:6006>.
 ```bash
 pnpm build-storybook
 ```
-
-## Docker Usage
-
-Run the dashboard
-
-```bash
-docker run -p 3000:80 --rm ghcr.io/ros-industrial/rmf2-ui/dashboard:main
-```
-
-The sample dashboard is accessible at http://localhost:3000. For more information, check out the [detail docker instructions](./docs/docker.md).
 
 ## Contribution Guidelines
 
