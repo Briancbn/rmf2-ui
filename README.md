@@ -15,6 +15,7 @@ React Library and Sample Web Dashboard for RMF2
   - [Quick Start](#quick-start)
   - [Build and Preview](#build-and-preview)
   - [Other Useful Commands](#other-useful-commands)
+- [Storybook](#storybook)
 - [Docker Usage](#docker-usage)
 
 ## Project Structure
@@ -120,6 +121,28 @@ Launch the dashboard
 
 ```bash
 pnpm app dev
+```
+
+## Storybook
+
+Storybook provides an interactive component explorer for the `@rmf2-ui/chakra` package, letting you develop and visually test components in isolation without running the full dashboard.
+
+<p align="center">
+  <img src="docs/imgs/storybook-view.png" alt="storybook-view" height="300"/>
+</p>
+
+### Run Storybook
+
+```bash
+pnpm storybook
+```
+
+Storybook is accessible at <http://localhost:6006>.
+
+### Build Storybook
+
+```bash
+pnpm build-storybook
 ```
 
 ## Docker Usage
