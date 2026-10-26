@@ -1,0 +1,18 @@
+FROM node:24
+
+WORKDIR /app
+
+RUN corepack enable && \
+    corepack prepare pnpm@latest-11 --activate
+
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY apps/dashboard/package.json apps/dashboard/
+COPY packages/ packages/
+
+RUN pnpm install
+
+COPY . .
+
+EXPOSE 3000
+
+CMD ["pnpm", "app", "dev", "--", "--host", "0.0.0.0"]
