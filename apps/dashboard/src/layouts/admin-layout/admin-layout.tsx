@@ -2,7 +2,7 @@ import { Outlet, useNavigation } from 'react-router';
 import { Box } from '@chakra-ui/react';
 import { Horizon } from '@rmf2-ui/chakra';
 import { RMF2FreeLogo } from '@/components/icons';
-import { Pending } from '@/components/pending';
+import Pending = Horizon.Pending;
 import { ColorModeButton } from '@/components/ui/color-mode';
 import { routes } from './admin-routes';
 import { AdminAvatarMenu } from './admin-avatar-menu';

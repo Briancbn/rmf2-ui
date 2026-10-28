@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Box, Grid, SimpleGrid, Icon } from '@chakra-ui/react';
 import { toaster } from '@/components/ui/toaster';
-import { Banner } from '@/components/banner';
+import { Horizon } from '@rmf2-ui/chakra';
+import Banner = Horizon.Banner;
 import { MiniStatisticsCard } from '@/components/card';
 import { IconBox } from '@/components/icons';
 import { OnboardCard } from './components/onboard-card';

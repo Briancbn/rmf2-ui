@@ -6,7 +6,7 @@ import type { RTS } from '@rmf2-ui/data';
 import { RTOConfig, LauncherConfig } from '@/clients';
 import { LightMode } from '@/components/ui/color-mode';
 import { toaster } from '@/components/ui/toaster';
-import { Pending } from '@/components/pending';
+import Pending = Horizon.Pending;
 import { DateTimeSelector } from './components/date-time-selector';
 import { ScheduleGantt } from './components/schedule-gantt';
 import { useRTSClient } from '@/clients/rts';
