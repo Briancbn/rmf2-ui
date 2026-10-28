@@ -1,11 +1,7 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Box } from '@chakra-ui/react';
-import {
-  PendingRoot,
-  PendingOverlay,
-  PendingSpinner,
-} from '../src/horizon/components/pending/pending';
+import { Pending } from '../src/horizon/components/pending';
 
 const meta = {
   title: 'Horizon/Pending',
@@ -20,9 +16,9 @@ export default meta;
 export const SpinnerOnly: StoryObj = {
   render: () => (
     <Box position="relative" w="200px" h="200px" bg="gray.100">
-      <PendingRoot>
-        <PendingSpinner />
-      </PendingRoot>
+      <Pending.Root>
+        <Pending.Spinner />
+      </Pending.Root>
     </Box>
   ),
 };
@@ -40,10 +36,10 @@ export const WithOverlay: StoryObj = {
       <Box p={4}>
         <p>Content underneath the overlay</p>
       </Box>
-      <PendingRoot>
-        <PendingOverlay />
-        <PendingSpinner />
-      </PendingRoot>
+      <Pending.Root>
+        <Pending.Overlay />
+        <Pending.Spinner />
+      </Pending.Root>
     </Box>
   ),
 };
@@ -51,9 +47,9 @@ export const WithOverlay: StoryObj = {
 export const SmallSpinner: StoryObj = {
   render: () => (
     <Box position="relative" w="100px" h="100px" bg="gray.100">
-      <PendingRoot>
-        <PendingSpinner size="sm" />
-      </PendingRoot>
+      <Pending.Root>
+        <Pending.Spinner size="sm" />
+      </Pending.Root>
     </Box>
   ),
 };
@@ -61,9 +57,9 @@ export const SmallSpinner: StoryObj = {
 export const LargeSpinner: StoryObj = {
   render: () => (
     <Box position="relative" w="300px" h="300px" bg="gray.100">
-      <PendingRoot>
-        <PendingSpinner size="xl" />
-      </PendingRoot>
+      <Pending.Root>
+        <Pending.Spinner size="xl" />
+      </Pending.Root>
     </Box>
   ),
 };

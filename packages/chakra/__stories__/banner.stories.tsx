@@ -1,12 +1,7 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Box } from '@chakra-ui/react';
-import {
-  BannerRoot,
-  BannerHeader,
-  BannerContent,
-  BannerButton,
-} from '../src/horizon/components/banner/banner';
+import { Banner } from '../src/horizon/components/banner';
 
 const meta = {
   title: 'Horizon/Banner',
@@ -28,31 +23,31 @@ export default meta;
 function SimulationControlBanner() {
   const [simStarted, setSimStarted] = useState(false);
   return (
-    <BannerRoot
+    <Banner.Root
       bgGradient="to-b"
       gradientFrom="brand.800"
       gradientTo="brand.100"
     >
-      <BannerHeader>Step into the Creative World of Simulation</BannerHeader>
-      <BannerContent>
-        <BannerButton
+      <Banner.Header>Step into the Creative World of Simulation</Banner.Header>
+      <Banner.Content>
+        <Banner.Button
           onClick={() => setSimStarted(true)}
           disabled={simStarted}
           bg="white"
           _hover={{ bg: 'whiteAlpha.800' }}
         >
           Start Simulation
-        </BannerButton>
-        <BannerButton
+        </Banner.Button>
+        <Banner.Button
           onClick={() => setSimStarted(false)}
           disabled={!simStarted}
           bg="white"
           _hover={{ bg: 'whiteAlpha.800' }}
         >
           Stop Simulation
-        </BannerButton>
-      </BannerContent>
-    </BannerRoot>
+        </Banner.Button>
+      </Banner.Content>
+    </Banner.Root>
   );
 }
 
@@ -62,22 +57,22 @@ export const SimulationControl: StoryObj = {
 
 export const DefaultGradient: StoryObj = {
   render: () => (
-    <BannerRoot>
-      <BannerHeader>Welcome to RMF2</BannerHeader>
-      <BannerContent>
-        <BannerButton>Get Started</BannerButton>
-      </BannerContent>
-    </BannerRoot>
+    <Banner.Root>
+      <Banner.Header>Welcome to RMF2</Banner.Header>
+      <Banner.Content>
+        <Banner.Button>Get Started</Banner.Button>
+      </Banner.Content>
+    </Banner.Root>
   ),
 };
 
 export const CustomColorPalette: StoryObj = {
   render: () => (
-    <BannerRoot colorPalette="blue">
-      <BannerHeader>Custom Color Palette</BannerHeader>
-      <BannerContent>
-        <BannerButton>Learn More</BannerButton>
-      </BannerContent>
-    </BannerRoot>
+    <Banner.Root colorPalette="blue">
+      <Banner.Header>Custom Color Palette</Banner.Header>
+      <Banner.Content>
+        <Banner.Button>Learn More</Banner.Button>
+      </Banner.Content>
+    </Banner.Root>
   ),
 };
