@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Box, Grid, SimpleGrid, Icon } from '@chakra-ui/react';
 import { toaster } from '@/components/ui/toaster';
-import { Banner } from '@/components/banner';
+import { Horizon } from '@rmf2-ui/chakra';
 import { MiniStatisticsCard } from '@/components/card';
 import { IconBox } from '@/components/icons';
 import { OnboardCard } from './components/onboard-card';
@@ -14,6 +14,8 @@ import { ServiceTable } from './components/service-table';
 import { serviceInfo } from './variables/service-info';
 import type { StateMessage } from './components/state-message';
 import { LauncherConfig, BrokerNGSILDConfig } from '@/clients';
+
+import Banner = Horizon.Banner;
 
 type RowObj = {
   robotName: string;

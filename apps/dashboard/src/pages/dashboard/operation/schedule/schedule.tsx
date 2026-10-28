@@ -1,12 +1,13 @@
 import { useEffect } from 'react';
 import { Box, Button, Flex, Spacer } from '@chakra-ui/react';
 import { Horizon } from '@rmf2-ui/chakra';
-import Card = Horizon.Card;
 import type { RTS } from '@rmf2-ui/data';
 import { RTOConfig, LauncherConfig } from '@/clients';
 import { LightMode } from '@/components/ui/color-mode';
 import { toaster } from '@/components/ui/toaster';
-import { Pending } from '@/components/pending';
+
+import Card = Horizon.Card;
+import Pending = Horizon.Pending;
 import { DateTimeSelector } from './components/date-time-selector';
 import { ScheduleGantt } from './components/schedule-gantt';
 import { useRTSClient } from '@/clients/rts';
