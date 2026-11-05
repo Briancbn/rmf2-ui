@@ -1,5 +1,5 @@
 import { Button, Flex, Image, Link, Text } from '@chakra-ui/react';
-import logoWhite from '@/horizon/assets/logoWhite.png';
+import logoWhite from '@/themes/horizon/assets/logoWhite.png';
 
 export function HorizonSidebarCard() {
   const bgColor = 'linear-gradient(135deg, #868CFF 0%, #4318FF 100%)';

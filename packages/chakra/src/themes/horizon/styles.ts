@@ -180,6 +180,11 @@ export const semanticTokens = {
     'navbar.title': { value: { base: 'navy.700', _dark: 'white' } },
     'navbar.text': { value: { base: 'gray.700', _dark: 'white' } },
     'navbar.menu.bg': { value: { base: 'white', _dark: 'navy.800' } },
+    'banner.gradient.from': { value: 'horizonTeal.600' },
+    'banner.gradient.to': { value: 'horizonTeal.100' },
+    'banner.button.bg': { value: 'orange.400' },
+    'banner.button.color': { value: 'black' },
+    'banner.button.hover.bg': { value: 'orange.300' },
   },
   shadows: {
     'navbar.toolbar': {

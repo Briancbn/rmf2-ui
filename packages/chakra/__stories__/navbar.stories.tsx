@@ -5,7 +5,7 @@ import {
   Navbar,
   HorizonNavbarInfo,
   HorizonNavbarNotification,
-} from '../src/horizon/components/navbar';
+} from '../src/components/navbar';
 import type { RoutesType } from '../src/types';
 
 const sampleRoutes: RoutesType[] = [

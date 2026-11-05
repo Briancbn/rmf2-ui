@@ -6,3 +6,4 @@ export * from './pending';
 export * from './searchbar';
 export * from './separator';
 export * from './sidebar';
+export * from './theme-switcher';

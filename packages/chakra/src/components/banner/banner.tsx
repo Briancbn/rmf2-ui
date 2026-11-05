@@ -6,25 +6,21 @@ import type {
 } from '@chakra-ui/react';
 import { Text, Box, Button, Flex, useSlotRecipe } from '@chakra-ui/react';
 
-export interface BannerRootProps extends BoxProps {
-  colorPalette?: string;
-}
+export interface BannerRootProps extends BoxProps {}
 
 export function BannerRoot(props: BannerRootProps) {
   const { children, colorPalette, ...rest } = props;
 
-  const gradientColor: string = colorPalette ? colorPalette : 'horizonTeal';
-
   return (
     <Box
-      direction="row"
       bgGradient="to-r"
-      gradientFrom={gradientColor + '.600'}
-      gradientTo={gradientColor + '.100'}
+      gradientFrom={colorPalette ? 'colorPalette.600' : 'banner.gradient.from'}
+      gradientTo={colorPalette ? 'colorPalette.100' : 'banner.gradient.to'}
       borderRadius="14px"
       py={{ base: '30px', md: '56px' }}
       px={{ base: '30px', md: '64px' }}
       w="100%"
+      colorPalette={colorPalette}
       {...rest}
     >
       {children}
@@ -75,7 +71,7 @@ export function BannerButton(props: BannerButtonProps) {
 
   return (
     <Button
-      css={styles.button}
+      {...styles.button}
       fontWeight="500"
       fontSize={{ base: '20px', md: '28px' }}
       py="20px"

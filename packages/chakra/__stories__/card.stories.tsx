@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Box } from '@chakra-ui/react';
-import { Card } from '../src/horizon/components/card/card';
+import { Card } from '../src/components/card/card';
 
 const meta = {
   title: 'Horizon/Card',

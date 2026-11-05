@@ -1,10 +1,14 @@
 import React from 'react';
 import type { Preview } from '@storybook/react';
-import { Box, ChakraProvider } from '@chakra-ui/react';
+import { Box, ChakraProvider, type SystemContext } from '@chakra-ui/react';
 import { MemoryRouter } from 'react-router';
 import { ThemeProvider } from 'next-themes';
-import system from '../packages/chakra/src/horizon/theme/theme';
+import { system as horizonSystem } from '../packages/chakra/src/themes/horizon/theme';
 import './horizon-fonts.css';
+
+const themes: Record<string, SystemContext> = {
+  horizon: horizonSystem,
+};
 
 const preview: Preview = {
   globalTypes: {
@@ -21,6 +25,19 @@ const preview: Preview = {
         dynamicTitle: true,
       },
     },
+    theme: {
+      description: 'UI Theme',
+      defaultValue: 'horizon',
+      toolbar: {
+        title: 'Theme',
+        icon: 'paintbrush',
+        items: Object.keys(themes).map((id) => ({
+          value: id,
+          title: id.charAt(0).toUpperCase() + id.slice(1),
+        })),
+        dynamicTitle: true,
+      },
+    },
   },
   parameters: {
     controls: {
@@ -33,12 +50,14 @@ const preview: Preview = {
   decorators: [
     (Story, context) => {
       const colorScheme = (context.globals.colorScheme as string) ?? 'light';
+      const themeId = (context.globals.theme as string) ?? 'horizon';
+      const activeSystem = themes[themeId] ?? horizonSystem;
       const initialRoute =
         (context.parameters.initialRoute as string) ?? '/dashboard';
 
       return (
         <MemoryRouter initialEntries={[initialRoute]}>
-          <ChakraProvider value={system}>
+          <ChakraProvider value={activeSystem}>
             <ThemeProvider
               attribute="class"
               forcedTheme={colorScheme}

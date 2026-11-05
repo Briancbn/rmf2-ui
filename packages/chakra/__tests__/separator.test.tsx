@@ -4,7 +4,7 @@ import { render, screen } from './utils';
 import {
   HSeparator,
   VSeparator,
-} from '@/horizon/components/separator/separator';
+} from '@/components/separator/separator';
 
 describe('HSeparator', () => {
   it('renders without crashing', () => {

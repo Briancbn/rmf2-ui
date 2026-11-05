@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Searchbar } from '../src/horizon/components/searchbar/searchbar';
+import { Searchbar } from '../src/components/searchbar/searchbar';
 
 const meta = {
   title: 'Horizon/Searchbar',

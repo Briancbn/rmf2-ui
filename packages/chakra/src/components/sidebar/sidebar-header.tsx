@@ -1,6 +1,6 @@
 import type { FlexProps } from '@chakra-ui/react';
 import { Flex } from '@chakra-ui/react';
-import { HSeparator } from '@/horizon/components';
+import { HSeparator } from '@/components';
 
 export interface SidebarHeaderProps extends FlexProps {}
 

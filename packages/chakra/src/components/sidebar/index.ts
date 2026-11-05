@@ -1,4 +1,4 @@
-// Components
+// Generic components
 export { SidebarRoot } from './sidebar-root';
 export { SidebarPositioner } from './sidebar-positioner';
 export { SidebarResponsive } from './sidebar-responsive';
@@ -6,6 +6,8 @@ export { SidebarHeader } from './sidebar-header';
 export { SidebarFooter } from './sidebar-footer';
 export { SidebarItems } from './sidebar-items';
 export { SidebarContent } from './sidebar-content';
+
+// Horizon-specific components
 export { HorizonSidebarCard } from './horizon-sidebar-card';
 
 // Props

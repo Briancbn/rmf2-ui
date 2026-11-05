@@ -2,7 +2,7 @@ import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Box, Text } from '@chakra-ui/react';
 import { MdDashboard, MdPerson, MdSettings, MdSecurity } from 'react-icons/md';
-import { Sidebar, HorizonSidebarCard } from '../src/horizon/components/sidebar';
+import { Sidebar, HorizonSidebarCard } from '../src/components/sidebar';
 import type { RoutesType } from '../src/types';
 
 const sampleRoutes: RoutesType[] = [

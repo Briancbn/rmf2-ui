@@ -38,7 +38,7 @@ import {
   ButtonLeft,
   ButtonRight,
   Fingerprint,
-} from '../src/horizon/components/icons/icons';
+} from '../src/components/icons/icons';
 
 const ALL_ICONS = [
   { name: 'AdobexdLogo', icon: AdobexdLogo },

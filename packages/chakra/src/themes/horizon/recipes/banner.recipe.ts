@@ -4,9 +4,9 @@ export const bannerRecipe = defineSlotRecipe({
   slots: ['button'],
   base: {
     button: {
-      bg: 'orange.400',
-      color: 'black',
-      _hover: { bg: 'whiteAlpha.900' },
+      bg: 'banner.button.bg',
+      color: 'banner.button.color',
+      _hover: { bg: 'banner.button.hover.bg' },
       _active: { bg: 'blue.200' },
       _focus: { bg: 'white' },
     },

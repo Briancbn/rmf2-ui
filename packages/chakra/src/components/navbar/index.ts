@@ -1,11 +1,13 @@
-// Components
+// Generic components
 export { NavbarRoot } from './navbar-root';
 export { NavbarHeader } from './navbar-header';
 export { NavbarBreadcrumb } from './navbar-breadcrumb';
 export { NavbarTitle } from './navbar-title';
 export { NavbarToolbar } from './navbar-toolbar';
-export { HorizonNavbarNotification } from './horizon-navbar-notifications';
+
+// Horizon-specific components
 export { HorizonNavbarInfo } from './horizon-navbar-info';
+export { HorizonNavbarNotification } from './horizon-navbar-notifications';
 
 // Props
 export type { NavbarRootProps } from './navbar-root';

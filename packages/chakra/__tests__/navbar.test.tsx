@@ -2,12 +2,12 @@ import React from 'react';
 import { describe, it, expect } from 'vitest';
 import { render, screen } from './utils';
 import userEvent from '@testing-library/user-event';
-import { NavbarRoot } from '@/horizon/components/navbar/navbar-root';
-import { NavbarHeader } from '@/horizon/components/navbar/navbar-header';
-import { NavbarTitle } from '@/horizon/components/navbar/navbar-title';
-import { NavbarToolbar } from '@/horizon/components/navbar/navbar-toolbar';
-import { HorizonNavbarInfo } from '@/horizon/components/navbar/horizon-navbar-info';
-import { HorizonNavbarNotification } from '@/horizon/components/navbar/horizon-navbar-notifications';
+import { NavbarRoot } from '@/components/navbar/navbar-root';
+import { NavbarHeader } from '@/components/navbar/navbar-header';
+import { NavbarTitle } from '@/components/navbar/navbar-title';
+import { NavbarToolbar } from '@/components/navbar/navbar-toolbar';
+import { HorizonNavbarInfo } from '@/components/navbar/horizon-navbar-info';
+import { HorizonNavbarNotification } from '@/components/navbar/horizon-navbar-notifications';
 import type { RoutesType } from '@/types';
 
 const routes: RoutesType[] = [
