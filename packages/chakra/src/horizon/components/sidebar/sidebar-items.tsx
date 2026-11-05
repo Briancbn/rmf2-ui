@@ -1,6 +1,13 @@
 import { NavLink, useLocation } from 'react-router';
 import type { AccordionRootProps } from '@chakra-ui/react';
-import { Accordion, Box, Flex, HStack, Text } from '@chakra-ui/react';
+import {
+  Accordion,
+  Box,
+  Flex,
+  HStack,
+  Text,
+  useSlotRecipe,
+} from '@chakra-ui/react';
 
 import type { RoutesType } from '@/types';
 import { routeMatchesLocation, routeSectionKey } from '@/utils/routes.utils';
@@ -15,13 +22,12 @@ interface SidebarItemProps {
 
 function SidebarItemLabel(props: { route: RoutesType; active: boolean }) {
   const { route, active } = props;
-
-  const activeColor = { base: 'gray.700', _dark: 'white' };
-  const activeIcon = { base: 'brand.500', _dark: 'white' };
-  const textColor = { base: 'secondaryGray.500', _dark: 'secondaryGray.600' };
+  const recipe = useSlotRecipe({ key: 'sidebar' });
+  const styles = recipe({ active });
 
   return (
     <Flex
+      css={styles.itemRoot}
       alignItems="center"
       justifyContent="center"
       w="100%"
@@ -32,18 +38,11 @@ function SidebarItemLabel(props: { route: RoutesType; active: boolean }) {
       transitionProperty="background-color"
       transitionDuration="0.15s"
       transitionTimingFunction="ease"
-      _hover={{
-        bg: { base: 'blackAlpha.50', _dark: 'whiteAlpha.100' },
-      }}
     >
-      <Box color={active ? activeIcon : textColor} me="18px">
+      <Box css={styles.itemIcon} me="18px">
         {route.icon ? route.icon : <Box width="20px" height="20px" />}
       </Box>
-      <Text
-        me="auto"
-        color={active ? activeColor : textColor}
-        fontWeight={active ? 'bold' : 'normal'}
-      >
+      <Text css={styles.itemLabel} me="auto">
         {route.name}
       </Text>
     </Flex>
@@ -52,7 +51,8 @@ function SidebarItemLabel(props: { route: RoutesType; active: boolean }) {
 
 function SidebarItem(props: SidebarItemProps) {
   const { route, active, section } = props;
-  const brandColor = { base: 'brand.500', _dark: 'brand.400' };
+  const recipe = useSlotRecipe({ key: 'sidebar' });
+  const styles = recipe({ active });
 
   const label = <SidebarItemLabel route={route} active={active} />;
 
@@ -72,12 +72,7 @@ function SidebarItem(props: SidebarItemProps) {
         </Box>
       )}
       {section && <Accordion.ItemIndicator cursor="pointer" />}
-      <Box
-        h="36px"
-        w="4px"
-        bg={active ? brandColor : 'transparent'}
-        borderRadius="5px"
-      />
+      <Box h="36px" w="4px" css={styles.itemIndicator} borderRadius="5px" />
     </HStack>
   );
 }

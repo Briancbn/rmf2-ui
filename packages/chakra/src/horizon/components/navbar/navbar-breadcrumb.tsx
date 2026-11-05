@@ -117,8 +117,8 @@ export function NavbarBreadcrumb(props: NavbarBreadcrumbProps) {
     path: '/',
   };
 
-  const textColor = { base: 'gray.700', _dark: 'white' };
-  const menuBg = { base: 'white', _dark: 'navy.800' };
+  const textColor = 'navbar.text';
+  const menuBg = 'navbar.menu.bg';
 
   return (
     <Box {...rest}>

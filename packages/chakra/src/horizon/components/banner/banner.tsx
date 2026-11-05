@@ -4,7 +4,7 @@ import type {
   ButtonProps,
   FlexProps,
 } from '@chakra-ui/react';
-import { Text, Box, Button, Flex } from '@chakra-ui/react';
+import { Text, Box, Button, Flex, useSlotRecipe } from '@chakra-ui/react';
 
 export interface BannerRootProps extends BoxProps {
   colorPalette?: string;
@@ -70,14 +70,12 @@ export interface BannerButtonProps extends ButtonProps {}
 
 export function BannerButton(props: BannerButtonProps) {
   const { children, ...rest } = props;
+  const recipe = useSlotRecipe({ key: 'banner' });
+  const styles = recipe();
 
   return (
     <Button
-      bg="orange.400"
-      color="black"
-      _hover={{ bg: 'whiteAlpha.900' }}
-      _active={{ bg: 'blue.200' }}
-      _focus={{ bg: 'white' }}
+      css={styles.button}
       fontWeight="500"
       fontSize={{ base: '20px', md: '28px' }}
       py="20px"

@@ -172,6 +172,25 @@ const radiiTokens = {
   full: { value: '9999px' },
 };
 
+export const semanticTokens = {
+  colors: {
+    'navbar.bg': {
+      value: { base: 'rgba(244, 247, 254, 0.9)', _dark: 'rgba(11,20,55,0.9)' },
+    },
+    'navbar.title': { value: { base: 'navy.700', _dark: 'white' } },
+    'navbar.text': { value: { base: 'gray.700', _dark: 'white' } },
+    'navbar.menu.bg': { value: { base: 'white', _dark: 'navy.800' } },
+  },
+  shadows: {
+    'navbar.toolbar': {
+      value: {
+        base: '14px 17px 40px 4px rgba(112, 144, 176, 0.18)',
+        _dark: '14px 17px 40px 4px rgba(112, 144, 176, 0.06)',
+      },
+    },
+  },
+};
+
 export const globalCss = {
   'html,body': {
     overflowX: 'hidden',

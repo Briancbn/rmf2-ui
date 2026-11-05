@@ -8,16 +8,15 @@ export function NavbarTitle(props: LinkProps) {
   const { children, ...rest } = props;
   const { routeName } = useNavbarTitle();
 
-  const mainText = { base: 'navy.700', _dark: 'white' };
   return (
     <Link
-      color={mainText}
+      color="navbar.title"
       href="#"
       bg="inherit"
       borderRadius="inherit"
       fontWeight="bold"
       fontSize="34px"
-      _hover={{ color: { base: 'navy.700', _dark: 'white' } }}
+      _hover={{ color: 'navbar.title' }}
       _active={{
         bg: 'inherit',
         transform: 'none',

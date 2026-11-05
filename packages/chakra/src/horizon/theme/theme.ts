@@ -1,13 +1,25 @@
 import { createSystem, defineConfig, defaultConfig } from '@chakra-ui/react';
-import { globalCss, globalTokens } from './styles';
-import { buttonRecipe, inputRecipe } from './recipes';
+import { globalCss, globalTokens, semanticTokens } from './styles';
+import {
+  buttonRecipe,
+  inputRecipe,
+  cardRecipe,
+  bannerRecipe,
+  sidebarRecipe,
+} from './recipes';
 
 export const systemConfig = defineConfig({
   theme: {
     tokens: globalTokens,
+    semanticTokens,
     recipes: {
       button: buttonRecipe,
       input: inputRecipe,
+      card: cardRecipe,
+    },
+    slotRecipes: {
+      banner: bannerRecipe,
+      sidebar: sidebarRecipe,
     },
   },
   globalCss: globalCss,

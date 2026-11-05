@@ -10,16 +10,11 @@ export function NavbarRoot(props: NavbarRootProps) {
 
   const defaultValue = useNavbar(props);
 
-  const navbarBg = {
-    base: 'rgba(244, 247, 254, 0.9)',
-    _dark: 'rgba(11,20,55,0.9)',
-  };
-
   return (
     <Box
       position="fixed"
       boxShadow="none"
-      bg={navbarBg}
+      bg="navbar.bg"
       borderColor="transparent"
       backdropFilter="blue(20px)"
       backgroundPosition="center"
