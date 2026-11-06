@@ -23,7 +23,7 @@ export default meta;
 function SimulationControlBanner() {
   const [simStarted, setSimStarted] = useState(false);
   return (
-    <Banner.Root colorPalette="brand" bgGradient="to-b">
+    <Banner.Root colorPalette="teal" bgGradient="to-b">
       <Banner.Header>Step into the Creative World of Simulation</Banner.Header>
       <Banner.Content>
         <Banner.Button

@@ -10,7 +10,6 @@ export interface BannerRootProps extends BoxProps {}
 
 export function BannerRoot(props: BannerRootProps) {
   const { children, colorPalette, ...rest } = props;
-
   return (
     <Box
       bgGradient="to-r"
@@ -68,7 +67,6 @@ export function BannerButton(props: BannerButtonProps) {
   const { children, ...rest } = props;
   const recipe = useSlotRecipe({ key: 'banner' });
   const styles = recipe();
-  console.log(styles.button);
 
   return (
     <Button

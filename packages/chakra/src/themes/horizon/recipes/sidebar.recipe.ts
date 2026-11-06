@@ -13,15 +13,6 @@ export const sidebarRecipe = defineSlotRecipe({
     itemRoot: {
       _hover: { bg: { base: 'blackAlpha.50', _dark: 'whiteAlpha.100' } },
     },
-    itemIcon: {
-      color: { base: 'secondaryGray.500', _dark: 'secondaryGray.600' },
-    },
-    itemLabel: {
-      color: { base: 'secondaryGray.500', _dark: 'secondaryGray.600' },
-    },
-    itemIndicator: {
-      bg: 'transparent',
-    },
   },
   variants: {
     active: {
@@ -33,6 +24,16 @@ export const sidebarRecipe = defineSlotRecipe({
         },
         itemIndicator: { bg: { base: 'brand.500', _dark: 'brand.400' } },
       },
+      false: {
+        itemIcon: {
+          color: { base: 'secondaryGray.500', _dark: 'secondaryGray.600' },
+        },
+        itemLabel: {
+          color: { base: 'secondaryGray.500', _dark: 'secondaryGray.600' },
+        },
+        itemIndicator: { bg: 'transparent' },
+      },
     },
   },
+  defaultVariants: { active: false },
 });
