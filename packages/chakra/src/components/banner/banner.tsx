@@ -68,10 +68,11 @@ export function BannerButton(props: BannerButtonProps) {
   const { children, ...rest } = props;
   const recipe = useSlotRecipe({ key: 'banner' });
   const styles = recipe();
+  console.log(styles.button);
 
   return (
     <Button
-      {...styles.button}
+      css={styles.button}
       fontWeight="500"
       fontSize={{ base: '20px', md: '28px' }}
       py="20px"

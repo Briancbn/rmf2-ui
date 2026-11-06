@@ -15,7 +15,10 @@ export function ThemeSwitcherRoot({
   themes = {},
   defaultTheme = 'horizon',
 }: ThemeSwitcherRootProps) {
-  const allThemes: Record<string, SystemContext> = { horizon: horizonSystem, ...themes };
+  const allThemes: Record<string, SystemContext> = {
+    horizon: horizonSystem,
+    ...themes,
+  };
   const [themeId, setThemeId] = useState(() =>
     defaultTheme in allThemes ? defaultTheme : 'horizon',
   );
@@ -23,7 +26,12 @@ export function ThemeSwitcherRoot({
 
   return (
     <ThemeSwitcherContext.Provider
-      value={{ themeId, availableThemes: Object.keys(allThemes), activeSystem, setThemeId }}
+      value={{
+        themeId,
+        availableThemes: Object.keys(allThemes),
+        activeSystem,
+        setThemeId,
+      }}
     >
       {children}
     </ThemeSwitcherContext.Provider>

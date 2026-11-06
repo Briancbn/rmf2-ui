@@ -1,9 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import {
-  HSeparator,
-  VSeparator,
-} from '../src/components/separator/separator';
+import { HSeparator, VSeparator } from '../src/components/separator/separator';
 
 const meta = {
   title: 'Horizon/Separator',

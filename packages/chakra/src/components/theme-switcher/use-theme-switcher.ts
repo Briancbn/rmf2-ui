@@ -8,9 +8,9 @@ export interface ThemeSwitcherContextValue {
   setThemeId: (id: string) => void;
 }
 
-export const ThemeSwitcherContext = createContext<ThemeSwitcherContextValue | undefined>(
-  undefined,
-);
+export const ThemeSwitcherContext = createContext<
+  ThemeSwitcherContextValue | undefined
+>(undefined);
 
 /** Returns the active theme context, or undefined when outside ThemeSwitcher.Root. */
 export function useThemeSwitcher() {

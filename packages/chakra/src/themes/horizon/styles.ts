@@ -177,14 +177,16 @@ export const semanticTokens = {
     'navbar.bg': {
       value: { base: 'rgba(244, 247, 254, 0.9)', _dark: 'rgba(11,20,55,0.9)' },
     },
-    'navbar.title': { value: { base: 'navy.700', _dark: 'white' } },
+    'navbar.title': {
+      value: { base: '{colors.navy.700}', _dark: '{colors.white}' },
+    },
     'navbar.text': { value: { base: 'gray.700', _dark: 'white' } },
-    'navbar.menu.bg': { value: { base: 'white', _dark: 'navy.800' } },
-    'banner.gradient.from': { value: 'horizonTeal.600' },
-    'banner.gradient.to': { value: 'horizonTeal.100' },
-    'banner.button.bg': { value: 'orange.400' },
-    'banner.button.color': { value: 'black' },
-    'banner.button.hover.bg': { value: 'orange.300' },
+    'navbar.menu.bg': { value: { base: 'white', _dark: '{colors.navy.800}' } },
+    'banner.gradient.from': { value: '{colors.horizonTeal.600}' },
+    'banner.gradient.to': { value: '{colors.horizonTeal.100}' },
+    'banner.button.bg': { value: '{colors.orange.400}' },
+    'banner.button.color': { value: '{colors.black}' },
+    'banner.button.hover.bg': { value: '{colors.whiteAlpha.900}' },
   },
   shadows: {
     'navbar.toolbar': {

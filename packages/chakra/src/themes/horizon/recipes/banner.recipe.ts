@@ -7,7 +7,7 @@ export const bannerRecipe = defineSlotRecipe({
       bg: 'banner.button.bg',
       color: 'banner.button.color',
       _hover: { bg: 'banner.button.hover.bg' },
-      _active: { bg: 'blue.200' },
+      _active: { bg: 'banner.button.bg' },
       _focus: { bg: 'white' },
     },
   },
