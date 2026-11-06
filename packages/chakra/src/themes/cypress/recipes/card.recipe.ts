@@ -10,7 +10,9 @@ export const cardRecipe = defineRecipe({
     borderRadius: '20px',
     minWidth: '0px',
     wordWrap: 'break-word',
-    bg: { base: 'white', _dark: 'teal.800' },
+    bg: { base: 'white', _dark: 'whiteAlpha.200' },
+    borderColor: { _dark: 'whiteAlpha.100' },
+    borderWidth: '0.5px',
     backgroundClip: 'border-box',
   },
 });

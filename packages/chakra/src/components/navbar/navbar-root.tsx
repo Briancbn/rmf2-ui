@@ -1,5 +1,5 @@
 import type { BoxProps } from '@chakra-ui/react';
-import { Box, Flex } from '@chakra-ui/react';
+import { Box, Flex, useSlotRecipe } from '@chakra-ui/react';
 import type { UseNavbarProps } from './use-navbar';
 import { useNavbar, NavbarContext } from './use-navbar';
 
@@ -9,19 +9,16 @@ export function NavbarRoot(props: NavbarRootProps) {
   const { children, ...rest } = props as BoxProps;
 
   const defaultValue = useNavbar(props);
+  const recipe = useSlotRecipe({ key: 'navbar' });
+  const styles = recipe();
 
   return (
     <Box
       position="fixed"
-      boxShadow="none"
-      bg="navbar.bg"
-      borderColor="transparent"
       backdropFilter="blue(20px)"
       backgroundPosition="center"
       backgroundSize="cover"
-      borderRadius="16px"
-      borderWidth="1.5px"
-      borderStyle="solid"
+      css={styles.root}
       alignItems={{ xl: 'center' }}
       display={{ xl: 'block', base: 'flex' }}
       minH="75px"

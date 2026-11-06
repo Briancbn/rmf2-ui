@@ -15,11 +15,11 @@ export const buttonRecipe = defineRecipe({
         borderRadius: '16px',
       },
       brand: {
-        bg: { base: 'teal.500', _dark: 'teal.400' },
+        bg: { base: 'teal.600', _dark: 'teal.700' },
         color: 'white',
-        _focus: { bg: { base: 'teal.500', _dark: 'teal.400' } },
-        _active: { bg: { base: 'teal.500', _dark: 'teal.400' } },
-        _hover: { bg: { base: 'teal.600', _dark: 'teal.400' } },
+        _focus: { bg: { base: 'teal.400', _dark: 'teal.400' } },
+        _active: { bg: { base: 'teal.400', _dark: 'teal.400' } },
+        _hover: { bg: { base: 'teal.400', _dark: 'teal.400' } },
       },
       darkBrand: {
         bg: { base: 'teal.900', _dark: 'teal.400' },

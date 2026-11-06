@@ -1,8 +1,6 @@
 import { Button, Flex, Text } from '@chakra-ui/react';
-import { Horizon } from '@rmf2-ui/chakra';
+import { Card, type CardProps } from '@rmf2-ui/chakra';
 import { useState, useEffect, MouseEvent, MouseEventHandler } from 'react';
-import Card = Horizon.Card;
-import CardProps = Horizon.CardProps;
 
 export interface OnboardCardProps extends CardProps {
   title: string;

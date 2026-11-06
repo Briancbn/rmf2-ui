@@ -1,6 +1,5 @@
 import { SceneViewer } from './components';
-import { Horizon } from '@rmf2-ui/chakra';
-import Card = Horizon.Card;
+import { Card } from '@rmf2-ui/chakra';
 import { useMapData } from '@/clients/map';
 
 export function Map() {

@@ -1,15 +1,16 @@
 import { Outlet, useNavigation } from 'react-router';
 import { Box } from '@chakra-ui/react';
-import { Horizon } from '@rmf2-ui/chakra';
+import {
+  Navbar,
+  Pending,
+  Searchbar,
+  Sidebar,
+  ThemeSwitcher,
+} from '@rmf2-ui/chakra';
 import { RMF2FreeLogo } from '@/components/icons';
 import { ColorModeButton } from '@/components/ui/color-mode';
 import { routes } from './admin-routes';
 import { AdminAvatarMenu } from './admin-avatar-menu';
-
-import Navbar = Horizon.Navbar;
-import Pending = Horizon.Pending;
-import Searchbar = Horizon.Searchbar;
-import Sidebar = Horizon.Sidebar;
 
 // Custom Chakra theme
 export function AdminLayout() {
@@ -28,7 +29,10 @@ export function AdminLayout() {
           <Sidebar.Content>
             <Sidebar.Items />
           </Sidebar.Content>
-          <Sidebar.Footer>{/*<Horizon.HorizonSidebarCard />*/}</Sidebar.Footer>
+          <Sidebar.Footer>
+            {/*<Horizon.HorizonSidebarCard />*/}
+            <ThemeSwitcher.Button />
+          </Sidebar.Footer>
         </Sidebar.Positioner>
 
         <Box

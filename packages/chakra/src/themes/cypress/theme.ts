@@ -7,6 +7,7 @@ import {
   bannerRecipe,
   sidebarRecipe,
   pendingRecipe,
+  navbarRecipe,
 } from './recipes';
 
 export const systemConfig = defineConfig({
@@ -22,6 +23,7 @@ export const systemConfig = defineConfig({
       banner: bannerRecipe,
       sidebar: sidebarRecipe,
       pending: pendingRecipe,
+      navbar: navbarRecipe,
     },
   },
   globalCss,
