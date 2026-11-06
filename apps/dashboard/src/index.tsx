@@ -20,7 +20,7 @@ const _THEMES = {
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Provider themes={_THEMES} defaultTheme="horizon">
+    <Provider systems={_THEMES} defaultTheme="horizon">
       <App />
       <Toaster />
     </Provider>

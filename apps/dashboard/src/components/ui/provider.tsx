@@ -11,13 +11,13 @@ function ChakraFromTheme({ children }: { children: ReactNode }) {
 }
 
 export interface ProviderProps extends ColorModeProviderProps {
-  themes: Record<string, SystemContext>;
+  systems: Record<string, SystemContext>;
   defaultTheme?: string;
 }
 
-export function Provider({ themes, defaultTheme, ...props }: ProviderProps) {
+export function Provider({ systems, defaultTheme, ...props }: ProviderProps) {
   return (
-    <ThemeSwitcher.Root themes={themes} defaultTheme={defaultTheme}>
+    <ThemeSwitcher.Root themes={systems} defaultTheme={defaultTheme}>
       <ChakraFromTheme>
         <ColorModeProvider {...props} />
       </ChakraFromTheme>
