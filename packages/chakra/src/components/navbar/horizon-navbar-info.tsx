@@ -8,7 +8,6 @@ export function HorizonNavbarInfo() {
     base: 'secondaryGray.500',
     _dark: 'whiteAlpha.200',
   };
-  const menuBg = { base: 'white', _dark: 'navy.800' };
 
   const shadow = {
     base: '14px 17px 40px 4px rgba(112, 144, 176, 0.18)',
@@ -29,7 +28,7 @@ export function HorizonNavbarInfo() {
             p="20px"
             me={{ base: '30px', md: 'unset' }}
             borderRadius="20px"
-            bg={menuBg}
+            bg="navbar.menu.bg"
             mt="22px"
             minW={{ base: 'unset' }}
             maxW={{ base: '360px', md: 'unset' }}

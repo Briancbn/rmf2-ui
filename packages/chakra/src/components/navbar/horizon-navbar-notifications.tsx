@@ -2,10 +2,7 @@ import { Menu, Flex, Icon, Portal, Text } from '@chakra-ui/react';
 import { MdNotificationsNone } from 'react-icons/md';
 
 export function HorizonNavbarNotification() {
-  const textColor = { base: 'secondaryGray.900', _dark: 'white' };
-  const textColorBrand = { base: 'brand.700', _dark: 'brand.400' };
   const iconColor = { base: 'gray.400', _dark: 'white' };
-  const menuBg = { base: 'white', _dark: 'navy.800' };
 
   const shadow = {
     base: '14px 17px 40px 4px rgba(112, 144, 176, 0.18)',
@@ -32,7 +29,7 @@ export function HorizonNavbarNotification() {
             boxShadow={shadow}
             p="20px"
             borderRadius="20px"
-            bg={menuBg}
+            bg="navbar.menu.bg"
             border="none"
             mt="22px"
             me={{ base: '30px', md: 'unset' }}
@@ -40,13 +37,13 @@ export function HorizonNavbarNotification() {
             maxW={{ base: '360px', md: 'unset' }}
           >
             <Flex w="100%" mb="20px">
-              <Text fontSize="md" fontWeight="600" color={textColor}>
+              <Text fontSize="md" fontWeight="600" color="navbar.text">
                 Notifications
               </Text>
               <Text
                 fontSize="sm"
                 fontWeight="500"
-                color={textColorBrand}
+                color="brand.400"
                 ms="auto"
                 cursor="pointer"
               >

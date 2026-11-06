@@ -43,7 +43,7 @@ export const semanticTokens = {
     },
     'navbar.text': { value: { base: 'gray.700', _dark: 'white' } },
     'navbar.menu.bg': {
-      value: { base: 'white', _dark: '{colors.whiteAlpha.100}' },
+      value: { base: 'white', _dark: '{colors.gray.900}' },
     },
     'banner.gradient.from': { value: '{colors.teal.600}' },
     'banner.gradient.to': { value: '{colors.teal.100}' },
