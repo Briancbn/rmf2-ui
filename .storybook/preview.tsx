@@ -3,8 +3,8 @@ import type { Preview } from '@storybook/react';
 import { Box, ChakraProvider, type SystemContext } from '@chakra-ui/react';
 import { MemoryRouter } from 'react-router';
 import { ThemeProvider } from 'next-themes';
-import { system as horizonSystem } from '../packages/chakra/src/themes/horizon/theme';
-import { system as cypressSystem } from '../packages/chakra/src/themes/cypress/theme';
+import { system as horizonSystem } from '../packages/chakra/src/themes/horizon';
+import { system as cypressSystem } from '../packages/chakra/src/themes/cypress';
 import './horizon-fonts.css';
 import './cypress-fonts.css';
 

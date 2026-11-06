@@ -6,7 +6,7 @@ export const navbarRecipe = defineSlotRecipe({
     root: {
       bg: 'navbar.bg',
       borderBottomColor: { base: 'teal.500', _dark: 'teal.500' },
-      borderWidth: '0.5px',
+      borderBottomWidth: '0.5px',
       borderStyle: 'solid',
       boxShadow: 'none',
     },
