@@ -1,10 +1,17 @@
 import { createContext, useContext } from 'react';
 import { type SystemContext } from '@chakra-ui/react';
 
+export interface ThemeColorPreview {
+  brand: string;
+  bg: string;
+  darkBg: string;
+}
+
 export interface ThemeSwitcherContextValue {
   themeId: string;
   availableThemes: string[];
   activeSystem: SystemContext;
+  themeColors: Record<string, ThemeColorPreview>;
   setThemeId: (id: string) => void;
 }
 

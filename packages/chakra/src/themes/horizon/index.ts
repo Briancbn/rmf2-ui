@@ -16,3 +16,9 @@ export const systemConfig = defineConfig({
 });
 
 export const system = createSystem(defaultConfig, systemConfig);
+
+export const previewColors = {
+  brand: '#613aff',
+  bg: '#ffffff',
+  darkBg: '#1B254B',
+};

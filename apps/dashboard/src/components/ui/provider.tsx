@@ -2,7 +2,11 @@
 
 import { type ReactNode } from 'react';
 import { ChakraProvider, type SystemContext } from '@chakra-ui/react';
-import { ThemeSwitcher, useThemeSwitcher } from '@rmf2-ui/chakra';
+import {
+  ThemeSwitcher,
+  useThemeSwitcher,
+  type ThemeColorPreview,
+} from '@rmf2-ui/chakra';
 import { ColorModeProvider, type ColorModeProviderProps } from './color-mode';
 
 function ChakraFromTheme({ children }: { children: ReactNode }) {
@@ -13,11 +17,21 @@ function ChakraFromTheme({ children }: { children: ReactNode }) {
 export interface ProviderProps extends ColorModeProviderProps {
   systems: Record<string, SystemContext>;
   defaultTheme?: string;
+  themeColors?: Record<string, ThemeColorPreview>;
 }
 
-export function Provider({ systems, defaultTheme, ...props }: ProviderProps) {
+export function Provider({
+  systems,
+  defaultTheme,
+  themeColors,
+  ...props
+}: ProviderProps) {
   return (
-    <ThemeSwitcher.Root themes={systems} defaultTheme={defaultTheme}>
+    <ThemeSwitcher.Root
+      themes={systems}
+      defaultTheme={defaultTheme}
+      themeColors={themeColors}
+    >
       <ChakraFromTheme>
         <ColorModeProvider {...props} />
       </ChakraFromTheme>

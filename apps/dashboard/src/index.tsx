@@ -18,9 +18,18 @@ const _THEMES = {
   cypress: Cypress.system,
 };
 
+const _THEME_COLORS = {
+  horizon: Horizon.previewColors,
+  cypress: Cypress.previewColors,
+};
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Provider systems={_THEMES} defaultTheme="horizon">
+    <Provider
+      systems={_THEMES}
+      defaultTheme="horizon"
+      themeColors={_THEME_COLORS}
+    >
       <App />
       <Toaster />
     </Provider>
