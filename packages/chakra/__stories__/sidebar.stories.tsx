@@ -39,44 +39,40 @@ export const Header: StoryObj = {
 
 export const Footer: StoryObj = {
   render: () => (
-    <Box w="300px" bg="white" _dark={{ bg: 'navy.800' }} p={4}>
+    <Sidebar.Root w="300px" p={4}>
       <Sidebar.Footer>
         <Text fontSize="sm" color="gray.400">
           v1.0.0 — RMF2 UI
         </Text>
       </Sidebar.Footer>
-    </Box>
+    </Sidebar.Root>
   ),
 };
 
 export const Content: StoryObj = {
   render: () => (
-    <Box w="300px" bg="white" _dark={{ bg: 'navy.800' }}>
+    <Sidebar.Root w="300px">
       <Sidebar.Content>
         <Text>Content area children go here.</Text>
       </Sidebar.Content>
-    </Box>
+    </Sidebar.Root>
   ),
 };
 
 export const Items: StoryObj = {
   render: () => (
-    <Box w="300px" bg="white" _dark={{ bg: 'navy.800' }} p={4}>
-      <Sidebar.Root routes={sampleRoutes}>
-        <Sidebar.Items />
-      </Sidebar.Root>
-    </Box>
+    <Sidebar.Root routes={sampleRoutes} w="300px" p={4}>
+      <Sidebar.Items />
+    </Sidebar.Root>
   ),
 };
 
 export const ItemsActiveRoute: StoryObj = {
   parameters: { initialRoute: '/settings/account' },
   render: () => (
-    <Box w="300px" bg="white" _dark={{ bg: 'navy.800' }} p={4}>
-      <Sidebar.Root routes={sampleRoutes}>
-        <Sidebar.Items />
-      </Sidebar.Root>
-    </Box>
+    <Sidebar.Root routes={sampleRoutes} w="300px" p={4}>
+      <Sidebar.Items />
+    </Sidebar.Root>
   ),
 };
 

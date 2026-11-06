@@ -182,6 +182,12 @@ export const semanticTokens = {
     },
     'navbar.text': { value: { base: 'gray.700', _dark: 'white' } },
     'navbar.menu.bg': { value: { base: 'white', _dark: '{colors.navy.800}' } },
+    'sidebar.bg': { value: { base: 'white', _dark: '{colors.navy.800}' } },
+    'sidebarCard.gradient.from': { value: '#868CFF' },
+    'sidebarCard.gradient.to': { value: '#4318FF' },
+    'sidebarCard.border': {
+      value: { base: 'white', _dark: '{colors.navy.800}' },
+    },
     'banner.gradient.from': { value: '{colors.brand.600}' },
     'banner.gradient.to': { value: '{colors.brand.100}' },
     'banner.button.bg': { value: '{colors.orange.400}' },

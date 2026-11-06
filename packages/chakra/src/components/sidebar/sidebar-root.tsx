@@ -14,7 +14,7 @@ export function SidebarRoot(props: SidebarRootProps) {
 
   // SIDEBAR
   return (
-    <Box {...rest}>
+    <Box bg="sidebar.bg" {...rest}>
       <SidebarContext value={defaultValue}>{children}</SidebarContext>
     </Box>
   );

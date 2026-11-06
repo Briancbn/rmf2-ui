@@ -4,10 +4,18 @@ import { Box, ChakraProvider, type SystemContext } from '@chakra-ui/react';
 import { MemoryRouter } from 'react-router';
 import { ThemeProvider } from 'next-themes';
 import { system as horizonSystem } from '../packages/chakra/src/themes/horizon/theme';
+import { system as cypressSystem } from '../packages/chakra/src/themes/cypress/theme';
 import './horizon-fonts.css';
+import './cypress-fonts.css';
 
 const themes: Record<string, SystemContext> = {
   horizon: horizonSystem,
+  cypress: cypressSystem,
+};
+
+const themeFonts: Record<string, string> = {
+  horizon: 'DM Sans',
+  cypress: 'Open Sans',
 };
 
 const preview: Preview = {
@@ -52,6 +60,7 @@ const preview: Preview = {
       const colorScheme = (context.globals.colorScheme as string) ?? 'light';
       const themeId = (context.globals.theme as string) ?? 'horizon';
       const activeSystem = themes[themeId] ?? horizonSystem;
+      const fontFamily = themeFonts[themeId] ?? 'DM Sans';
       const initialRoute =
         (context.parameters.initialRoute as string) ?? '/dashboard';
 
@@ -66,7 +75,7 @@ const preview: Preview = {
               <Box
                 minH="100vh"
                 bg="bg"
-                fontFamily="DM Sans"
+                fontFamily={fontFamily}
                 letterSpacing="-0.5px"
                 p={4}
               >

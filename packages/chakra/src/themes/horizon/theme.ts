@@ -6,6 +6,7 @@ import {
   cardRecipe,
   bannerRecipe,
   sidebarRecipe,
+  pendingRecipe,
 } from './recipes';
 
 export const systemConfig = defineConfig({
@@ -20,6 +21,7 @@ export const systemConfig = defineConfig({
     slotRecipes: {
       banner: bannerRecipe,
       sidebar: sidebarRecipe,
+      pending: pendingRecipe,
     },
   },
   globalCss: globalCss,

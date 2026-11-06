@@ -13,7 +13,7 @@ import { IoMenuOutline } from 'react-icons/io5';
 export interface SidebarResponsiveProps extends FlexProps {}
 
 export function SidebarResponsive(props: SidebarResponsiveProps) {
-  const sidebarBackgroundColor = { base: 'white', _dark: 'navy.800' };
+  const sidebarBackgroundColor = 'sidebar.bg';
   const menuColor = { base: 'gray.400', _dark: 'white' };
   const { open, setOpen } = useDisclosure();
   const btnRef = useRef<HTMLInputElement | null>(null);

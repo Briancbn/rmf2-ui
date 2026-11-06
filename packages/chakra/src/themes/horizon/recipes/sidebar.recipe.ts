@@ -4,7 +4,7 @@ export const sidebarRecipe = defineSlotRecipe({
   slots: ['positioner', 'itemRoot', 'itemIcon', 'itemLabel', 'itemIndicator'],
   base: {
     positioner: {
-      bg: { base: 'white', _dark: 'navy.800' },
+      bg: 'sidebar.bg',
       boxShadow: {
         base: '14px 17px 40px 4px rgba(112, 144, 176, 0.08)',
         _dark: 'unset',

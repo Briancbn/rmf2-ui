@@ -1,4 +1,4 @@
-import { Spinner, chakra } from '@chakra-ui/react';
+import { Spinner, chakra, useSlotRecipe } from '@chakra-ui/react';
 import type { HTMLChakraProps, SpinnerProps } from '@chakra-ui/react';
 
 export interface PendingRootProps extends HTMLChakraProps<'div'> {}
@@ -29,5 +29,9 @@ PendingOverlay.displayName = 'Pending.Overlay';
 
 export interface PendingSpinnerProps extends SpinnerProps {}
 export function PendingSpinner(props: PendingSpinnerProps) {
-  return <Spinner color="brand.500" size="xl" borderWidth="5px" {...props} />;
+  const recipe = useSlotRecipe({ key: 'pending' });
+  const styles = recipe();
+  return (
+    <Spinner css={styles.spinner} size="xl" borderWidth="5px" {...props} />
+  );
 }

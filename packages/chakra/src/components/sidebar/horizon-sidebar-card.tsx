@@ -2,23 +2,24 @@ import { Button, Flex, Image, Link, Text } from '@chakra-ui/react';
 import logoWhite from '@/themes/horizon/assets/logoWhite.png';
 
 export function HorizonSidebarCard() {
-  const bgColor = 'linear-gradient(135deg, #868CFF 0%, #4318FF 100%)';
-  const borderColor = { base: 'white', _dark: 'navy.800' };
-
   return (
     <Flex
       justify="center"
       direction="column"
       align="center"
-      bg={bgColor}
+      bgGradient="to-br"
+      gradientFrom="sidebarCard.gradient.from"
+      gradientTo="sidebarCard.gradient.to"
       borderRadius="30px"
       me={{ base: '20px' }}
       position="relative"
     >
       <Flex
         border="5px solid"
-        borderColor={borderColor}
-        bg="linear-gradient(135deg, #868CFF 0%, #4318FF 100%)"
+        borderColor="sidebarCard.border"
+        bgGradient="to-br"
+        gradientFrom="sidebarCard.gradient.from"
+        gradientTo="sidebarCard.gradient.to"
         borderRadius="50%"
         w="94px"
         h="94px"
