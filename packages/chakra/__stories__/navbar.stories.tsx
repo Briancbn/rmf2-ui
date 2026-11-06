@@ -21,7 +21,7 @@ const sampleRoutes: RoutesType[] = [
 ];
 
 const meta = {
-  title: 'Horizon/Navbar',
+  title: 'RMF2-UI/Navbar',
   tags: ['autodocs'],
 } satisfies Meta;
 

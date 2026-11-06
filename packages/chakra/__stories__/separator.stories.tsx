@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { HSeparator, VSeparator } from '../src/components/separator/separator';
 
 const meta = {
-  title: 'Horizon/Separator',
+  title: 'RMF2-UI/Separator',
   tags: ['autodocs'],
 } satisfies Meta;
 

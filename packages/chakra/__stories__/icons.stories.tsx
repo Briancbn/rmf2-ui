@@ -80,7 +80,7 @@ const ALL_ICONS = [
 ] as const;
 
 const meta = {
-  title: 'Horizon/Icons',
+  title: 'RMF2-UI/Icons',
   tags: ['autodocs'],
 } satisfies Meta;
 

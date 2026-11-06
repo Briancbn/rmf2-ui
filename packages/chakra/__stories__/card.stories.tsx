@@ -1,22 +1,15 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Box } from '@chakra-ui/react';
 import { Card } from '../src/components/card/card';
 
 const meta = {
-  title: 'Horizon/Card',
+  title: 'RMF2-UI/Card',
   component: Card,
   tags: ['autodocs'],
   parameters: {
     backgrounds: { disable: true },
   },
-  decorators: [
-    (Story: React.ComponentType) => (
-      <Box bg={{ base: 'secondaryGray.300', _dark: 'navy.900' }} p={4}>
-        <Story />
-      </Box>
-    ),
-  ],
+  decorators: [(Story: React.ComponentType) => <Story />],
 } satisfies Meta<typeof Card>;
 
 export default meta;

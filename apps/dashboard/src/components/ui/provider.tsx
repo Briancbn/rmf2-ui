@@ -7,11 +7,42 @@ import {
   useThemeSwitcher,
   type ThemeColorPreview,
 } from '@rmf2-ui/chakra';
-import { ColorModeProvider, type ColorModeProviderProps } from './color-mode';
+import {
+  ColorModeProvider,
+  useColorMode,
+  type ColorModeProviderProps,
+} from './color-mode';
 
 function ChakraFromTheme({ children }: { children: ReactNode }) {
   const { activeSystem } = useThemeSwitcher()!;
   return <ChakraProvider value={activeSystem}>{children}</ChakraProvider>;
+}
+
+interface ThemeSwitcherBridgeProps {
+  systems: Record<string, SystemContext>;
+  defaultTheme?: string;
+  themeColors?: Record<string, ThemeColorPreview>;
+  children: ReactNode;
+}
+
+function ThemeSwitcherBridge({
+  systems,
+  defaultTheme,
+  themeColors,
+  children,
+}: ThemeSwitcherBridgeProps) {
+  const { colorMode, setColorMode } = useColorMode();
+  return (
+    <ThemeSwitcher.Root
+      themes={systems}
+      defaultTheme={defaultTheme}
+      themeColors={themeColors}
+      colorMode={colorMode}
+      setColorMode={setColorMode}
+    >
+      <ChakraFromTheme>{children}</ChakraFromTheme>
+    </ThemeSwitcher.Root>
+  );
 }
 
 export interface ProviderProps extends ColorModeProviderProps {
@@ -24,17 +55,18 @@ export function Provider({
   systems,
   defaultTheme,
   themeColors,
+  children,
   ...props
 }: ProviderProps) {
   return (
-    <ThemeSwitcher.Root
-      themes={systems}
-      defaultTheme={defaultTheme}
-      themeColors={themeColors}
-    >
-      <ChakraFromTheme>
-        <ColorModeProvider {...props} />
-      </ChakraFromTheme>
-    </ThemeSwitcher.Root>
+    <ColorModeProvider disableTransitionOnChange={false} {...props}>
+      <ThemeSwitcherBridge
+        systems={systems}
+        defaultTheme={defaultTheme}
+        themeColors={themeColors}
+      >
+        {children}
+      </ThemeSwitcherBridge>
+    </ColorModeProvider>
   );
 }

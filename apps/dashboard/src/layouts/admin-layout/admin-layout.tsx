@@ -8,7 +8,6 @@ import {
   ThemeSwitcher,
 } from '@rmf2-ui/chakra';
 import { RMF2FreeLogo } from '@/components/icons';
-import { ColorModeSwitch } from '@/components/ui/color-mode';
 import { routes } from './admin-routes';
 import { AdminAvatarMenu } from './admin-avatar-menu';
 
@@ -32,7 +31,7 @@ export function AdminLayout() {
           <Sidebar.Footer>
             {/*<Horizon.HorizonSidebarCard />*/}
             <HStack gap={2} w="full" justify="flex-start" px={3} py={2}>
-              <ColorModeSwitch />
+              <ThemeSwitcher.ColorModeSwitch />
               <ThemeSwitcher.Select />
             </HStack>
           </Sidebar.Footer>
@@ -77,7 +76,7 @@ export function AdminLayout() {
                 <Sidebar.Footer>
                   {/*<Horizon.HorizonSidebarCard />*/}
                   <HStack gap={2} w="full" justify="flex-start" px={3} py={2}>
-                    <ColorModeSwitch />
+                    <ThemeSwitcher.ColorModeSwitch />
                     <ThemeSwitcher.Select />
                   </HStack>
                 </Sidebar.Footer>

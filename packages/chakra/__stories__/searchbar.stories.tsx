@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Searchbar } from '../src/components/searchbar/searchbar';
 
 const meta = {
-  title: 'Horizon/Searchbar',
+  title: 'RMF2-UI/Searchbar',
   component: Searchbar,
   tags: ['autodocs'],
   parameters: {

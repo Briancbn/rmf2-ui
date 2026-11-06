@@ -2,12 +2,12 @@ import { createContext, useContext } from 'react';
 import type { RoutesType } from '@/types';
 
 export interface UseSidebarProps {
-  routes: RoutesType[];
+  routes?: RoutesType[];
 }
 
 export function useSidebar(props: UseSidebarProps) {
   const { routes } = props;
-  return { routes };
+  return { routes: routes ?? [] };
 }
 
 export type UseSidebarReturn = ReturnType<typeof useSidebar>;

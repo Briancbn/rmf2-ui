@@ -1,5 +1,7 @@
 import { createContext, useContext } from 'react';
-import { type SystemContext } from '@chakra-ui/react';
+import type { SystemContext } from '@chakra-ui/react';
+
+export type ColorMode = 'light' | 'dark';
 
 export interface ThemeColorPreview {
   brand: string;
@@ -13,6 +15,8 @@ export interface ThemeSwitcherContextValue {
   activeSystem: SystemContext;
   themeColors: Record<string, ThemeColorPreview>;
   setThemeId: (id: string) => void;
+  colorMode?: ColorMode;
+  setColorMode?: (colorMode: ColorMode) => void;
 }
 
 export const ThemeSwitcherContext = createContext<

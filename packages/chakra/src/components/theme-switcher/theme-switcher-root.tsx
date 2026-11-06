@@ -4,6 +4,7 @@ import type { SystemContext } from '@chakra-ui/react';
 import { system as horizonSystem } from '@/themes/horizon';
 import {
   ThemeSwitcherContext,
+  type ColorMode,
   type ThemeColorPreview,
 } from './use-theme-switcher';
 
@@ -14,6 +15,8 @@ export interface ThemeSwitcherRootProps {
   themes?: Record<string, SystemContext>;
   themeColors?: Record<string, ThemeColorPreview>;
   defaultTheme?: string;
+  colorMode?: ColorMode;
+  setColorMode?: (colorMode: ColorMode) => void;
 }
 
 export function ThemeSwitcherRoot({
@@ -21,6 +24,8 @@ export function ThemeSwitcherRoot({
   themes = {},
   themeColors = {},
   defaultTheme = 'horizon',
+  colorMode,
+  setColorMode,
 }: ThemeSwitcherRootProps) {
   const allThemes: Record<string, SystemContext> = {
     horizon: horizonSystem,
@@ -55,6 +60,8 @@ export function ThemeSwitcherRoot({
         activeSystem,
         themeColors,
         setThemeId,
+        colorMode,
+        setColorMode,
       }}
     >
       {children}

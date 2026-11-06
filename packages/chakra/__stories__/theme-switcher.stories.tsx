@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, ReactNode } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import {
   system as horizonSystem,
@@ -24,12 +24,17 @@ const themeColors = {
 
 function StorybookThemeBridge({
   initialThemeId,
+  initialColorMode = 'light',
   children,
 }: {
   initialThemeId: string;
-  children: React.ReactNode;
+  initialColorMode?: 'light' | 'dark';
+  children: ReactNode;
 }) {
   const [themeId, setThemeId] = useState(initialThemeId);
+  const [colorMode, setColorMode] = useState<'light' | 'dark'>(
+    initialColorMode,
+  );
   const activeSystem = themes[themeId] ?? horizonSystem;
 
   return (
@@ -40,6 +45,8 @@ function StorybookThemeBridge({
         activeSystem,
         themeColors,
         setThemeId,
+        colorMode,
+        setColorMode,
       }}
     >
       {children}
@@ -48,13 +55,18 @@ function StorybookThemeBridge({
 }
 
 const meta = {
-  title: 'Components/ThemeSwitcher',
+  title: 'RMF2-UI/ThemeSwitcher',
   tags: ['autodocs'],
   decorators: [
     (Story, context) => {
       const themeId = (context.globals.theme as string) ?? 'horizon';
+      const colorMode =
+        (context.globals.colorScheme as 'light' | 'dark') ?? 'light';
       return (
-        <StorybookThemeBridge key={themeId} initialThemeId={themeId}>
+        <StorybookThemeBridge
+          initialThemeId={themeId}
+          initialColorMode={colorMode}
+        >
           <Story />
         </StorybookThemeBridge>
       );
@@ -70,4 +82,8 @@ export const Button: StoryObj = {
 
 export const Select: StoryObj = {
   render: () => <ThemeSwitcher.Select />,
+};
+
+export const ColorModeSwitch: StoryObj = {
+  render: () => <ThemeSwitcher.ColorModeSwitch />,
 };

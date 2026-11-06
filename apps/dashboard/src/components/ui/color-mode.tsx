@@ -1,24 +1,18 @@
 'use client';
 
 import type { IconButtonProps, SpanProps } from '@chakra-ui/react';
-import {
-  Icon,
-  ClientOnly,
-  IconButton,
-  Skeleton,
-  Span,
-  Switch,
-} from '@chakra-ui/react';
-import { useThemeSwitcher } from '@rmf2-ui/chakra';
+import { ClientOnly, IconButton, Skeleton, Span } from '@chakra-ui/react';
 import { ThemeProvider, useTheme } from 'next-themes';
 import type { ThemeProviderProps } from 'next-themes';
 import * as React from 'react';
-import { FaMoon, FaSun } from 'react-icons/fa6';
+import { LuMoon, LuSun } from 'react-icons/lu';
 
 export interface ColorModeProviderProps extends ThemeProviderProps {}
 
 export function ColorModeProvider(props: ColorModeProviderProps) {
-  return <ThemeProvider attribute="class" {...props} />;
+  return (
+    <ThemeProvider attribute="class" disableTransitionOnChange {...props} />
+  );
 }
 
 export type ColorMode = 'light' | 'dark';
@@ -49,55 +43,8 @@ export function useColorModeValue<T>(light: T, dark: T) {
 
 export function ColorModeIcon() {
   const { colorMode } = useColorMode();
-  return colorMode === 'dark' ? <FaMoon /> : <FaSun />;
+  return colorMode === 'dark' ? <LuMoon /> : <LuSun />;
 }
-
-export const ColorModeSwitch = React.forwardRef<
-  HTMLInputElement,
-  Omit<Switch.RootProps, 'children'>
->(function ColorModeSwitch(props, ref) {
-  const { colorMode, setColorMode } = useColorMode();
-  const themeCtx = useThemeSwitcher();
-  const themeColors = themeCtx
-    ? themeCtx.themeColors[themeCtx.themeId]
-    : undefined;
-  const lightBg = themeColors?.bg ?? '#ffffff';
-  const darkBg = themeColors?.darkBg ?? '#1a202c';
-
-  return (
-    <ClientOnly fallback={<Skeleton w="70px" h="36px" borderRadius="full" />}>
-      <Switch.Root
-        checked={colorMode === 'dark'}
-        onCheckedChange={(e) => setColorMode(e.checked ? 'dark' : 'light')}
-        aria-label="Toggle color mode"
-        css={{
-          '--switch-width': '70px',
-          '--switch-height': '36px',
-        }}
-        {...props}
-      >
-        <Switch.HiddenInput ref={ref} />
-        <Switch.Control bg="brand.600" _checked={{ bg: 'brand.500' }}>
-          <Switch.Thumb bg={colorMode === 'dark' ? darkBg : lightBg} />
-          <Switch.Indicator
-            fallback={
-              <Icon
-                as={FaSun}
-                style={{ width: '20px', height: '20px' }}
-                color="yellow.400"
-              />
-            }
-          >
-            <FaMoon
-              style={{ width: '20px', height: '20px' }}
-              color="gray.400"
-            />
-          </Switch.Indicator>
-        </Switch.Control>
-      </Switch.Root>
-    </ClientOnly>
-  );
-});
 
 interface ColorModeButtonProps extends Omit<IconButtonProps, 'aria-label'> {}
 
