@@ -1,4 +1,5 @@
-import { Button, type ButtonProps } from '@chakra-ui/react';
+import { Button } from '@chakra-ui/react';
+import type { ButtonProps } from '@chakra-ui/react';
 import { useThemeSwitcher } from './use-theme-switcher';
 
 export interface ThemeSwitcherButtonProps extends Omit<ButtonProps, 'onClick'> {

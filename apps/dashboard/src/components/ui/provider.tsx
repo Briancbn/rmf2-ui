@@ -1,7 +1,8 @@
 'use client';
 
-import { type ReactNode } from 'react';
-import { ChakraProvider, type SystemContext } from '@chakra-ui/react';
+import type { ReactNode } from 'react';
+import { ChakraProvider } from '@chakra-ui/react';
+import type { SystemContext } from '@chakra-ui/react';
 import { ThemeSwitcher, useThemeSwitcher } from '@rmf2-ui/chakra';
 import {
   ColorModeProvider,
