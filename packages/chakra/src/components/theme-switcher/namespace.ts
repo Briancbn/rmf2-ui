@@ -5,4 +5,7 @@ export { ThemeSwitcherColorModeSwitch as ColorModeSwitch } from './theme-switche
 
 export type { ThemeSwitcherRootProps as RootProps } from './theme-switcher-root';
 export type { ThemeSwitcherButtonProps as ButtonProps } from './theme-switcher-button';
-export type { ThemeColorPreview } from './use-theme-switcher';
+export type {
+  ThemeSwitcherThemeColorPreview as ThemeColorPreview,
+  ThemeSwitcherColorMode as ColorMode,
+} from './use-theme-switcher';

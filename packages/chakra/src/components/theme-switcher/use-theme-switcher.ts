@@ -1,9 +1,9 @@
 import { createContext, useContext } from 'react';
 import type { SystemContext } from '@chakra-ui/react';
 
-export type ColorMode = 'light' | 'dark';
+export type ThemeSwitcherColorMode = 'light' | 'dark';
 
-export interface ThemeColorPreview {
+export interface ThemeSwitcherThemeColorPreview {
   brand: string;
   bg: string;
   darkBg: string;
@@ -13,10 +13,10 @@ export interface ThemeSwitcherContextValue {
   themeId: string;
   availableThemes: string[];
   activeSystem: SystemContext;
-  themeColors: Record<string, ThemeColorPreview>;
+  themeColors: Record<string, ThemeSwitcherThemeColorPreview>;
   setThemeId: (id: string) => void;
-  colorMode?: ColorMode;
-  setColorMode?: (colorMode: ColorMode) => void;
+  colorMode?: ThemeSwitcherColorMode;
+  setColorMode?: (colorMode: ThemeSwitcherColorMode) => void;
 }
 
 export const ThemeSwitcherContext = createContext<

@@ -2,10 +2,10 @@ import type { ReactNode } from 'react';
 import { useState } from 'react';
 import type { SystemContext } from '@chakra-ui/react';
 import { system as horizonSystem } from '@/themes/horizon';
-import {
-  ThemeSwitcherContext,
-  type ColorMode,
-  type ThemeColorPreview,
+import { ThemeSwitcherContext } from './use-theme-switcher';
+import type {
+  ThemeSwitcherColorMode,
+  ThemeSwitcherThemeColorPreview,
 } from './use-theme-switcher';
 
 const STORAGE_KEY = 'rmf2-theme';
@@ -13,10 +13,10 @@ const STORAGE_KEY = 'rmf2-theme';
 export interface ThemeSwitcherRootProps {
   children: ReactNode;
   themes?: Record<string, SystemContext>;
-  themeColors?: Record<string, ThemeColorPreview>;
+  themeColors?: Record<string, ThemeSwitcherThemeColorPreview>;
   defaultTheme?: string;
-  colorMode?: ColorMode;
-  setColorMode?: (colorMode: ColorMode) => void;
+  colorMode?: ThemeSwitcherColorMode;
+  setColorMode?: (colorMode: ThemeSwitcherColorMode) => void;
 }
 
 export function ThemeSwitcherRoot({
