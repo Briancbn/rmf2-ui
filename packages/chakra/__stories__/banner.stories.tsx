@@ -1,21 +1,14 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Box } from '@chakra-ui/react';
-import { Banner } from '../src/horizon/components/banner';
+import { Banner } from '../src/components/banner';
 
 const meta = {
-  title: 'Horizon/Banner',
+  title: 'RMF2-UI/Banner',
   tags: ['autodocs'],
   parameters: {
     backgrounds: { disable: true },
   },
-  decorators: [
-    (Story: React.ComponentType) => (
-      <Box bg={{ base: 'secondaryGray.300', _dark: 'navy.900' }} p={6}>
-        <Story />
-      </Box>
-    ),
-  ],
+  decorators: [(Story: React.ComponentType) => <Story />],
 } satisfies Meta;
 
 export default meta;
@@ -23,11 +16,7 @@ export default meta;
 function SimulationControlBanner() {
   const [simStarted, setSimStarted] = useState(false);
   return (
-    <Banner.Root
-      bgGradient="to-b"
-      gradientFrom="brand.800"
-      gradientTo="brand.100"
-    >
+    <Banner.Root colorPalette="teal" bgGradient="to-b">
       <Banner.Header>Step into the Creative World of Simulation</Banner.Header>
       <Banner.Content>
         <Banner.Button

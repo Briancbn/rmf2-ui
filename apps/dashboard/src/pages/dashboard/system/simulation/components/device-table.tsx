@@ -9,8 +9,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { MdArrowUpward, MdArrowDownward } from 'react-icons/md';
-import { Horizon } from '@rmf2-ui/chakra';
-import Card = Horizon.Card;
+import { Card } from '@rmf2-ui/chakra';
 import type { StateMessage } from './state-message';
 import { BrokerNGSILDConfig } from '@/clients';
 

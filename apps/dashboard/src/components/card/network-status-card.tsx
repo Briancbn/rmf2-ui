@@ -1,12 +1,9 @@
 import { Box, Flex, Icon, Text } from '@chakra-ui/react';
 // Custom components
-import { Horizon } from '@rmf2-ui/chakra';
+import { Card, type CardProps } from '@rmf2-ui/chakra';
 // Assets
 import { IoWifi } from 'react-icons/io5'; // Online and Offline icons
 import { FiWifiOff } from 'react-icons/fi';
-
-import Card = Horizon.Card;
-import CardProps = Horizon.CardProps;
 
 export interface NetworkStatusCardProps extends CardProps {
   name: string;

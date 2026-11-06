@@ -3,11 +3,11 @@ import { describe, it, expect } from 'vitest';
 import { render, screen } from './utils';
 import userEvent from '@testing-library/user-event';
 import { MdDashboard, MdPerson, MdSettings } from 'react-icons/md';
-import { SidebarRoot } from '@/horizon/components/sidebar/sidebar-root';
-import { SidebarContent } from '@/horizon/components/sidebar/sidebar-content';
-import { SidebarHeader } from '@/horizon/components/sidebar/sidebar-header';
-import { SidebarFooter } from '@/horizon/components/sidebar/sidebar-footer';
-import { SidebarItems } from '@/horizon/components/sidebar/sidebar-items';
+import { SidebarRoot } from '@/components/sidebar/sidebar-root';
+import { SidebarContent } from '@/components/sidebar/sidebar-content';
+import { SidebarHeader } from '@/components/sidebar/sidebar-header';
+import { SidebarFooter } from '@/components/sidebar/sidebar-footer';
+import { SidebarItems } from '@/components/sidebar/sidebar-items';
 import type { RoutesType } from '@/types';
 
 const routes: RoutesType[] = [

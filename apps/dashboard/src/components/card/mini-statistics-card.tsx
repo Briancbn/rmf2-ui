@@ -1,8 +1,6 @@
 import { ReactNode } from 'react';
 import { Flex, Stat, Text } from '@chakra-ui/react';
-import { Horizon } from '@rmf2-ui/chakra';
-import Card = Horizon.Card;
-import CardProps = Horizon.CardProps;
+import { Card, type CardProps } from '@rmf2-ui/chakra';
 
 export interface MiniStatisticsCardProps extends CardProps {
   startContent?: ReactNode;
