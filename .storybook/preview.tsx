@@ -3,8 +3,17 @@ import type { Preview } from '@storybook/react';
 import { Box, ChakraProvider } from '@chakra-ui/react';
 import { MemoryRouter } from 'react-router';
 import { ThemeProvider } from 'next-themes';
-import system from '../packages/chakra/src/horizon/theme/theme';
+import { themeConfig as horizonConfig } from '../packages/chakra/src/themes/horizon';
+import { themeConfig as cypressConfig } from '../packages/chakra/src/themes/cypress';
 import './horizon-fonts.css';
+import './cypress-fonts.css';
+
+const themeConfigs = [horizonConfig, cypressConfig];
+
+const themeFonts: Record<string, string> = {
+  horizon: 'DM Sans',
+  cypress: 'Open Sans',
+};
 
 const preview: Preview = {
   globalTypes: {
@@ -21,6 +30,19 @@ const preview: Preview = {
         dynamicTitle: true,
       },
     },
+    theme: {
+      description: 'UI Theme',
+      defaultValue: 'horizon',
+      toolbar: {
+        title: 'Theme',
+        icon: 'paintbrush',
+        items: themeConfigs.map((t) => ({
+          value: t.id,
+          title: t.label ?? t.id,
+        })),
+        dynamicTitle: true,
+      },
+    },
   },
   parameters: {
     controls: {
@@ -33,12 +55,16 @@ const preview: Preview = {
   decorators: [
     (Story, context) => {
       const colorScheme = (context.globals.colorScheme as string) ?? 'light';
+      const themeId = (context.globals.theme as string) ?? 'horizon';
+      const activeConfig =
+        themeConfigs.find((t) => t.id === themeId) ?? horizonConfig;
+      const fontFamily = themeFonts[themeId] ?? 'DM Sans';
       const initialRoute =
         (context.parameters.initialRoute as string) ?? '/dashboard';
 
       return (
         <MemoryRouter initialEntries={[initialRoute]}>
-          <ChakraProvider value={system}>
+          <ChakraProvider value={activeConfig.system}>
             <ThemeProvider
               attribute="class"
               forcedTheme={colorScheme}
@@ -47,7 +73,7 @@ const preview: Preview = {
               <Box
                 minH="100vh"
                 bg="bg"
-                fontFamily="DM Sans"
+                fontFamily={fontFamily}
                 letterSpacing="-0.5px"
                 p={4}
               >

@@ -2,9 +2,8 @@ import { useState, useEffect, MouseEventHandler, MouseEvent } from 'react';
 import { Button, Flex, Text, Icon } from '@chakra-ui/react';
 import type { IconType } from 'react-icons';
 import { MdCancel, MdCheckCircle, MdOutlineError } from 'react-icons/md';
-import { Horizon } from '@rmf2-ui/chakra';
-import Card = Horizon.Card;
-import CardProps = Horizon.CardProps;
+import { Card } from '@rmf2-ui/chakra';
+import type { CardProps } from '@rmf2-ui/chakra';
 
 export type InitializationState = 'disabled' | 'pending' | 'initialized';
 
