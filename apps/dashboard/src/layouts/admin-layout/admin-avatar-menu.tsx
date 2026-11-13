@@ -1,13 +1,11 @@
 import { Avatar, Flex, Menu, Portal, Text } from '@chakra-ui/react';
 
 export function AdminAvatarMenu() {
-  const menuBg = { base: 'white', _dark: 'navy.800' };
   const shadow = {
     base: '14px 17px 40px 4px rgba(112, 144, 176, 0.18)',
     _dark: '14px 17px 40px 4px rgba(112, 144, 176, 0.06)',
   };
   const borderColor = { base: '#E6ECFA', _dark: 'rgba(135, 140, 189, 0.3)' };
-  const textColor = { base: 'secondaryGray.900', _dark: 'white' };
   return (
     <Menu.Root>
       <Menu.Trigger>
@@ -29,7 +27,7 @@ export function AdminAvatarMenu() {
             p="0px"
             mt="10px"
             borderRadius="20px"
-            bg={menuBg}
+            bg="navbar.menu.bg"
             border="none"
           >
             <Flex w="100%" mb="0px">
@@ -42,7 +40,7 @@ export function AdminAvatarMenu() {
                 borderColor={borderColor}
                 fontSize="sm"
                 fontWeight="700"
-                color={textColor}
+                color="navbar.text"
               >
                 👋&nbsp; Hey, Adela
               </Text>

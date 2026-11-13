@@ -2,7 +2,7 @@ import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Box, Text } from '@chakra-ui/react';
 import { MdDashboard, MdPerson, MdSettings, MdSecurity } from 'react-icons/md';
-import { Sidebar, HorizonSidebarCard } from '../src/horizon/components/sidebar';
+import { Sidebar, HorizonSidebarCard } from '../src/components/sidebar';
 import type { RoutesType } from '../src/types';
 
 const sampleRoutes: RoutesType[] = [
@@ -19,7 +19,7 @@ const sampleRoutes: RoutesType[] = [
 ];
 
 const meta = {
-  title: 'Horizon/Sidebar',
+  title: 'RMF2-UI/Sidebar',
   tags: ['autodocs'],
 } satisfies Meta;
 
@@ -39,44 +39,40 @@ export const Header: StoryObj = {
 
 export const Footer: StoryObj = {
   render: () => (
-    <Box w="300px" bg="white" _dark={{ bg: 'navy.800' }} p={4}>
+    <Sidebar.Root w="300px" p={4}>
       <Sidebar.Footer>
         <Text fontSize="sm" color="gray.400">
           v1.0.0 — RMF2 UI
         </Text>
       </Sidebar.Footer>
-    </Box>
+    </Sidebar.Root>
   ),
 };
 
 export const Content: StoryObj = {
   render: () => (
-    <Box w="300px" bg="white" _dark={{ bg: 'navy.800' }}>
+    <Sidebar.Root w="300px">
       <Sidebar.Content>
         <Text>Content area children go here.</Text>
       </Sidebar.Content>
-    </Box>
+    </Sidebar.Root>
   ),
 };
 
 export const Items: StoryObj = {
   render: () => (
-    <Box w="300px" bg="white" _dark={{ bg: 'navy.800' }} p={4}>
-      <Sidebar.Root routes={sampleRoutes}>
-        <Sidebar.Items />
-      </Sidebar.Root>
-    </Box>
+    <Sidebar.Root routes={sampleRoutes} w="300px" p={4}>
+      <Sidebar.Items />
+    </Sidebar.Root>
   ),
 };
 
 export const ItemsActiveRoute: StoryObj = {
   parameters: { initialRoute: '/settings/account' },
   render: () => (
-    <Box w="300px" bg="white" _dark={{ bg: 'navy.800' }} p={4}>
-      <Sidebar.Root routes={sampleRoutes}>
-        <Sidebar.Items />
-      </Sidebar.Root>
-    </Box>
+    <Sidebar.Root routes={sampleRoutes} w="300px" p={4}>
+      <Sidebar.Items />
+    </Sidebar.Root>
   ),
 };
 

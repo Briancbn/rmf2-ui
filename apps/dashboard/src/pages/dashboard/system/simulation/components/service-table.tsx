@@ -8,8 +8,7 @@ import {
   SortingState,
   useReactTable,
 } from '@tanstack/react-table';
-import { Horizon } from '@rmf2-ui/chakra';
-import Card = Horizon.Card;
+import { Card } from '@rmf2-ui/chakra';
 import { MdCancel, MdCheckCircle, MdOutlineError } from 'react-icons/md';
 import { BsQuestionCircleFill } from 'react-icons/bs';
 

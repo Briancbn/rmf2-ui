@@ -13,7 +13,7 @@ import {
   ClockIcon,
   DocumentIcon,
   GlobeIcon,
-} from '@/horizon/components/icons/icons';
+} from '@/components/icons/icons';
 
 const icons = [
   HorizonLogo,

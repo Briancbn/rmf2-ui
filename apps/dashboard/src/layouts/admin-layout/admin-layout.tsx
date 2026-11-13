@@ -1,15 +1,10 @@
 import { Outlet, useNavigation } from 'react-router';
 import { Box } from '@chakra-ui/react';
-import { Horizon } from '@rmf2-ui/chakra';
+import { Navbar, Pending, Searchbar, Sidebar } from '@rmf2-ui/chakra';
 import { RMF2FreeLogo } from '@/components/icons';
-import { ColorModeButton } from '@/components/ui/color-mode';
+import { ThemeControlFooter } from '@/components/theme-control-footer';
 import { routes } from './admin-routes';
 import { AdminAvatarMenu } from './admin-avatar-menu';
-
-import Navbar = Horizon.Navbar;
-import Pending = Horizon.Pending;
-import Searchbar = Horizon.Searchbar;
-import Sidebar = Horizon.Sidebar;
 
 // Custom Chakra theme
 export function AdminLayout() {
@@ -28,7 +23,10 @@ export function AdminLayout() {
           <Sidebar.Content>
             <Sidebar.Items />
           </Sidebar.Content>
-          <Sidebar.Footer>{/*<Horizon.HorizonSidebarCard />*/}</Sidebar.Footer>
+          <Sidebar.Footer>
+            {/*<Horizon.HorizonSidebarCard />*/}
+            <ThemeControlFooter />
+          </Sidebar.Footer>
         </Sidebar.Positioner>
 
         <Box
@@ -69,6 +67,7 @@ export function AdminLayout() {
                 </Sidebar.Content>
                 <Sidebar.Footer>
                   {/*<Horizon.HorizonSidebarCard />*/}
+                  <ThemeControlFooter />
                 </Sidebar.Footer>
               </Sidebar.Responsive>
 
@@ -77,15 +76,6 @@ export function AdminLayout() {
 
               {/* Horizon Info Button */}
               {/*<Horizon.HorizonNavbarInfo />*/}
-
-              {/* Color Mode Button */}
-              <ColorModeButton
-                h="10px"
-                w="10px"
-                p="0px"
-                me="10px"
-                color={{ base: 'gray.400', _dark: 'white' }}
-              />
 
               {/* Avatar Button */}
               <AdminAvatarMenu />

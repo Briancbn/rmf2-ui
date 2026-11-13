@@ -5,7 +5,7 @@ import {
   PendingRoot,
   PendingOverlay,
   PendingSpinner,
-} from '@/horizon/components/pending/pending';
+} from '@/components/pending/pending';
 
 describe('PendingRoot', () => {
   it('renders without crashing', () => {

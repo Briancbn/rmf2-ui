@@ -6,7 +6,7 @@ import {
   BannerHeader,
   BannerContent,
   BannerButton,
-} from '@/horizon/components/banner/banner';
+} from '@/components/banner/banner';
 
 describe('BannerRoot', () => {
   it('renders children', () => {

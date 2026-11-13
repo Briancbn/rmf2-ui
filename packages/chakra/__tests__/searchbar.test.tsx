@@ -2,7 +2,7 @@ import React from 'react';
 import { describe, it, expect } from 'vitest';
 import { render, screen } from './utils';
 import userEvent from '@testing-library/user-event';
-import { Searchbar } from '@/horizon/components/searchbar/searchbar';
+import { Searchbar } from '@/components/searchbar/searchbar';
 
 describe('Searchbar', () => {
   it('renders a search input', () => {

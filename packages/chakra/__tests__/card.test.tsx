@@ -1,7 +1,7 @@
 import React from 'react';
 import { describe, it, expect } from 'vitest';
 import { render, screen } from './utils';
-import { Card } from '@/horizon/components/card/card';
+import { Card } from '@/components/card/card';
 
 describe('Card', () => {
   it('renders children', () => {

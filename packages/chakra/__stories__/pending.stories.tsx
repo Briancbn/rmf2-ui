@@ -1,10 +1,10 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Box } from '@chakra-ui/react';
-import { Pending } from '../src/horizon/components/pending';
+import { Pending } from '../src/components/pending';
 
 const meta = {
-  title: 'Horizon/Pending',
+  title: 'RMF2-UI/Pending',
   tags: ['autodocs'],
   parameters: {
     backgrounds: { disable: true },
