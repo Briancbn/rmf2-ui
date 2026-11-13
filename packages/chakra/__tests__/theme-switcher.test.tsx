@@ -40,8 +40,6 @@ function TestBridge({
   );
 }
 
-// ── useThemeSwitcherActiveTheme ───────────────────────────────────────────────
-
 function ActiveThemeDisplay() {
   const theme = useThemeSwitcherActiveTheme();
   return <span data-testid="active-theme">{theme.id}</span>;
@@ -66,8 +64,6 @@ describe('useThemeSwitcherActiveTheme', () => {
     expect(screen.getByTestId('active-theme')).toHaveTextContent('horizon');
   });
 });
-
-// ── ThemeSwitcher.Button ──────────────────────────────────────────────────────
 
 describe('ThemeSwitcher.Button', () => {
   it('renders the current theme label', () => {
@@ -108,8 +104,6 @@ describe('ThemeSwitcher.Button', () => {
   });
 });
 
-// ── ThemeSwitcher.Select ──────────────────────────────────────────────────────
-
 describe('ThemeSwitcher.Select', () => {
   it('renders a button for each theme', () => {
     render(
@@ -137,8 +131,6 @@ describe('ThemeSwitcher.Select', () => {
     expect(screen.getByTestId('active-theme')).toHaveTextContent('cypress');
   });
 });
-
-// ── ThemeSwitcher.ColorModeSwitch ─────────────────────────────────────────────
 
 describe('ThemeSwitcher.ColorModeSwitch', () => {
   it('renders nothing when colorMode is not provided', () => {
@@ -170,8 +162,6 @@ describe('ThemeSwitcher.ColorModeSwitch', () => {
     expect(toggle).toBeChecked();
   });
 });
-
-// ── localStorage persistence ──────────────────────────────────────────────────
 
 describe('useThemeSwitcher localStorage', () => {
   beforeEach(() => localStorage.clear());
