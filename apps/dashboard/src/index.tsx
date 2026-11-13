@@ -1,4 +1,4 @@
-import { Provider } from '@/components/ui/provider';
+import { DynamicThemeProvider } from '@/components/ui/dynamic-theme-provider';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Toaster } from '@/components/ui/toaster';
@@ -25,13 +25,13 @@ const _THEME_COLORS = {
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Provider
+    <DynamicThemeProvider
       systems={_THEMES}
       defaultTheme="horizon"
       themeColors={_THEME_COLORS}
     >
       <App />
       <Toaster />
-    </Provider>
+    </DynamicThemeProvider>
   </StrictMode>,
 );
