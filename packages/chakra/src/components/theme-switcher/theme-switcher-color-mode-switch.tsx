@@ -1,6 +1,6 @@
 import { Icon, Switch } from '@chakra-ui/react';
 import { FaMoon, FaSun } from 'react-icons/fa6';
-import { useThemeSwitcher } from './use-theme-switcher';
+import { useThemeSwitcherColorModeSwitch } from './use-theme-switcher';
 
 // Fixed hex colors so the switch icons look consistent regardless of active theme
 const SUN_COLOR = '#ecc94b'; // yellow-400
@@ -9,16 +9,14 @@ const MOON_COLOR = '#e2e8f0'; // gray-200
 export function ThemeSwitcherColorModeSwitch(
   props: Omit<Switch.RootProps, 'children'>,
 ) {
-  const ctx = useThemeSwitcher();
-  const colorMode = ctx?.colorMode;
-  const setColorMode = ctx?.setColorMode;
-  const themeColors = ctx ? ctx.themeColors[ctx.themeId] : undefined;
+  const { colorMode, setColorMode, colorPreview } =
+    useThemeSwitcherColorModeSwitch();
 
-  if (!ctx || !colorMode || !setColorMode) return null;
+  if (!colorMode || !setColorMode) return null;
 
   // Fixed hex so the thumb preview color is stable across theme token changes
-  const lightBg = themeColors?.bg ?? '#ffffff';
-  const darkBg = themeColors?.darkBg ?? '#000000';
+  const lightBg = colorPreview?.bg ?? '#ffffff';
+  const darkBg = colorPreview?.darkBg ?? '#000000';
 
   return (
     <Switch.Root

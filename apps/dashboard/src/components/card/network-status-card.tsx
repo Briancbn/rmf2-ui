@@ -1,6 +1,7 @@
 import { Box, Flex, Icon, Text } from '@chakra-ui/react';
 // Custom components
-import { Card, type CardProps } from '@rmf2-ui/chakra';
+import { Card } from '@rmf2-ui/chakra';
+import type { CardProps } from '@rmf2-ui/chakra';
 // Assets
 import { IoWifi } from 'react-icons/io5'; // Online and Offline icons
 import { FiWifiOff } from 'react-icons/fi';

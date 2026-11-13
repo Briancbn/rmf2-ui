@@ -1,13 +1,8 @@
 import { Outlet, useNavigation } from 'react-router';
-import { Box, HStack } from '@chakra-ui/react';
-import {
-  Navbar,
-  Pending,
-  Searchbar,
-  Sidebar,
-  ThemeSwitcher,
-} from '@rmf2-ui/chakra';
+import { Box } from '@chakra-ui/react';
+import { Navbar, Pending, Searchbar, Sidebar } from '@rmf2-ui/chakra';
 import { RMF2FreeLogo } from '@/components/icons';
+import { ThemeControlFooter } from '@/components/theme-control-footer';
 import { routes } from './admin-routes';
 import { AdminAvatarMenu } from './admin-avatar-menu';
 
@@ -30,10 +25,7 @@ export function AdminLayout() {
           </Sidebar.Content>
           <Sidebar.Footer>
             {/*<Horizon.HorizonSidebarCard />*/}
-            <HStack gap={2} w="full" justify="flex-start" px={3} py={2}>
-              <ThemeSwitcher.ColorModeSwitch />
-              <ThemeSwitcher.Select />
-            </HStack>
+            <ThemeControlFooter />
           </Sidebar.Footer>
         </Sidebar.Positioner>
 
@@ -75,10 +67,7 @@ export function AdminLayout() {
                 </Sidebar.Content>
                 <Sidebar.Footer>
                   {/*<Horizon.HorizonSidebarCard />*/}
-                  <HStack gap={2} w="full" justify="flex-start" px={3} py={2}>
-                    <ThemeSwitcher.ColorModeSwitch />
-                    <ThemeSwitcher.Select />
-                  </HStack>
+                  <ThemeControlFooter />
                 </Sidebar.Footer>
               </Sidebar.Responsive>
 

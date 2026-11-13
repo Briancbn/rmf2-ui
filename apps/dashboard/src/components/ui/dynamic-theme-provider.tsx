@@ -2,35 +2,31 @@
 
 import type { ReactNode } from 'react';
 import { ChakraProvider } from '@chakra-ui/react';
-import type { SystemContext } from '@chakra-ui/react';
-import { ThemeSwitcher, useThemeSwitcher } from '@rmf2-ui/chakra';
+import { ThemeSwitcher, useThemeSwitcherActiveTheme } from '@rmf2-ui/chakra';
 import { ColorModeProvider, useColorMode } from './color-mode';
 import type { ColorModeProviderProps } from './color-mode';
 
 function SystemProvider({ children }: { children: ReactNode }) {
-  const { activeSystem } = useThemeSwitcher()!;
-  return <ChakraProvider value={activeSystem}>{children}</ChakraProvider>;
+  const theme = useThemeSwitcherActiveTheme();
+  return <ChakraProvider value={theme.system}>{children}</ChakraProvider>;
 }
 
 interface ThemeSwitcherBridgeProps {
-  systems: Record<string, SystemContext>;
+  themes?: ThemeSwitcher.ThemeConfig[];
   defaultTheme?: string;
-  themeColors?: Record<string, ThemeSwitcher.ThemeColorPreview>;
   children: ReactNode;
 }
 
 function ThemeSwitcherBridge({
-  systems,
+  themes,
   defaultTheme,
-  themeColors,
   children,
 }: ThemeSwitcherBridgeProps) {
   const { colorMode, setColorMode } = useColorMode();
   return (
     <ThemeSwitcher.Root
-      themes={systems}
+      themes={themes}
       defaultTheme={defaultTheme}
-      themeColors={themeColors}
       colorMode={colorMode}
       setColorMode={setColorMode}
     >
@@ -39,26 +35,21 @@ function ThemeSwitcherBridge({
   );
 }
 
-export interface DynamicThemeProviderProps extends ColorModeProviderProps {
-  systems: Record<string, SystemContext>;
+export interface DynamicThemeProviderProps
+  extends Omit<ColorModeProviderProps, 'themes' | 'defaultTheme'> {
+  themes?: ThemeSwitcher.ThemeConfig[];
   defaultTheme?: string;
-  themeColors?: Record<string, ThemeSwitcher.ThemeColorPreview>;
 }
 
 export function DynamicThemeProvider({
-  systems,
+  themes,
   defaultTheme,
-  themeColors,
   children,
   ...props
 }: DynamicThemeProviderProps) {
   return (
     <ColorModeProvider disableTransitionOnChange={false} {...props}>
-      <ThemeSwitcherBridge
-        systems={systems}
-        defaultTheme={defaultTheme}
-        themeColors={themeColors}
-      >
+      <ThemeSwitcherBridge themes={themes} defaultTheme={defaultTheme}>
         {children}
       </ThemeSwitcherBridge>
     </ColorModeProvider>

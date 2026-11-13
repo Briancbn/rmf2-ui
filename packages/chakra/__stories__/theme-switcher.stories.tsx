@@ -1,26 +1,16 @@
-import React, { useState, ReactNode } from 'react';
+import React, { useState } from 'react';
+import type { ReactNode } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import { themeConfig as horizonConfig } from '../src/themes/horizon';
+import { themeConfig as cypressConfig } from '../src/themes/cypress';
 import {
-  system as horizonSystem,
-  previewColors as horizonColors,
-} from '../src/themes/horizon';
-import {
-  system as cypressSystem,
-  previewColors as cypressColors,
-} from '../src/themes/cypress';
-import { ThemeSwitcherContext } from '../src/components/theme-switcher/use-theme-switcher';
+  ThemeSwitcherContext,
+  useThemeSwitcherStorybook,
+} from '../src/components/theme-switcher/use-theme-switcher';
+import type { ThemeSwitcherColorMode } from '../src/components/theme-switcher/use-theme-switcher';
 import { ThemeSwitcher } from '../src/components/theme-switcher';
-import type { SystemContext } from '@chakra-ui/react';
 
-const themes: Record<string, SystemContext> = {
-  horizon: horizonSystem,
-  cypress: cypressSystem,
-};
-
-const themeColors = {
-  horizon: horizonColors,
-  cypress: cypressColors,
-};
+const themeConfigs = [horizonConfig, cypressConfig];
 
 function StorybookThemeBridge({
   initialThemeId,
@@ -28,27 +18,23 @@ function StorybookThemeBridge({
   children,
 }: {
   initialThemeId: string;
-  initialColorMode?: 'light' | 'dark';
+  initialColorMode?: ThemeSwitcherColorMode;
   children: ReactNode;
 }) {
   const [themeId, setThemeId] = useState(initialThemeId);
-  const [colorMode, setColorMode] = useState<'light' | 'dark'>(
-    initialColorMode,
-  );
-  const activeSystem = themes[themeId] ?? horizonSystem;
+  const [colorMode, setColorMode] =
+    useState<ThemeSwitcherColorMode>(initialColorMode);
+
+  const ctx = useThemeSwitcherStorybook({
+    themes: themeConfigs,
+    themeId,
+    setThemeId,
+    colorMode,
+    setColorMode,
+  });
 
   return (
-    <ThemeSwitcherContext.Provider
-      value={{
-        themeId,
-        availableThemes: Object.keys(themes),
-        activeSystem,
-        themeColors,
-        setThemeId,
-        colorMode,
-        setColorMode,
-      }}
-    >
+    <ThemeSwitcherContext.Provider value={ctx}>
       {children}
     </ThemeSwitcherContext.Provider>
   );
@@ -61,7 +47,7 @@ const meta = {
     (Story, context) => {
       const themeId = (context.globals.theme as string) ?? 'horizon';
       const colorMode =
-        (context.globals.colorScheme as 'light' | 'dark') ?? 'light';
+        (context.globals.colorScheme as ThemeSwitcherColorMode) ?? 'light';
       return (
         <StorybookThemeBridge
           initialThemeId={themeId}

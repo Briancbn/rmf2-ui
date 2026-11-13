@@ -13,22 +13,11 @@ import '@fontsource/open-sans/400.css';
 import '@fontsource/open-sans/500.css';
 import '@fontsource/open-sans/700.css';
 
-const _THEMES = {
-  horizon: Horizon.system,
-  cypress: Cypress.system,
-};
-
-const _THEME_COLORS = {
-  horizon: Horizon.previewColors,
-  cypress: Cypress.previewColors,
-};
-
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <DynamicThemeProvider
-      systems={_THEMES}
+      themes={[Horizon.themeConfig, Cypress.themeConfig]}
       defaultTheme="horizon"
-      themeColors={_THEME_COLORS}
     >
       <App />
       <Toaster />

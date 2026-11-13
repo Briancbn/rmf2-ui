@@ -1,20 +1,16 @@
 import { Box, HStack } from '@chakra-ui/react';
-import { useThemeSwitcher } from './use-theme-switcher';
+import { useThemeSwitcherSelect } from './use-theme-switcher';
 
 export function ThemeSwitcherSelect() {
-  const ctx = useThemeSwitcher();
-  if (!ctx) return null;
-
-  const { themeId, availableThemes, themeColors, setThemeId } = ctx;
+  const { themeId, themes, setThemeId } = useThemeSwitcherSelect();
 
   return (
     <HStack gap={2}>
-      {availableThemes.map((id) => {
-        const colors = themeColors[id];
+      {Array.from(themes.values()).map(({ id, colorPreview }) => {
         const isActive = id === themeId;
 
-        const gradient = colors
-          ? `conic-gradient(from 120deg, ${colors.brand} 0deg 240deg, ${colors.darkBg} 240deg 300deg, ${colors.bg} 300deg 360deg)`
+        const gradient = colorPreview
+          ? `conic-gradient(from 120deg, ${colorPreview.brand} 0deg 240deg, ${colorPreview.darkBg} 240deg 300deg, ${colorPreview.bg} 300deg 360deg)`
           : 'conic-gradient(from 120deg, #aaa 0deg 240deg, #444 240deg 300deg, #eee 300deg 360deg)';
 
         return (

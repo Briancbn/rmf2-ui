@@ -1,28 +1,23 @@
 import { Button } from '@chakra-ui/react';
 import type { ButtonProps } from '@chakra-ui/react';
-import { useThemeSwitcher } from './use-theme-switcher';
+import { useThemeSwitcherButton } from './use-theme-switcher';
 
-export interface ThemeSwitcherButtonProps extends Omit<ButtonProps, 'onClick'> {
-  label?: (themeId: string) => string;
-}
+export interface ThemeSwitcherButtonProps
+  extends Omit<ButtonProps, 'onClick'> {}
 
-export function ThemeSwitcherButton({
-  label = (id) => `${id}`,
-  ...rest
-}: ThemeSwitcherButtonProps) {
-  const ctx = useThemeSwitcher();
-  if (!ctx) return null;
-
-  const { themeId, availableThemes, setThemeId } = ctx;
+export function ThemeSwitcherButton(props: ThemeSwitcherButtonProps) {
+  const { themeId, themes, setThemeId } = useThemeSwitcherButton();
+  const current = themes.get(themeId);
 
   const handleClick = () => {
-    const idx = availableThemes.indexOf(themeId);
-    setThemeId(availableThemes[(idx + 1) % availableThemes.length]);
+    const keys = Array.from(themes.keys());
+    const idx = keys.indexOf(themeId);
+    setThemeId(keys[(idx + 1) % keys.length]);
   };
 
   return (
-    <Button type="button" onClick={handleClick} {...rest}>
-      {label(themeId)}
+    <Button type="button" onClick={handleClick} {...props}>
+      {current?.label ?? themeId}
     </Button>
   );
 }

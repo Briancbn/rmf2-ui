@@ -1,17 +1,14 @@
 import React from 'react';
 import type { Preview } from '@storybook/react';
-import { Box, ChakraProvider, type SystemContext } from '@chakra-ui/react';
+import { Box, ChakraProvider } from '@chakra-ui/react';
 import { MemoryRouter } from 'react-router';
 import { ThemeProvider } from 'next-themes';
-import { system as horizonSystem } from '../packages/chakra/src/themes/horizon';
-import { system as cypressSystem } from '../packages/chakra/src/themes/cypress';
+import { themeConfig as horizonConfig } from '../packages/chakra/src/themes/horizon';
+import { themeConfig as cypressConfig } from '../packages/chakra/src/themes/cypress';
 import './horizon-fonts.css';
 import './cypress-fonts.css';
 
-const themes: Record<string, SystemContext> = {
-  horizon: horizonSystem,
-  cypress: cypressSystem,
-};
+const themeConfigs = [horizonConfig, cypressConfig];
 
 const themeFonts: Record<string, string> = {
   horizon: 'DM Sans',
@@ -39,9 +36,9 @@ const preview: Preview = {
       toolbar: {
         title: 'Theme',
         icon: 'paintbrush',
-        items: Object.keys(themes).map((id) => ({
-          value: id,
-          title: id.charAt(0).toUpperCase() + id.slice(1),
+        items: themeConfigs.map((t) => ({
+          value: t.id,
+          title: t.label ?? t.id,
         })),
         dynamicTitle: true,
       },
@@ -59,14 +56,15 @@ const preview: Preview = {
     (Story, context) => {
       const colorScheme = (context.globals.colorScheme as string) ?? 'light';
       const themeId = (context.globals.theme as string) ?? 'horizon';
-      const activeSystem = themes[themeId] ?? horizonSystem;
+      const activeConfig =
+        themeConfigs.find((t) => t.id === themeId) ?? horizonConfig;
       const fontFamily = themeFonts[themeId] ?? 'DM Sans';
       const initialRoute =
         (context.parameters.initialRoute as string) ?? '/dashboard';
 
       return (
         <MemoryRouter initialEntries={[initialRoute]}>
-          <ChakraProvider value={activeSystem}>
+          <ChakraProvider value={activeConfig.system}>
             <ThemeProvider
               attribute="class"
               forcedTheme={colorScheme}
