@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Box, Button, Flex, Spacer, Text } from '@chakra-ui/react';
-import { Card, Pending, Schedule } from '@rmf2-ui/chakra';
+import { Card, Pending, SchedulerViewer } from '@rmf2-ui/chakra';
 import type { RTS } from '@rmf2-ui/data';
 import { RTOConfig, LauncherConfig } from '@/clients';
 import { toaster } from '@/components/ui/toaster';
@@ -230,57 +230,56 @@ export function SchedulePage() {
           </Flex>
         </Flex>
         {/* Schedule Viewer */}
-        <Schedule.Root schedule={schedule}>
+        <SchedulerViewer.Root schedule={schedule}>
           {/* Schedule Tabs */}
-          <Schedule.TabsRoot>
+          <SchedulerViewer.TabsRoot>
             {/* Schedule Tabs Control */}
-            <Schedule.TabsControl />
+            <SchedulerViewer.TabsControl />
 
             {/* Schedule Tabs Schedule Display */}
-            <Schedule.TabsContentSchedule>
+            <SchedulerViewer.TabsContentSchedule>
               {/* Control Panel */}
-              <Schedule.ControlPanel>
-                <Schedule.AddButton disabled={schedule === undefined} />
-                <Schedule.DownloadButton
+              <SchedulerViewer.ControlPanel>
+                <SchedulerViewer.AddButton disabled={schedule === undefined} />
+                <SchedulerViewer.DownloadButton
                   onClick={downloadCSV}
                   disabled={schedule === undefined}
                 />
-                <Schedule.RefreshButton
+                <SchedulerViewer.RefreshButton
                   onClick={async () => await refreshScheduleMutation()}
                   loading={refreshSchedulePending}
                 />
-                <Schedule.LiveToggle
+                <SchedulerViewer.LiveToggle
                   onToggleLive={(live) => {
                     setRefetchInterval(live ? 1000 : false);
                   }}
                 />
-                <Schedule.OptimizeButton
+                <SchedulerViewer.OptimizeButton
                   onClick={async () => await optimzeScheduleMutation()}
                   loading={optimizeSchedulePending}
                 />
                 <Spacer />
 
                 <DateTimeSelector currentDate={currentDate} />
-              </Schedule.ControlPanel>
-              <Schedule.Gantt />
-            </Schedule.TabsContentSchedule>
+              </SchedulerViewer.ControlPanel>
+              <SchedulerViewer.Gantt />
+            </SchedulerViewer.TabsContentSchedule>
 
             {/* Schedule Tabs Process Display */}
-            <Schedule.TabsContentProcess>
-              <Schedule.Process />
-            </Schedule.TabsContentProcess>
-          </Schedule.TabsRoot>
+            <SchedulerViewer.TabsContentProcess>
+              <SchedulerViewer.Process />
+            </SchedulerViewer.TabsContentProcess>
+          </SchedulerViewer.TabsRoot>
 
-          {/* Task Dialog Popover */}
-          <Schedule.TaskDialog placement="center">
-            <Schedule.TaskDialogControlPanel
+          <SchedulerViewer.TaskDialog placement="center">
+            <SchedulerViewer.TaskDialogControlPanel
               onDelete={async (event) =>
                 await deleteTaskMutation(event.task.id)
               }
               isDeleting={deleteTaskPending}
             />
-          </Schedule.TaskDialog>
-        </Schedule.Root>
+          </SchedulerViewer.TaskDialog>
+        </SchedulerViewer.Root>
         {isPendingGetSchedule && (
           <Pending.Root>
             <Pending.Overlay />

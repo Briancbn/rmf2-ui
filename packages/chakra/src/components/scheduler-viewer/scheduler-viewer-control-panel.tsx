@@ -3,13 +3,13 @@ import { chakra, Flex, IconButton } from '@chakra-ui/react';
 import { LuRefreshCw, LuDownload, LuPlay, LuPause } from 'react-icons/lu';
 import { IoAdd } from 'react-icons/io5';
 import { PiSpinnerBold } from 'react-icons/pi';
-import type { UseScheduleLiveToggleProps } from './use-schedule';
+import type { UseSchedulerViewerLiveToggleProps } from './use-scheduler-viewer';
 import {
-  useScheduleLiveToggle,
-  useScheduleRefreshButton,
-} from './use-schedule';
+  useSchedulerViewerLiveToggle,
+  useSchedulerViewerRefreshButton,
+} from './use-scheduler-viewer';
 
-export function ScheduleControlPanel(props: FlexProps) {
+export function SchedulerViewerControlPanel(props: FlexProps) {
   const { children, ...rest } = props;
   return (
     <Flex
@@ -23,11 +23,11 @@ export function ScheduleControlPanel(props: FlexProps) {
   );
 }
 
-export interface ScheduleAddButtonProps extends IconButtonProps {
+export interface SchedulerViewerAddButtonProps extends IconButtonProps {
   label?: string;
 }
 
-export function ScheduleAddButton(props: ScheduleAddButtonProps) {
+export function SchedulerViewerAddButton(props: SchedulerViewerAddButtonProps) {
   const { children, label: _label, ...rest } = props;
   return (
     <IconButton aria-label="add-task" variant="outline" {...rest}>
@@ -36,11 +36,13 @@ export function ScheduleAddButton(props: ScheduleAddButtonProps) {
   );
 }
 
-export interface ScheduleDownloadButtonProps extends IconButtonProps {
+export interface SchedulerViewerDownloadButtonProps extends IconButtonProps {
   label?: string;
 }
 
-export function ScheduleDownloadButton(props: ScheduleDownloadButtonProps) {
+export function SchedulerViewerDownloadButton(
+  props: SchedulerViewerDownloadButtonProps,
+) {
   const { children, label: _label, ...rest } = props;
   return (
     <IconButton aria-label="download" variant="outline" {...rest}>
@@ -49,13 +51,15 @@ export function ScheduleDownloadButton(props: ScheduleDownloadButtonProps) {
   );
 }
 
-export interface ScheduleRefreshButtonProps extends IconButtonProps {
+export interface SchedulerViewerRefreshButtonProps extends IconButtonProps {
   label?: string;
 }
 
-export function ScheduleRefreshButton(props: ScheduleRefreshButtonProps) {
+export function SchedulerViewerRefreshButton(
+  props: SchedulerViewerRefreshButtonProps,
+) {
   const { children, loading: loadingExternal, label: _label, ...rest } = props;
-  const { disabled, loading } = useScheduleRefreshButton();
+  const { disabled, loading } = useSchedulerViewerRefreshButton();
   return (
     <IconButton
       aria-label="refresh"
@@ -74,17 +78,19 @@ export function ScheduleRefreshButton(props: ScheduleRefreshButtonProps) {
   );
 }
 
-export interface ScheduleLiveToggleProps
+export interface SchedulerViewerLiveToggleProps
   extends IconButtonProps,
-    UseScheduleLiveToggleProps {
+    UseSchedulerViewerLiveToggleProps {
   onToggleLive?: (live: boolean) => void;
   label?: string | ((live: boolean) => string);
 }
 
-export function ScheduleLiveToggle(props: ScheduleLiveToggleProps) {
+export function SchedulerViewerLiveToggle(
+  props: SchedulerViewerLiveToggleProps,
+) {
   const { children, onToggleLive, label: _label, ...rest } = props;
-  const { live, setLive, disabled } = useScheduleLiveToggle(
-    props as UseScheduleLiveToggleProps,
+  const { live, setLive, disabled } = useSchedulerViewerLiveToggle(
+    props as UseSchedulerViewerLiveToggleProps,
   );
 
   return (
@@ -105,11 +111,13 @@ export function ScheduleLiveToggle(props: ScheduleLiveToggleProps) {
   );
 }
 
-export interface ScheduleOptimizeButtonProps extends IconButtonProps {
+export interface SchedulerViewerOptimizeButtonProps extends IconButtonProps {
   label?: string;
 }
 
-export function ScheduleOptimizeButton(props: ScheduleOptimizeButtonProps) {
+export function SchedulerViewerOptimizeButton(
+  props: SchedulerViewerOptimizeButtonProps,
+) {
   const { children, label: _label, ...rest } = props;
   return (
     <IconButton

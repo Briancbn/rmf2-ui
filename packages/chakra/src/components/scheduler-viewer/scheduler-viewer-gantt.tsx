@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { chakra } from '@chakra-ui/react';
-import { useScheduleGantt } from './use-schedule';
+import { useSchedulerViewerGantt } from './use-scheduler-viewer';
 import { DataSet } from 'vis-data/esnext';
 import type { DataItem, DataGroup } from 'vis-timeline/esnext';
 import { Timeline } from 'vis-timeline/esnext';
@@ -17,8 +17,8 @@ interface VisTimelineContext {
   timeline: Timeline;
 }
 
-export function ScheduleGantt() {
-  const { tasks, openTaskViewDialog } = useScheduleGantt();
+export function SchedulerViewerGantt() {
+  const { tasks, openTaskViewDialog } = useSchedulerViewerGantt();
   const visTimelineContext = useRef<VisTimelineContext>(null);
 
   const containerRef = useCallback((node: HTMLDivElement) => {

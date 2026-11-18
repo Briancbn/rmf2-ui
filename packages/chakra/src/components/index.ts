@@ -7,5 +7,6 @@ export * from './searchbar';
 export * from './separator';
 export * from './sidebar';
 export * from './theme-switcher';
-export * from './process';
-export * from './schedule';
+export * from './process-viewer';
+export * from './scheduler-viewer';
+export * from './task-viewer';

@@ -12,13 +12,13 @@ interface TimeViewWindow {
   end: Date;
 }
 
-export interface UseScheduleProps {
+export interface UseSchedulerViewerProps {
   schedule?: RTS.Schedule;
   live?: boolean;
   timeViewWindow?: TimeViewWindow;
 }
 
-export function useSchedule(props: UseScheduleProps) {
+export function useSchedulerViewer(props: UseSchedulerViewerProps) {
   const {
     schedule,
     live: defaultLive,
@@ -52,29 +52,30 @@ export function useSchedule(props: UseScheduleProps) {
   };
 }
 
-export type UseScheduleReturn = ReturnType<typeof useSchedule>;
+export type UseSchedulerViewerReturn = ReturnType<typeof useSchedule>;
 
-export const ScheduleContext = createContext<UseScheduleReturn | undefined>(
-  undefined,
-);
+export const SchedulerViewerContext = createContext<
+  UseSchedulerViewerReturn | undefined
+>(undefined);
 
-const useScheduleContext = () => {
-  const ctx = useContext(ScheduleContext);
+const useSchedulerViewerContext = () => {
+  const ctx = useContext(SchedulerViewerContext);
   if (ctx === undefined) {
     throw new Error(
-      'useScheduleContext must be inside a ScheduleContext.Provider',
+      'useSchedulerViewerContext must be inside a SchedulerViewerContext.Provider',
     );
   }
   return ctx;
 };
 
-export function useScheduleTabsRoot() {
-  const { tabValue, setTabValue } = useScheduleContext();
+export function useSchedulerViewerTabsRoot() {
+  const { tabValue, setTabValue } = useSchedulerViewerContext();
   return { tabValue, setTabValue };
 }
 
-export function useScheduleGantt() {
-  const { schedule, setViewTask, setTaskDialogOpen } = useScheduleContext();
+export function useSchedulerViewerGantt() {
+  const { schedule, setViewTask, setTaskDialogOpen } =
+    useSchedulerViewerContext();
 
   const openTaskViewDialog = useCallback(
     (taskId: string) => {
@@ -97,23 +98,26 @@ export function useScheduleGantt() {
   };
 }
 
-export function useScheduleTaskDialog() {
-  const { viewTask, taskDialogOpen, setTaskDialogOpen } = useScheduleContext();
+export function useSchedulerViewerTaskDialog() {
+  const { viewTask, taskDialogOpen, setTaskDialogOpen } =
+    useSchedulerViewerContext();
   return { viewTask, open: taskDialogOpen, setOpen: setTaskDialogOpen };
 }
 
-export function useScheduleControlPanel() {
+export function useSchedulerViewerControlPanel() {
   const { schedule, live, setLive, timeViewWindow, setTimeViewWindow } =
-    useScheduleContext();
+    useSchedulerViewerContext();
   return { schedule, live, setLive, timeViewWindow, setTimeViewWindow };
 }
 
-export interface UseScheduleLiveToggleProps {
+export interface UseSchedulerViewerLiveToggleProps {
   live?: boolean;
 }
 
-export function useScheduleLiveToggle(props: UseScheduleLiveToggleProps) {
-  const { schedule, live, setLive } = useScheduleContext();
+export function useSchedulerViewerLiveToggle(
+  props: UseSchedulerViewerLiveToggleProps,
+) {
+  const { schedule, live, setLive } = useSchedulerViewerContext();
   const { live: liveExternal } = props;
 
   useEffect(() => {
@@ -130,12 +134,12 @@ export function useScheduleLiveToggle(props: UseScheduleLiveToggleProps) {
   return { disabled: schedule === undefined, live, setLive };
 }
 
-export function useScheduleRefreshButton() {
-  const { schedule, live } = useScheduleContext();
+export function useSchedulerViewerRefreshButton() {
+  const { schedule, live } = useSchedulerViewerContext();
   return { disabled: schedule === undefined, loading: live };
 }
 
-export function useScheduleProcess() {
-  const { schedule, viewProcess, setViewProcess } = useScheduleContext();
+export function useSchedulerViewerProcess() {
+  const { schedule, viewProcess, setViewProcess } = useSchedulerViewerContext();
   return { schedule, viewProcess, setViewProcess };
 }
