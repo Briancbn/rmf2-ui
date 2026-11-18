@@ -5,7 +5,4 @@ export const globalCss = {
     letterSpacing: '-0.5px',
     bg: { base: 'white', _dark: 'black' },
   },
-  input: {
-    color: 'gray.700',
-  },
 };

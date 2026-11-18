@@ -152,6 +152,39 @@
         }
       }
     },
+    "/schedule/optimize": {
+      "post": {
+        "tags": ["Schedule"],
+        "summary": "Optimize Schedule",
+        "operationId": "optimize_schedule_schedule_optimize_post",
+        "parameters": [
+          {
+            "name": "optimization_duration",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "number", "title": "Optimization Duration" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Message" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
     "/tasks/": {
       "get": {
         "tags": ["Task"],
@@ -165,7 +198,7 @@
             "schema": {
               "type": "string",
               "format": "date-time",
-              "default": "2025-05-16T15:28:05.582872",
+              "default": "2026-01-13T10:34:01.176178",
               "title": "Start Time"
             }
           },
@@ -176,7 +209,7 @@
             "schema": {
               "type": "string",
               "format": "date-time",
-              "default": "2025-05-17T15:28:05.582873",
+              "default": "2026-01-14T10:34:01.176179",
               "title": "End Time"
             }
           },
@@ -364,7 +397,7 @@
             "schema": {
               "type": "string",
               "format": "date-time",
-              "default": "2025-05-16T15:28:05.577978",
+              "default": "2026-01-13T10:34:01.168597",
               "title": "Start Time"
             }
           },
@@ -375,7 +408,7 @@
             "schema": {
               "type": "string",
               "format": "date-time",
-              "default": "2025-05-17T15:28:05.577979",
+              "default": "2026-01-14T10:34:01.168598",
               "title": "End Time"
             }
           },
@@ -739,7 +772,7 @@
             "schema": {
               "type": "string",
               "format": "date-time",
-              "default": "2025-05-16T15:28:05.575928",
+              "default": "2026-01-13T10:34:01.165654",
               "title": "Start Time"
             }
           },
@@ -750,7 +783,7 @@
             "schema": {
               "type": "string",
               "format": "date-time",
-              "default": "2025-05-17T15:28:05.575929",
+              "default": "2026-01-14T10:34:01.165655",
               "title": "End Time"
             }
           },

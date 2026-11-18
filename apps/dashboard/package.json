@@ -25,6 +25,8 @@
     "react-router": "^7.6.3",
     "three": "^0.177.0",
     "three-viewport-gizmo": "^2.2.0",
+    "@dagrejs/dagre": "^1.1.8",
+    "@xyflow/react": "^12.9.3",
     "vis-data": "^8.0.3",
     "vis-timeline": "^8.3.1",
     "vite-tsconfig-paths": "^5.1.4"
