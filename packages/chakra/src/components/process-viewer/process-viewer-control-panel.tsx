@@ -8,8 +8,8 @@ import {
   useFilter,
   useListCollection,
 } from '@chakra-ui/react';
-import { useEffect } from 'react';
-import { useProcessViewerContext } from './use-process-viewer';
+import { useEffect, useState } from 'react';
+import { useProcessViewerControlPanel } from './use-process-viewer';
 
 export interface ProcessViewerControlPanelProps extends BoxProps {}
 
@@ -18,7 +18,7 @@ export function ProcessViewerControlPanel(
 ) {
   const { ...rest } = props;
   const { processes, selectedProcessId, setSelectedProcessId } =
-    useProcessViewerContext();
+    useProcessViewerControlPanel();
   const { contains } = useFilter({ sensitivity: 'base' });
   const {
     collection,
@@ -28,9 +28,17 @@ export function ProcessViewerControlPanel(
     initialItems: processes.map((p) => p.id),
     filter: contains,
   });
+
+  const [inputValue, setInputValue] = useState(selectedProcessId ?? '');
+
   useEffect(() => {
     setCollection(processes.map((p) => p.id));
   }, [processes, setCollection]);
+
+  useEffect(() => {
+    filter('');
+    setInputValue(selectedProcessId ?? '');
+  }, [selectedProcessId]);
 
   return (
     <Box {...rest}>
@@ -40,7 +48,11 @@ export function ProcessViewerControlPanel(
           <Combobox.Root
             collection={collection}
             value={selectedProcessId ? [selectedProcessId] : []}
-            onInputValueChange={(e) => filter(e.inputValue)}
+            inputValue={inputValue}
+            onInputValueChange={(e) => {
+              setInputValue(e.inputValue);
+              filter(e.inputValue);
+            }}
             onValueChange={(e) => setSelectedProcessId(e.value[0])}
             w="350px"
           >

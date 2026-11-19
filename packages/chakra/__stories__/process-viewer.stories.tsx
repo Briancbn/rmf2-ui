@@ -85,9 +85,7 @@ export const Default: Story = {
   render: () => (
     <ProcessViewer.Root processes={DUMMY_PROCESSES} tasks={DUMMY_TASKS}>
       <ProcessViewer.ControlPanel mb="10px" />
-      <ProcessViewer.Canvas>
-        <ProcessViewer.GraphView />
-      </ProcessViewer.Canvas>
+      <ProcessViewer.Canvas />
     </ProcessViewer.Root>
   ),
 };

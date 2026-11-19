@@ -16,9 +16,7 @@ export function SchedulerViewerProcess(props: SchedulerViewerProcessProps) {
         tasks={schedule?.tasks ?? []}
       >
         <ProcessViewer.ControlPanel mb="10px" />
-        <ProcessViewer.Canvas>
-          <ProcessViewer.GraphView />
-        </ProcessViewer.Canvas>
+        <ProcessViewer.Canvas />
       </ProcessViewer.Root>
     </Box>
   );

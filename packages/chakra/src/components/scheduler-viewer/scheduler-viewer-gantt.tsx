@@ -151,12 +151,12 @@ export function SchedulerViewerGantt() {
       maxHeight="900px"
       css={{
         '--vis-text-color': {
-          base: 'colors.gray.700',
-          _dark: 'colors.white',
+          base: '{colors.gray.700}',
+          _dark: '{colors.white}',
         },
         '--vis-label-text-color': {
-          base: 'colors.gray.700',
-          _dark: 'colors.white',
+          base: '{colors.gray.700}',
+          _dark: '{colors.white}',
         },
       }}
     />

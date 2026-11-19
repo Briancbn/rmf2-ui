@@ -52,7 +52,7 @@ export function useSchedulerViewer(props: UseSchedulerViewerProps) {
   };
 }
 
-export type UseSchedulerViewerReturn = ReturnType<typeof useSchedule>;
+export type UseSchedulerViewerReturn = ReturnType<typeof useSchedulerViewer>;
 
 export const SchedulerViewerContext = createContext<
   UseSchedulerViewerReturn | undefined
