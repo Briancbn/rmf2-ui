@@ -7,14 +7,6 @@ import {
 } from 'react';
 import type { RTS } from '@rmf2-ui/data';
 
-export const GANTT_PRESETS = [
-  'preset_1',
-  'preset_2',
-  'preset_3',
-  'preset_4',
-  'preset_5',
-];
-
 const LOCALSTORAGE_KEY = 'rmf2.gantt.typeColorMap';
 
 function loadTypeColorMap(): Record<string, string> {

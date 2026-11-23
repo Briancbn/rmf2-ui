@@ -1,14 +1,48 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { chakra, useSlotRecipe } from '@chakra-ui/react';
-import { useSchedulerViewerGantt, GANTT_PRESETS } from './use-scheduler-viewer';
+import type { SystemStyleObject } from '@chakra-ui/react';
+import { useSchedulerViewerGantt } from './use-scheduler-viewer';
 import { DataSet } from 'vis-data/esnext';
 import type { DataItem, DataGroup } from 'vis-timeline/esnext';
 import { Timeline } from 'vis-timeline/esnext';
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css';
-import './vis-timeline-styles.css';
 
 const OPTIONS = { height: '680px', orientation: 'top', zoomFriction: 0 };
 const DEFAULT_ZOOM_LEVEL = 30 * 60; // 30 min in seconds
+
+function ganttPresetsCss(
+  presetMap: Record<string, unknown>,
+): SystemStyleObject {
+  const result: Record<string, unknown> = {};
+  for (const [preset, token] of Object.entries(presetMap)) {
+    result[`& .vis-item.${preset}`] = {
+      bg: token,
+    };
+    result[`& .vis-item.vis-selected.${preset}`] = {
+      borderColor: {
+        base: `color-mix(in srgb, ${token} 70%, black)!`,
+        _dark: `color-mix(in srgb, ${token} 70%, white)!`,
+      },
+      borderWidth: '2px!',
+      filter: { base: 'brightness(0.9)', _dark: 'brightness(1.3)' },
+      boxShadow: `0 0 8px 2px color-mix(in srgb, ${token} 60%, transparent)`,
+    };
+    result[`& .vis-item:not(.vis-selected).${preset}:hover`] = {
+      filter: { base: 'brightness(0.93)', _dark: 'brightness(1.15)' },
+    };
+  }
+  return result;
+}
+
+const PRESET_COLORS: Record<string, string> = {
+  preset_1: '{colors.schedule-viewer.gantt.preset1.bg}',
+  preset_2: '{colors.schedule-viewer.gantt.preset2.bg}',
+  preset_3: '{colors.schedule-viewer.gantt.preset3.bg}',
+  preset_4: '{colors.schedule-viewer.gantt.preset4.bg}',
+  preset_5: '{colors.schedule-viewer.gantt.preset5.bg}',
+};
+
+const PRESET_KEYS = Object.keys(PRESET_COLORS);
 
 function assignPresets(
   types: string[],
@@ -18,7 +52,8 @@ function assignPresets(
   let nextIndex = Object.keys(updated).length;
   for (const type of types) {
     if (updated[type] === undefined) {
-      updated[type] = GANTT_PRESETS[nextIndex % GANTT_PRESETS.length];
+      updated[type] =
+        PRESET_KEYS[nextIndex % PRESET_KEYS.length] ?? PRESET_KEYS[0];
       nextIndex++;
     }
   }
@@ -100,7 +135,7 @@ export function SchedulerViewerGantt() {
         content: task.description ?? '',
         start: task.startTime,
         end: task.endTime ?? new Date(task.startTime.getTime() + 20 * 1000),
-        className: colorMap[task.type],
+        className: `${styles.ganttItem} ${colorMap[task.type] ?? ''}`,
         style:
           pct !== null
             ? `background-image: linear-gradient(to right, rgba(255,255,255,0.25) ${pct}%, rgba(0,0,0,0.3) ${pct}%)`
@@ -139,7 +174,6 @@ export function SchedulerViewerGantt() {
       }
       visTimelineContext.current.timeline.moveTo(new Date());
     });
-
     const datetimeInput = document.getElementById('datetimeInputId');
     if (!datetimeInput) {
       return;
@@ -164,39 +198,19 @@ export function SchedulerViewerGantt() {
       }
     });
   }, [openTaskViewDialog]);
-
   return (
     <chakra.div
       ref={containerRef}
       minHeight="700px"
       maxHeight="900px"
       css={{
-        '--vis-text-color': {
-          base: '{colors.gray.700}',
-          _dark: '{colors.white}',
+        '& .vis-time-axis .vis-text': {
+          color: { base: '{colors.gray.700}', _dark: '{colors.white}' },
         },
-        '--gantt-item-text-color': {
-          base: '{colors.gray.800}',
-          _dark: '{colors.white}',
+        '& .vis-labelset .vis-label': {
+          color: { base: '{colors.gray.700}', _dark: '{colors.white}' },
         },
-        '--gantt-item-hover-filter': {
-          base: 'brightness(0.93)',
-          _dark: 'brightness(1.15)',
-        },
-        '--vis-label-text-color': {
-          base: '{colors.gray.700}',
-          _dark: '{colors.white}',
-        },
-        '--gantt-preset-1-bg': '{colors.schedule-viewer.gantt.preset1.bg}',
-        '--gantt-preset-2-bg': '{colors.schedule-viewer.gantt.preset2.bg}',
-        '--gantt-preset-3-bg': '{colors.schedule-viewer.gantt.preset3.bg}',
-        '--gantt-preset-4-bg': '{colors.schedule-viewer.gantt.preset4.bg}',
-        '--gantt-preset-5-bg': '{colors.schedule-viewer.gantt.preset5.bg}',
-        '& .vis-item.vis-selected.preset_1': styles['gantt.selected.preset_1'],
-        '& .vis-item.vis-selected.preset_2': styles['gantt.selected.preset_2'],
-        '& .vis-item.vis-selected.preset_3': styles['gantt.selected.preset_3'],
-        '& .vis-item.vis-selected.preset_4': styles['gantt.selected.preset_4'],
-        '& .vis-item.vis-selected.preset_5': styles['gantt.selected.preset_5'],
+        ...ganttPresetsCss(PRESET_COLORS),
       }}
     />
   );
