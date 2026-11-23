@@ -23,11 +23,21 @@ export const semanticTokens = {
     'banner.button.bg': { value: '{colors.orange.400}' },
     'banner.button.color': { value: '{colors.black}' },
     'banner.button.hover.bg': { value: '{colors.whiteAlpha.900}' },
-    'schedule-viewer.gantt.preset1.bg': { value: '#01b574' },
-    'schedule-viewer.gantt.preset2.bg': { value: '#422afb' },
-    'schedule-viewer.gantt.preset3.bg': { value: '#ffb547' },
-    'schedule-viewer.gantt.preset4.bg': { value: '#e53e3e' },
-    'schedule-viewer.gantt.preset5.bg': { value: '#00b5d8' },
+    'schedule-viewer.gantt.preset1.bg': {
+      value: { base: '{colors.green.300}', _dark: '{colors.green.700}' },
+    },
+    'schedule-viewer.gantt.preset2.bg': {
+      value: { base: '{colors.purple.300}', _dark: '{colors.purple.700}' },
+    },
+    'schedule-viewer.gantt.preset3.bg': {
+      value: { base: '{colors.orange.200}', _dark: '{colors.orange.700}' },
+    },
+    'schedule-viewer.gantt.preset4.bg': {
+      value: { base: '{colors.pink.300}', _dark: '{colors.pink.700}' },
+    },
+    'schedule-viewer.gantt.preset5.bg': {
+      value: { base: '{colors.cyan.300}', _dark: '{colors.teal.700}' },
+    },
   },
   shadows: {
     'navbar.toolbar': {

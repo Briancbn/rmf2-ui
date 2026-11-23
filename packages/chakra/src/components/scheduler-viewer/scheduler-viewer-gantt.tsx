@@ -36,7 +36,6 @@ export function SchedulerViewerGantt() {
     useSchedulerViewerGantt();
   const schedulerViewerRecipe = useSlotRecipe({ key: 'schedulerViewer' });
   const styles = schedulerViewerRecipe();
-  const selectedStyles = styles['gantt.selected'];
   const visTimelineContext = useRef<VisTimelineContext>(null);
 
   const containerRef = useCallback((node: HTMLDivElement) => {
@@ -94,15 +93,22 @@ export function SchedulerViewerGantt() {
       id: index,
       content: groupId,
     }));
-    const newDataItems: DataItem[] = filteredTasks.map((task) => ({
-      id: task.id,
-      content: task.description ?? '',
-      start: task.startTime,
-      end: task.endTime ?? new Date(task.startTime.getTime() + 20 * 1000),
-      className: colorMap[task.type],
-      group: groupMap[task.resourceId ?? 'unassigned'],
-      title: `${task?.resourceId} \n@ ${task?.taskDetails?.resource_zone} zone`,
-    }));
+    const newDataItems: DataItem[] = filteredTasks.map((task) => {
+      const pct = task.progress !== undefined ? task.progress * 100 : null;
+      return {
+        id: task.id,
+        content: task.description ?? '',
+        start: task.startTime,
+        end: task.endTime ?? new Date(task.startTime.getTime() + 20 * 1000),
+        className: colorMap[task.type],
+        style:
+          pct !== null
+            ? `background-image: linear-gradient(to right, rgba(255,255,255,0.25) ${pct}%, rgba(0,0,0,0.3) ${pct}%)`
+            : undefined,
+        group: groupMap[task.resourceId ?? 'unassigned'],
+        title: `${task?.resourceId} \n@ ${task?.taskDetails?.resource_zone} zone`,
+      };
+    });
 
     visTimelineContext.current.dataGroups.update(newDataGroups);
     visTimelineContext.current.dataItems.update(newDataItems);
@@ -169,6 +175,14 @@ export function SchedulerViewerGantt() {
           base: '{colors.gray.700}',
           _dark: '{colors.white}',
         },
+        '--gantt-item-text-color': {
+          base: '{colors.gray.800}',
+          _dark: '{colors.white}',
+        },
+        '--gantt-item-hover-filter': {
+          base: 'brightness(0.93)',
+          _dark: 'brightness(1.15)',
+        },
         '--vis-label-text-color': {
           base: '{colors.gray.700}',
           _dark: '{colors.white}',
@@ -178,7 +192,11 @@ export function SchedulerViewerGantt() {
         '--gantt-preset-3-bg': '{colors.schedule-viewer.gantt.preset3.bg}',
         '--gantt-preset-4-bg': '{colors.schedule-viewer.gantt.preset4.bg}',
         '--gantt-preset-5-bg': '{colors.schedule-viewer.gantt.preset5.bg}',
-        '& .vis-item.vis-selected': selectedStyles,
+        '& .vis-item.vis-selected.preset_1': styles['gantt.selected.preset_1'],
+        '& .vis-item.vis-selected.preset_2': styles['gantt.selected.preset_2'],
+        '& .vis-item.vis-selected.preset_3': styles['gantt.selected.preset_3'],
+        '& .vis-item.vis-selected.preset_4': styles['gantt.selected.preset_4'],
+        '& .vis-item.vis-selected.preset_5': styles['gantt.selected.preset_5'],
       }}
     />
   );

@@ -9,6 +9,7 @@ export interface Task {
   resourceId?: string;
   deadline?: Date;
   status: string;
+  progress?: number;
   plannedStartTime?: Date;
   plannedEndTime?: Date;
   // estimatedDuration?: number
