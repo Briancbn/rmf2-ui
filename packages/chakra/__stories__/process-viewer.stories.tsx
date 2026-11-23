@@ -89,3 +89,20 @@ export const Default: Story = {
     </ProcessViewer.Root>
   ),
 };
+
+export const WithProcessSelector: Story = {
+  render: () => (
+    <>
+      <ProcessViewer.Root processes={DUMMY_PROCESSES} tasks={DUMMY_TASKS}>
+        <ProcessViewer.ProcessSelector
+          mb="10px"
+          w="500px"
+          variant="flushed"
+          size="lg"
+          colorPalette="green"
+        />
+        <ProcessViewer.Canvas />
+      </ProcessViewer.Root>
+    </>
+  ),
+};
