@@ -19,6 +19,11 @@ export const semanticTokens = {
     'banner.button.bg': { value: '{colors.orange.400}' },
     'banner.button.color': { value: '{colors.black}' },
     'banner.button.hover.bg': { value: '{colors.whiteAlpha.900}' },
+    'schedule-viewer.gantt.preset1.bg': { value: '#01b574' },
+    'schedule-viewer.gantt.preset2.bg': { value: '#4318FF' },
+    'schedule-viewer.gantt.preset3.bg': { value: '#ffb547' },
+    'schedule-viewer.gantt.preset4.bg': { value: '#e53e3e' },
+    'schedule-viewer.gantt.preset5.bg': { value: '#00b5d8' },
   },
   shadows: {
     'navbar.toolbar': {

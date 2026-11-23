@@ -78,6 +78,67 @@ type Story = StoryObj;
 export const GanttView: Story = {
   render: () => (
     <SchedulerViewer.Root schedule={DUMMY_SCHEDULE}>
+      <SchedulerViewer.ControlPanel mb="8px">
+        <SchedulerViewer.AddButton disabled />
+        <SchedulerViewer.DownloadButton disabled />
+        <SchedulerViewer.RefreshButton disabled />
+        <SchedulerViewer.LiveToggle disabled />
+        <SchedulerViewer.OptimizeButton disabled />
+      </SchedulerViewer.ControlPanel>
+      <SchedulerViewer.Gantt />
+      <SchedulerViewer.TaskDialog placement="center">
+        <SchedulerViewer.TaskDialogControlPanel />
+      </SchedulerViewer.TaskDialog>
+    </SchedulerViewer.Root>
+  ),
+};
+
+export const WithLiveToggle: Story = {
+  render: () => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [refetchInterval, setRefetchInterval] = useState<false | number>(
+      false,
+    );
+    return (
+      <SchedulerViewer.Root schedule={DUMMY_SCHEDULE}>
+        <SchedulerViewer.ControlPanel mb="8px">
+          <SchedulerViewer.LiveToggle
+            onToggleLive={(live) => setRefetchInterval(live ? 1000 : false)}
+          />
+        </SchedulerViewer.ControlPanel>
+        <SchedulerViewer.Gantt />
+        <SchedulerViewer.TaskDialog placement="center" />
+        <p style={{ marginTop: 8, fontSize: 12, color: 'gray' }}>
+          Refetch interval:{' '}
+          {refetchInterval === false ? 'off' : `${refetchInterval}ms`}
+        </p>
+      </SchedulerViewer.Root>
+    );
+  },
+};
+
+export const EmptySchedule: Story = {
+  render: () => (
+    <SchedulerViewer.Root schedule={{ tasks: [], processes: [] }}>
+      <SchedulerViewer.ControlPanel mb="8px">
+        <SchedulerViewer.RefreshButton />
+      </SchedulerViewer.ControlPanel>
+      <SchedulerViewer.Gantt />
+    </SchedulerViewer.Root>
+  ),
+};
+
+export const ProcessView: Story = {
+  render: () => (
+    <SchedulerViewer.Root schedule={DUMMY_SCHEDULE}>
+      <SchedulerViewer.Process />
+    </SchedulerViewer.Root>
+  ),
+};
+
+export const WithTabs: Story = {
+  render: () => (
+    <SchedulerViewer.Root schedule={DUMMY_SCHEDULE}>
       <SchedulerViewer.TabsRoot>
         <SchedulerViewer.TabsControl />
         <SchedulerViewer.TabsContentSchedule>
@@ -97,70 +158,6 @@ export const GanttView: Story = {
       <SchedulerViewer.TaskDialog placement="center">
         <SchedulerViewer.TaskDialogControlPanel />
       </SchedulerViewer.TaskDialog>
-    </SchedulerViewer.Root>
-  ),
-};
-
-export const WithLiveToggle: Story = {
-  render: () => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [refetchInterval, setRefetchInterval] = useState<false | number>(
-      false,
-    );
-    return (
-      <SchedulerViewer.Root schedule={DUMMY_SCHEDULE}>
-        <SchedulerViewer.TabsRoot>
-          <SchedulerViewer.TabsControl />
-          <SchedulerViewer.TabsContentSchedule>
-            <SchedulerViewer.ControlPanel mb="8px">
-              <SchedulerViewer.LiveToggle
-                onToggleLive={(live) => setRefetchInterval(live ? 1000 : false)}
-              />
-            </SchedulerViewer.ControlPanel>
-            <SchedulerViewer.Gantt />
-          </SchedulerViewer.TabsContentSchedule>
-        </SchedulerViewer.TabsRoot>
-        <SchedulerViewer.TaskDialog placement="center" />
-        <p style={{ marginTop: 8, fontSize: 12, color: 'gray' }}>
-          Refetch interval:{' '}
-          {refetchInterval === false ? 'off' : `${refetchInterval}ms`}
-        </p>
-      </SchedulerViewer.Root>
-    );
-  },
-};
-
-export const EmptySchedule: Story = {
-  render: () => (
-    <SchedulerViewer.Root schedule={{ tasks: [], processes: [] }}>
-      <SchedulerViewer.TabsRoot>
-        <SchedulerViewer.TabsControl />
-        <SchedulerViewer.TabsContentSchedule>
-          <SchedulerViewer.ControlPanel mb="8px">
-            <SchedulerViewer.RefreshButton />
-          </SchedulerViewer.ControlPanel>
-          <SchedulerViewer.Gantt />
-        </SchedulerViewer.TabsContentSchedule>
-        <SchedulerViewer.TabsContentProcess>
-          <SchedulerViewer.Process />
-        </SchedulerViewer.TabsContentProcess>
-      </SchedulerViewer.TabsRoot>
-    </SchedulerViewer.Root>
-  ),
-};
-
-export const ProcessView: Story = {
-  render: () => (
-    <SchedulerViewer.Root schedule={DUMMY_SCHEDULE}>
-      <SchedulerViewer.TabsRoot defaultValue="process">
-        <SchedulerViewer.TabsControl />
-        <SchedulerViewer.TabsContentSchedule>
-          <SchedulerViewer.Gantt />
-        </SchedulerViewer.TabsContentSchedule>
-        <SchedulerViewer.TabsContentProcess>
-          <SchedulerViewer.Process />
-        </SchedulerViewer.TabsContentProcess>
-      </SchedulerViewer.TabsRoot>
     </SchedulerViewer.Root>
   ),
 };

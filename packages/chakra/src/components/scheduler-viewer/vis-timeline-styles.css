@@ -7,47 +7,25 @@
   color: var(--vis-label-text-color);
 }
 
-.vis-item.green {
-  background-color: #01b574;
+/* theme preset classes */
+
+.vis-item.preset_1 {
+  background-color: var(--gantt-preset-1-bg);
   color: white;
 }
-
-.vis-item.red {
-  background-color: red;
+.vis-item.preset_2 {
+  background-color: var(--gantt-preset-2-bg);
   color: white;
 }
-
-.vis-item.vis-dot.red {
-  border-radius: 10px;
-  border-width: 10px;
-}
-
-.vis-item.vis-line.red {
-  border-width: 5px;
-}
-
-.vis-item.vis-box.red {
-  border-radius: 0;
+.vis-item.preset_3 {
+  background-color: var(--gantt-preset-3-bg);
   color: white;
 }
-
-.vis-item.orange {
-  background-color: #ffb547;
+.vis-item.preset_4 {
+  background-color: var(--gantt-preset-4-bg);
   color: white;
 }
-
-.vis-item.vis-selected.orange {
-  background-color: orange;
+.vis-item.preset_5 {
+  background-color: var(--gantt-preset-5-bg);
   color: white;
-}
-
-.vis-item.magenta {
-  background-color: #422afb;
-  color: white;
-}
-
-.vis-item.vis-selected {
-  border-color: white;
-  border-width: 1px;
-  box-shadow: 0 0 10px gray;
 }

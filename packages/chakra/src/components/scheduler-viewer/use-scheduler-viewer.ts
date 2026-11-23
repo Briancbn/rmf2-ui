@@ -7,6 +7,33 @@ import {
 } from 'react';
 import type { RTS } from '@rmf2-ui/data';
 
+export const GANTT_PRESETS = [
+  'preset_1',
+  'preset_2',
+  'preset_3',
+  'preset_4',
+  'preset_5',
+];
+
+const LOCALSTORAGE_KEY = 'rmf2.gantt.typeColorMap';
+
+function loadTypeColorMap(): Record<string, string> {
+  try {
+    const raw = localStorage.getItem(LOCALSTORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+function saveTypeColorMap(map: Record<string, string>) {
+  try {
+    localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(map));
+  } catch {
+    // ignore
+  }
+}
+
 interface TimeViewWindow {
   start: Date;
   end: Date;
@@ -34,6 +61,12 @@ export function useSchedulerViewer(props: UseSchedulerViewerProps) {
     undefined,
   );
   const [taskDialogOpen, setTaskDialogOpen] = useState<boolean>(false);
+  const [typeColorMap, setTypeColorMap] =
+    useState<Record<string, string>>(loadTypeColorMap);
+
+  useEffect(() => {
+    saveTypeColorMap(typeColorMap);
+  }, [typeColorMap]);
 
   return {
     schedule,
@@ -49,6 +82,8 @@ export function useSchedulerViewer(props: UseSchedulerViewerProps) {
     setViewProcess,
     taskDialogOpen,
     setTaskDialogOpen,
+    typeColorMap,
+    setTypeColorMap,
   };
 }
 
@@ -74,8 +109,13 @@ export function useSchedulerViewerTabsRoot() {
 }
 
 export function useSchedulerViewerGantt() {
-  const { schedule, setViewTask, setTaskDialogOpen } =
-    useSchedulerViewerContext();
+  const {
+    schedule,
+    setViewTask,
+    setTaskDialogOpen,
+    typeColorMap,
+    setTypeColorMap,
+  } = useSchedulerViewerContext();
 
   const openTaskViewDialog = useCallback(
     (taskId: string) => {
@@ -94,6 +134,8 @@ export function useSchedulerViewerGantt() {
 
   return {
     tasks: schedule === undefined ? [] : schedule.tasks,
+    typeColorMap,
+    setTypeColorMap,
     openTaskViewDialog,
   };
 }

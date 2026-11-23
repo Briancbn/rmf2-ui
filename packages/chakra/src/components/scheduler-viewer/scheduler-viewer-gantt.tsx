@@ -1,15 +1,29 @@
 import { useCallback, useEffect, useRef } from 'react';
-import { chakra } from '@chakra-ui/react';
-import { useSchedulerViewerGantt } from './use-scheduler-viewer';
+import { chakra, useSlotRecipe } from '@chakra-ui/react';
+import { useSchedulerViewerGantt, GANTT_PRESETS } from './use-scheduler-viewer';
 import { DataSet } from 'vis-data/esnext';
 import type { DataItem, DataGroup } from 'vis-timeline/esnext';
 import { Timeline } from 'vis-timeline/esnext';
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css';
 import './vis-timeline-styles.css';
 
-const COLOR_CLASSES = ['green', 'magenta', 'yellow', 'orange'];
 const OPTIONS = { height: '680px', orientation: 'top', zoomFriction: 0 };
 const DEFAULT_ZOOM_LEVEL = 30 * 60; // 30 min in seconds
+
+function assignPresets(
+  types: string[],
+  existing: Record<string, string>,
+): Record<string, string> {
+  const updated = { ...existing };
+  let nextIndex = Object.keys(updated).length;
+  for (const type of types) {
+    if (updated[type] === undefined) {
+      updated[type] = GANTT_PRESETS[nextIndex % GANTT_PRESETS.length];
+      nextIndex++;
+    }
+  }
+  return updated;
+}
 
 interface VisTimelineContext {
   dataGroups: DataSet<DataGroup>;
@@ -18,7 +32,11 @@ interface VisTimelineContext {
 }
 
 export function SchedulerViewerGantt() {
-  const { tasks, openTaskViewDialog } = useSchedulerViewerGantt();
+  const { tasks, typeColorMap, setTypeColorMap, openTaskViewDialog } =
+    useSchedulerViewerGantt();
+  const schedulerViewerRecipe = useSlotRecipe({ key: 'schedulerViewer' });
+  const styles = schedulerViewerRecipe();
+  const selectedStyles = styles['gantt.selected'];
   const visTimelineContext = useRef<VisTimelineContext>(null);
 
   const containerRef = useCallback((node: HTMLDivElement) => {
@@ -52,27 +70,24 @@ export function SchedulerViewerGantt() {
         task?.type !== 'ihi/dummy' && task?.type !== 'ihi/warehouse_task',
     );
 
+    const types = Array.from(new Set(filteredTasks.map((t) => t.type)));
+    const colorMap = assignPresets(types, typeColorMap);
+    if (Object.keys(colorMap).length !== Object.keys(typeColorMap).length) {
+      setTypeColorMap(colorMap);
+    }
+
     const groupIds = new Set<string>();
     const taskIds = new Set<string>();
-    const taskTypes = new Set<string>();
     for (const task of filteredTasks) {
-      taskTypes.add(task.type);
       groupIds.add(task.resourceId ?? 'unassigned');
       taskIds.add(task.id);
     }
 
-    const colorMap: Record<string, string> = {};
-    Array.from(taskTypes).reduce((colorMap, taskType, index) => {
-      const colorIndex = index % COLOR_CLASSES.length;
-      colorMap[taskType] = COLOR_CLASSES[colorIndex];
-      return colorMap;
-    }, colorMap);
-
     const sortedGroupIds = Array.from(groupIds).sort();
     const groupMap: Record<string, number> = {};
-    sortedGroupIds.reduce((groupMap, groupId, index) => {
-      groupMap[groupId] = index;
-      return groupMap;
+    sortedGroupIds.reduce((acc, groupId, index) => {
+      acc[groupId] = index;
+      return acc;
     }, groupMap);
 
     const newDataGroups: DataGroup[] = sortedGroupIds.map((groupId, index) => ({
@@ -130,7 +145,7 @@ export function SchedulerViewerGantt() {
       const target = event.target as HTMLInputElement;
       visTimelineContext.current.timeline.moveTo(new Date(target.value));
     });
-  }, [tasks]);
+  }, [tasks, typeColorMap, setTypeColorMap]);
 
   useEffect(() => {
     if (!visTimelineContext.current) {
@@ -158,6 +173,12 @@ export function SchedulerViewerGantt() {
           base: '{colors.gray.700}',
           _dark: '{colors.white}',
         },
+        '--gantt-preset-1-bg': '{colors.schedule-viewer.gantt.preset1.bg}',
+        '--gantt-preset-2-bg': '{colors.schedule-viewer.gantt.preset2.bg}',
+        '--gantt-preset-3-bg': '{colors.schedule-viewer.gantt.preset3.bg}',
+        '--gantt-preset-4-bg': '{colors.schedule-viewer.gantt.preset4.bg}',
+        '--gantt-preset-5-bg': '{colors.schedule-viewer.gantt.preset5.bg}',
+        '& .vis-item.vis-selected': selectedStyles,
       }}
     />
   );

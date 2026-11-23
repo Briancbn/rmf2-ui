@@ -1,12 +1,12 @@
 import { defineSlotRecipe } from '@chakra-ui/react';
 
-export const navbarRecipe = defineSlotRecipe({
+export const navbarSlotRecipe = defineSlotRecipe({
   slots: ['root', 'toolbar'],
   base: {
     root: {
       bg: 'navbar.bg',
       borderBottomColor: { base: 'teal.500', _dark: 'teal.500' },
-      borderBottomWidth: '0.5px',
+      borderWidth: '0.5px',
       borderStyle: 'solid',
       boxShadow: 'none',
     },
