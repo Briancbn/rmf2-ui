@@ -174,6 +174,20 @@ export const WithLiveToggle: Story = {
   },
 };
 
+export const DownloadView: Story = {
+  render: () => {
+    const mockRTSClient = new MockRTSClient(DUMMY_SCHEDULE);
+    return (
+      <SchedulerViewer.Root rtsClient={mockRTSClient}>
+        <SchedulerViewer.ControlPanel mb="8px">
+          <SchedulerViewer.DownloadButton />
+        </SchedulerViewer.ControlPanel>
+        <SchedulerViewer.Gantt />
+      </SchedulerViewer.Root>
+    );
+  },
+};
+
 export const EmptySchedule: Story = {
   render: () => {
     const emptyRTSClient = new MockRTSClient(EMPTY_SCHEDULE);
