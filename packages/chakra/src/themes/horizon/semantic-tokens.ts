@@ -20,22 +20,22 @@ export const semanticTokens = {
     'banner.button.color': { value: '{colors.black}' },
     'banner.button.hover.bg': { value: '{colors.whiteAlpha.900}' },
     'schedule-viewer.gantt.preset1.bg': {
-      value: { base: '{colors.green.300}', _dark: '{colors.green.700}' },
+      value: { base: '{colors.brand.200}', _dark: '{colors.brand.700}' },
     },
     'schedule-viewer.gantt.preset2.bg': {
-      value: { base: '{colors.purple.300}', _dark: '{colors.purple.700}' },
+      value: { base: '#FF9AE8', _dark: '#66004E' },
     },
     'schedule-viewer.gantt.preset3.bg': {
-      value: { base: '{colors.orange.200}', _dark: '{colors.orange.600}' },
+      value: { base: '#FF9DBE', _dark: '#610020' },
     },
     'schedule-viewer.gantt.preset4.bg': {
-      value: { base: '{colors.pink.300}', _dark: '{colors.pink.700}' },
+      value: { base: '#FFB291', _dark: '#702200' },
     },
     'schedule-viewer.gantt.preset5.bg': {
-      value: { base: '{colors.cyan.300}', _dark: '{colors.teal.700}' },
+      value: { base: '#FFD470', _dark: '#8F6400' },
     },
     'schedule-viewer.gantt.item.text': {
-      value: { base: '{colors.gray.700}', _dark: '{colors.white}' },
+      value: { base: '{colors.gray.900}', _dark: '{colors.white}' },
     },
     'schedule-viewer.gantt.axis.text': {
       value: { base: '{colors.gray.700}', _dark: '{colors.white}' },
