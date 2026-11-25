@@ -220,8 +220,14 @@ export function useSchedulerViewerTabsRoot() {
 }
 
 export function useSchedulerViewerGantt() {
-  const { schedule, filterTask, setViewTask, setTaskDialogOpen, typeColorMap } =
-    useSchedulerViewerContext();
+  const {
+    schedule,
+    filterTask,
+    setViewTask,
+    setTaskDialogOpen,
+    typeColorMap,
+    live,
+  } = useSchedulerViewerContext();
 
   const openTaskViewDialog = useCallback(
     (taskId: string) => {
@@ -249,6 +255,7 @@ export function useSchedulerViewerGantt() {
     tasks,
     typeColorMap,
     openTaskViewDialog,
+    live,
   };
 }
 
@@ -323,8 +330,8 @@ export function useSchedulerViewerLiveToggle(
 }
 
 export function useSchedulerViewerRefreshButton() {
-  const { loading, fetchSchedule } = useSchedulerViewerContext();
-  return { loading, onClick: fetchSchedule };
+  const { loading, fetchSchedule, live } = useSchedulerViewerContext();
+  return { loading: loading || live, onClick: fetchSchedule };
 }
 
 export function useSchedulerViewerOptimizeButton() {

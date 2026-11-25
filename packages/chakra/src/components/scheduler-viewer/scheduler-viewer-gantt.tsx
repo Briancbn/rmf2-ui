@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { chakra } from '@chakra-ui/react';
 import { useSchedulerViewerGantt } from './use-scheduler-viewer';
 import { DataSet } from 'vis-data/esnext';
@@ -52,10 +52,15 @@ interface VisTimelineContext {
 }
 
 export function SchedulerViewerGantt() {
-  const { tasks, typeColorMap, openTaskViewDialog } = useSchedulerViewerGantt();
+  const { tasks, typeColorMap, openTaskViewDialog, live } =
+    useSchedulerViewerGantt();
   const visTimelineContext = useRef<VisTimelineContext>(null);
+  const containerNodeRef = useRef<HTMLDivElement | null>(null);
+  const liveRef = useRef(live);
+  const [rollingPaused, setRollingPaused] = useState(false);
 
   const containerRef = useCallback((node: HTMLDivElement) => {
+    containerNodeRef.current = node;
     if (visTimelineContext.current !== null) {
       return;
     }
@@ -71,6 +76,7 @@ export function SchedulerViewerGantt() {
           ...OPTIONS,
           start: new Date(Date.now() - (DEFAULT_ZOOM_LEVEL / 2) * 1000),
           end: new Date(Date.now() + (DEFAULT_ZOOM_LEVEL / 2) * 1000),
+          rollingMode: { follow: liveRef.current },
         }),
       };
     }
@@ -156,6 +162,39 @@ export function SchedulerViewerGantt() {
   }, [tasks, typeColorMap]);
 
   useEffect(() => {
+    if (liveRef.current === live) return;
+    liveRef.current = live;
+    if (!live && rollingPaused) return;
+    visTimelineContext.current?.timeline.toggleRollingMode();
+  }, [live, rollingPaused]);
+
+  useEffect(() => {
+    if (!live) setRollingPaused(false);
+  }, [live]);
+
+  useEffect(() => {
+    const btn = containerNodeRef.current?.querySelector(
+      '.vis-rolling-mode-btn',
+    ) as HTMLElement | null;
+    if (!btn) return;
+    const observer = new MutationObserver(() => {
+      setRollingPaused(liveRef.current && btn.style.visibility === 'visible');
+    });
+    observer.observe(btn, { attributes: true, attributeFilter: ['style'] });
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!live || !rollingPaused) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape')
+        visTimelineContext.current?.timeline.toggleRollingMode();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [live, rollingPaused]);
+
+  useEffect(() => {
     if (!visTimelineContext.current) {
       return;
     }
@@ -167,19 +206,44 @@ export function SchedulerViewerGantt() {
     });
   }, [openTaskViewDialog]);
   return (
-    <chakra.div
-      ref={containerRef}
-      minHeight="700px"
-      maxHeight="900px"
-      css={{
-        '& .vis-time-axis .vis-text': {
-          color: '{colors.schedule-viewer.gantt.axis.text}',
-        },
-        '& .vis-labelset .vis-label': {
-          color: '{colors.schedule-viewer.gantt.label.text}',
-        },
-        ...ganttPresetsCss(PRESET_COLORS),
-      }}
-    />
+    <chakra.div position="relative">
+      <chakra.div
+        ref={containerRef}
+        minHeight="700px"
+        maxHeight="900px"
+        css={{
+          '& .vis-time-axis .vis-text': {
+            color: '{colors.schedule-viewer.gantt.axis.text}',
+          },
+          '& .vis-labelset .vis-label': {
+            color: '{colors.schedule-viewer.gantt.label.text}',
+          },
+          '& .vis-rolling-mode-btn': { display: 'none' },
+          ...ganttPresetsCss(PRESET_COLORS),
+        }}
+      />
+      {live && rollingPaused && (
+        <chakra.div
+          position="absolute"
+          bottom="12px"
+          right="16px"
+          px="10px"
+          py="4px"
+          borderRadius="full"
+          fontSize="xs"
+          fontWeight="medium"
+          bg="orange.subtle"
+          color="orange.fg"
+          borderWidth="1px"
+          borderColor="orange.muted"
+          cursor="pointer"
+          onClick={() =>
+            visTimelineContext.current?.timeline.toggleRollingMode()
+          }
+        >
+          Live paused — Esc or click to resume
+        </chakra.div>
+      )}
+    </chakra.div>
   );
 }

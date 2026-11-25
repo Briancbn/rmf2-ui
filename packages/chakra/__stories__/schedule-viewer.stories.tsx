@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import type { RTS } from '@rmf2-ui/data';
 import {
@@ -124,13 +124,6 @@ export const GanttView: Story = {
     const mockRTSClient = new MockRTSClient(DUMMY_SCHEDULE);
     return (
       <SchedulerViewer.Root rtsClient={mockRTSClient}>
-        <SchedulerViewer.ControlPanel mb="8px">
-          <SchedulerViewer.AddButton disabled />
-          <SchedulerViewer.DownloadButton disabled />
-          <SchedulerViewer.RefreshButton disabled />
-          <SchedulerViewer.LiveToggle disabled />
-          <SchedulerViewer.OptimizeButton disabled />
-        </SchedulerViewer.ControlPanel>
         <SchedulerViewer.Gantt />
         <SchedulerViewer.TaskDialog placement="center">
           <SchedulerViewer.TaskDialogControlPanel />
@@ -140,25 +133,41 @@ export const GanttView: Story = {
   },
 };
 
+class TrackingRTSClient extends MockRTSClient {
+  lastRefetch: Date | null = null;
+  onRefetch: (() => void) | null = null;
+
+  async getSchedule(params: Parameters<MockRTSClient['getSchedule']>[0]) {
+    const result = await super.getSchedule(params);
+    this.lastRefetch = new Date();
+    this.onRefetch?.();
+    return result;
+  }
+}
+
 export const WithLiveToggle: Story = {
   render: () => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [refetchInterval, setRefetchInterval] = useState<false | number>(
-      false,
-    );
-    const mockRTSClient = new MockRTSClient(DUMMY_SCHEDULE);
+    const lastRefetchSpanRef = React.useRef<HTMLSpanElement>(null);
+    const trackingClient = new TrackingRTSClient(DUMMY_SCHEDULE);
+    trackingClient.onRefetch = () => {
+      if (lastRefetchSpanRef.current && trackingClient.lastRefetch) {
+        lastRefetchSpanRef.current.textContent =
+          trackingClient.lastRefetch.toLocaleTimeString();
+      }
+    };
     return (
-      <SchedulerViewer.Root rtsClient={mockRTSClient}>
+      <SchedulerViewer.Root rtsClient={trackingClient}>
         <SchedulerViewer.ControlPanel mb="8px">
-          <SchedulerViewer.LiveToggle
-            onToggleLive={(live) => setRefetchInterval(live ? 1000 : false)}
-          />
+          <SchedulerViewer.RefreshButton />
+          <SchedulerViewer.LiveToggle />
         </SchedulerViewer.ControlPanel>
         <SchedulerViewer.Gantt />
-        <SchedulerViewer.TaskDialog placement="center" />
+        <SchedulerViewer.TaskDialog placement="center">
+          <SchedulerViewer.TaskDialogControlPanel />
+        </SchedulerViewer.TaskDialog>
         <p style={{ marginTop: 8, fontSize: 12, color: 'gray' }}>
-          Refetch interval:{' '}
-          {refetchInterval === false ? 'off' : `${refetchInterval}ms`}
+          Last refetch: <span ref={lastRefetchSpanRef}>never</span>
         </p>
       </SchedulerViewer.Root>
     );
