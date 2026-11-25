@@ -4,14 +4,28 @@ import type { RTS } from '@rmf2-ui/data';
 export interface UseProcessViewerProps {
   processes: RTS.Process[];
   tasks: RTS.Task[];
+  onNodeDoubleClick?: (taskId: string) => void;
+  getNodeColor?: (taskId: string) => string | undefined;
 }
 
-export function useProcessViewer({ processes, tasks }: UseProcessViewerProps) {
+export function useProcessViewer({
+  processes,
+  tasks,
+  onNodeDoubleClick,
+  getNodeColor,
+}: UseProcessViewerProps) {
   const [selectedProcessId, setSelectedProcessId] = useState<
     string | undefined
   >(processes[0]?.id);
 
-  return { processes, tasks, selectedProcessId, setSelectedProcessId };
+  return {
+    processes,
+    tasks,
+    selectedProcessId,
+    setSelectedProcessId,
+    onNodeDoubleClick,
+    getNodeColor,
+  };
 }
 
 export type UseProcessViewerReturn = ReturnType<typeof useProcessViewer>;
@@ -31,9 +45,15 @@ const useProcessViewerContext = (): UseProcessViewerReturn => {
 };
 
 export function useProcessViewerCanvas() {
-  const { processes, selectedProcessId, tasks } = useProcessViewerContext();
+  const {
+    processes,
+    selectedProcessId,
+    tasks,
+    onNodeDoubleClick,
+    getNodeColor,
+  } = useProcessViewerContext();
   const selectedProcess = processes.find((p) => p.id === selectedProcessId);
-  return { selectedProcess, tasks };
+  return { selectedProcess, tasks, onNodeDoubleClick, getNodeColor };
 }
 
 export function useProcessViewerControlPanel() {

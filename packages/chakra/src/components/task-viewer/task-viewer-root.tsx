@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Badge, DataList } from '@chakra-ui/react';
+import { Badge, DataList, Flex } from '@chakra-ui/react';
 import type { RTS } from '@rmf2-ui/data';
 
 const formatDate = (time: Date | undefined): string => {
@@ -24,27 +24,59 @@ const formatStatus = (statusText: string): ReactNode => {
 
 export interface TaskViewerSummaryProps {
   task: RTS.Task;
+  renderFieldExtra?: (fieldLabel: string) => ReactNode;
+}
+
+function ItemValue({
+  label,
+  children,
+  renderFieldExtra,
+}: {
+  label: string;
+  children: ReactNode;
+  renderFieldExtra?: (fieldLabel: string) => ReactNode;
+}) {
+  const extra = renderFieldExtra?.(label);
+  if (extra === undefined) {
+    return <DataList.ItemValue>{children}</DataList.ItemValue>;
+  }
+  return (
+    <DataList.ItemValue asChild>
+      <Flex align="center" gap="2">
+        {children}
+        {extra}
+      </Flex>
+    </DataList.ItemValue>
+  );
 }
 
 export function TaskViewerSummary(props: TaskViewerSummaryProps) {
-  const { task } = props;
+  const { task, renderFieldExtra } = props;
   return (
     <DataList.Root orientation="horizontal">
       <DataList.Item>
         <DataList.ItemLabel>Description</DataList.ItemLabel>
-        <DataList.ItemValue>{task.description}</DataList.ItemValue>
+        <ItemValue label="Description" renderFieldExtra={renderFieldExtra}>
+          {task.description}
+        </ItemValue>
       </DataList.Item>
       <DataList.Item>
         <DataList.ItemLabel>Type</DataList.ItemLabel>
-        <DataList.ItemValue>{task.type}</DataList.ItemValue>
+        <ItemValue label="Type" renderFieldExtra={renderFieldExtra}>
+          {task.type}
+        </ItemValue>
       </DataList.Item>
       <DataList.Item>
         <DataList.ItemLabel>Start Time</DataList.ItemLabel>
-        <DataList.ItemValue>{formatDate(task.startTime)}</DataList.ItemValue>
+        <ItemValue label="Start Time" renderFieldExtra={renderFieldExtra}>
+          {formatDate(task.startTime)}
+        </ItemValue>
       </DataList.Item>
       <DataList.Item>
         <DataList.ItemLabel>End Time</DataList.ItemLabel>
-        <DataList.ItemValue>{formatDate(task.endTime)}</DataList.ItemValue>
+        <ItemValue label="End Time" renderFieldExtra={renderFieldExtra}>
+          {formatDate(task.endTime)}
+        </ItemValue>
       </DataList.Item>
       <DataList.Item
         color={
@@ -56,15 +88,21 @@ export function TaskViewerSummary(props: TaskViewerSummaryProps) {
         }
       >
         <DataList.ItemLabel>Deadline</DataList.ItemLabel>
-        <DataList.ItemValue>{formatDate(task.deadline)}</DataList.ItemValue>
+        <ItemValue label="Deadline" renderFieldExtra={renderFieldExtra}>
+          {formatDate(task.deadline)}
+        </ItemValue>
       </DataList.Item>
       <DataList.Item>
         <DataList.ItemLabel>Assigned to</DataList.ItemLabel>
-        <DataList.ItemValue>{task.resourceId}</DataList.ItemValue>
+        <ItemValue label="Assigned to" renderFieldExtra={renderFieldExtra}>
+          {task.resourceId}
+        </ItemValue>
       </DataList.Item>
       <DataList.Item>
         <DataList.ItemLabel>Status</DataList.ItemLabel>
-        <DataList.ItemValue>{formatStatus(task.status)}</DataList.ItemValue>
+        <ItemValue label="Status" renderFieldExtra={renderFieldExtra}>
+          {formatStatus(task.status)}
+        </ItemValue>
       </DataList.Item>
       {task.taskDetails.coordinates && (
         <DataList.Item>

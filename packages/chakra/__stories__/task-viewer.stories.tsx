@@ -1,3 +1,5 @@
+import React from 'react';
+import { Badge } from '@chakra-ui/react';
 import type { Meta, StoryObj } from '@storybook/react';
 import type { RTS } from '@rmf2-ui/data';
 import {
@@ -38,4 +40,22 @@ export const Summary: Story = {
 
 export const Details: Story = {
   render: () => <TaskViewerDetails task={DUMMY_TASK} />,
+};
+
+export const SummaryWithFieldExtra: Story = {
+  render: () => (
+    <TaskViewerSummary
+      task={DUMMY_TASK}
+      renderFieldExtra={(fieldLabel) => {
+        if (fieldLabel === 'Type') {
+          return (
+            <Badge colorPalette="teal" size="sm">
+              custom extra
+            </Badge>
+          );
+        }
+        return undefined;
+      }}
+    />
+  ),
 };

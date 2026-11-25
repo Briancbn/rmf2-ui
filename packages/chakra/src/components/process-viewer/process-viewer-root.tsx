@@ -5,12 +5,25 @@ import { ProcessViewerContext, useProcessViewer } from './use-process-viewer';
 export interface ProcessViewerRootProps {
   processes?: RTS.Process[];
   tasks?: RTS.Task[];
+  onNodeDoubleClick?: (taskId: string) => void;
+  getNodeColor?: (taskId: string) => string | undefined;
   children?: ReactNode;
 }
 
 export function ProcessViewerRoot(props: ProcessViewerRootProps) {
-  const { processes = [], tasks = [], children } = props;
-  const ctx = useProcessViewer({ processes, tasks });
+  const {
+    processes = [],
+    tasks = [],
+    onNodeDoubleClick,
+    getNodeColor,
+    children,
+  } = props;
+  const ctx = useProcessViewer({
+    processes,
+    tasks,
+    onNodeDoubleClick,
+    getNodeColor,
+  });
   const value = useMemo(() => ctx, [ctx]);
 
   return <ProcessViewerContext value={value}>{children}</ProcessViewerContext>;

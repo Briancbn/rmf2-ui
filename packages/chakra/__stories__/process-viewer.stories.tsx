@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import type { RTS } from '@rmf2-ui/data';
 import { ProcessViewer } from '../src/components/process-viewer';
@@ -88,6 +89,30 @@ export const Default: Story = {
       <ProcessViewer.Canvas />
     </ProcessViewer.Root>
   ),
+};
+
+export const WithDoubleClick: Story = {
+  render: () => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [lastClicked, setLastClicked] = useState<string | undefined>(
+      undefined,
+    );
+    return (
+      <>
+        <ProcessViewer.Root
+          processes={DUMMY_PROCESSES}
+          tasks={DUMMY_TASKS}
+          onNodeDoubleClick={setLastClicked}
+        >
+          <ProcessViewer.ControlPanel mb="10px" />
+          <ProcessViewer.Canvas />
+        </ProcessViewer.Root>
+        <p style={{ marginTop: 8, fontSize: 12, color: 'gray' }}>
+          Last double-clicked task id: {lastClicked ?? '—'}
+        </p>
+      </>
+    );
+  },
 };
 
 export const WithProcessSelector: Story = {

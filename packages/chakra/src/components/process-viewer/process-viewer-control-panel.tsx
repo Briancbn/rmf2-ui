@@ -47,7 +47,7 @@ export function ProcessViewerProcessSelector(
   useEffect(() => {
     filter('');
     setInputValue(selectedProcessId ?? '');
-  }, [selectedProcessId]);
+  }, [selectedProcessId, filter]);
 
   return (
     <Combobox.Root

@@ -9,6 +9,30 @@ import type { RTS } from '@rmf2-ui/data';
 
 const LOCALSTORAGE_KEY = 'rmf2.gantt.typeColorMap';
 
+const PRESET_KEYS = [
+  'preset_1',
+  'preset_2',
+  'preset_3',
+  'preset_4',
+  'preset_5',
+];
+
+function assignPresets(
+  types: string[],
+  existing: Record<string, string>,
+): Record<string, string> {
+  const updated = { ...existing };
+  let nextIndex = Object.keys(updated).length;
+  for (const type of types) {
+    if (updated[type] === undefined) {
+      updated[type] =
+        PRESET_KEYS[nextIndex % PRESET_KEYS.length] ?? PRESET_KEYS[0];
+      nextIndex++;
+    }
+  }
+  return updated;
+}
+
 function loadTypeColorMap(): Record<string, string> {
   try {
     const raw = localStorage.getItem(LOCALSTORAGE_KEY);
@@ -57,10 +81,28 @@ export function useSchedulerViewer(props: UseSchedulerViewerProps) {
   const [taskDialogOpen, setTaskDialogOpen] = useState<boolean>(false);
   const [typeColorMap, setTypeColorMap] =
     useState<Record<string, string>>(loadTypeColorMap);
+  const [typeCustomColorMap, setTypeCustomColorMap] = useState<
+    Record<string, string>
+  >({});
 
-  useEffect(() => {
+  const saveColors = useCallback(() => {
     saveTypeColorMap(typeColorMap);
   }, [typeColorMap]);
+
+  useEffect(() => {
+    if (schedule === undefined) return;
+    const tasks =
+      filterTask !== undefined
+        ? schedule.tasks.filter(filterTask)
+        : schedule.tasks;
+    const types = Array.from(new Set(tasks.map((t) => t.type)));
+    setTypeColorMap((prev) => {
+      const next = assignPresets(types, prev);
+      return Object.keys(next).length !== Object.keys(prev).length
+        ? next
+        : prev;
+    });
+  }, [schedule, filterTask]);
 
   return {
     schedule,
@@ -79,6 +121,9 @@ export function useSchedulerViewer(props: UseSchedulerViewerProps) {
     setTaskDialogOpen,
     typeColorMap,
     setTypeColorMap,
+    typeCustomColorMap,
+    setTypeCustomColorMap,
+    saveColors,
   };
 }
 
@@ -104,14 +149,8 @@ export function useSchedulerViewerTabsRoot() {
 }
 
 export function useSchedulerViewerGantt() {
-  const {
-    schedule,
-    filterTask,
-    setViewTask,
-    setTaskDialogOpen,
-    typeColorMap,
-    setTypeColorMap,
-  } = useSchedulerViewerContext();
+  const { schedule, filterTask, setViewTask, setTaskDialogOpen, typeColorMap } =
+    useSchedulerViewerContext();
 
   const openTaskViewDialog = useCallback(
     (taskId: string) => {
@@ -138,15 +177,29 @@ export function useSchedulerViewerGantt() {
   return {
     tasks,
     typeColorMap,
-    setTypeColorMap,
     openTaskViewDialog,
   };
 }
 
 export function useSchedulerViewerTaskDialog() {
-  const { viewTask, taskDialogOpen, setTaskDialogOpen } =
-    useSchedulerViewerContext();
-  return { viewTask, open: taskDialogOpen, setOpen: setTaskDialogOpen };
+  const {
+    viewTask,
+    taskDialogOpen,
+    setTaskDialogOpen,
+    typeColorMap,
+    typeCustomColorMap,
+    setTypeCustomColorMap,
+    saveColors,
+  } = useSchedulerViewerContext();
+  return {
+    viewTask,
+    open: taskDialogOpen,
+    setOpen: setTaskDialogOpen,
+    typeColorMap,
+    typeCustomColorMap,
+    setTypeCustomColorMap,
+    saveColors,
+  };
 }
 
 export function useSchedulerViewerControlPanel() {
@@ -185,6 +238,30 @@ export function useSchedulerViewerRefreshButton() {
 }
 
 export function useSchedulerViewerProcess() {
-  const { schedule, viewProcess, setViewProcess } = useSchedulerViewerContext();
-  return { schedule, viewProcess, setViewProcess };
+  const {
+    schedule,
+    viewProcess,
+    setViewProcess,
+    setViewTask,
+    setTaskDialogOpen,
+    typeColorMap,
+  } = useSchedulerViewerContext();
+
+  const openTaskViewDialog = useCallback(
+    (taskId: string) => {
+      if (schedule === undefined) return;
+      const task = schedule.tasks.find((t) => t.id === taskId);
+      if (task !== undefined) setViewTask(task);
+      setTaskDialogOpen(true);
+    },
+    [schedule, setViewTask, setTaskDialogOpen],
+  );
+
+  return {
+    schedule,
+    viewProcess,
+    setViewProcess,
+    openTaskViewDialog,
+    typeColorMap,
+  };
 }

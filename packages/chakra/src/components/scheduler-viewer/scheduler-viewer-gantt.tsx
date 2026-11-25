@@ -45,24 +45,6 @@ const PRESET_COLORS: Record<string, string> = {
   preset_5: '{colors.schedule-viewer.gantt.preset5.bg}',
 };
 
-const PRESET_KEYS = Object.keys(PRESET_COLORS);
-
-function assignPresets(
-  types: string[],
-  existing: Record<string, string>,
-): Record<string, string> {
-  const updated = { ...existing };
-  let nextIndex = Object.keys(updated).length;
-  for (const type of types) {
-    if (updated[type] === undefined) {
-      updated[type] =
-        PRESET_KEYS[nextIndex % PRESET_KEYS.length] ?? PRESET_KEYS[0];
-      nextIndex++;
-    }
-  }
-  return updated;
-}
-
 interface VisTimelineContext {
   dataGroups: DataSet<DataGroup>;
   dataItems: DataSet<DataItem>;
@@ -70,8 +52,7 @@ interface VisTimelineContext {
 }
 
 export function SchedulerViewerGantt() {
-  const { tasks, typeColorMap, setTypeColorMap, openTaskViewDialog } =
-    useSchedulerViewerGantt();
+  const { tasks, typeColorMap, openTaskViewDialog } = useSchedulerViewerGantt();
   const visTimelineContext = useRef<VisTimelineContext>(null);
 
   const containerRef = useCallback((node: HTMLDivElement) => {
@@ -100,12 +81,6 @@ export function SchedulerViewerGantt() {
       return;
     }
 
-    const types = Array.from(new Set(tasks.map((t) => t.type)));
-    const colorMap = assignPresets(types, typeColorMap);
-    if (Object.keys(colorMap).length !== Object.keys(typeColorMap).length) {
-      setTypeColorMap(colorMap);
-    }
-
     const groupIds = new Set<string>();
     const taskIds = new Set<string>();
     for (const task of tasks) {
@@ -131,7 +106,7 @@ export function SchedulerViewerGantt() {
         content: task.description ?? '',
         start: task.startTime,
         end: task.endTime ?? new Date(task.startTime.getTime() + 20 * 1000),
-        className: colorMap[task.type] ?? '',
+        className: typeColorMap[task.type] ?? '',
         style: `background-image: linear-gradient(to right, rgba(255,255,255,0.25) ${pct}%, rgba(0,0,0,0.15) ${pct}%)`,
         group: groupMap[task.resourceId ?? 'unassigned'],
         title: `${task?.resourceId} \n@ ${task?.taskDetails?.resource_zone} zone`,
@@ -178,7 +153,7 @@ export function SchedulerViewerGantt() {
       const target = event.target as HTMLInputElement;
       visTimelineContext.current.timeline.moveTo(new Date(target.value));
     });
-  }, [tasks, typeColorMap, setTypeColorMap]);
+  }, [tasks, typeColorMap]);
 
   useEffect(() => {
     if (!visTimelineContext.current) {

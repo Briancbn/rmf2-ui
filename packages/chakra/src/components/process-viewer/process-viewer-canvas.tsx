@@ -59,7 +59,8 @@ const getLayoutElements = (nodes: Node[], edges: Edge[], direction = 'LR') => {
 
 export function ProcessViewerCanvas(props: ProcessViewerCanvasProps) {
   const { ...rest } = props;
-  const { selectedProcess, tasks } = useProcessViewerCanvas();
+  const { selectedProcess, tasks, onNodeDoubleClick, getNodeColor } =
+    useProcessViewerCanvas();
   const { resolvedTheme, forcedTheme } = useTheme();
   const colorMode = (forcedTheme || resolvedTheme) as 'light' | 'dark';
 
@@ -81,11 +82,23 @@ export function ProcessViewerCanvas(props: ProcessViewerCanvasProps) {
       return;
     }
 
-    const rawNodes: Node[] = selectedProcess.graph.map((element) => ({
-      id: element.id,
-      position: { x: 0, y: 0 },
-      data: { label: taskMap[element.id]?.description ?? element.id },
-    }));
+    const rawNodes: Node[] = selectedProcess.graph.map((element) => {
+      const task = taskMap[element.id];
+      const pct =
+        task?.progress !== undefined ? task.progress * 100 : undefined;
+      return {
+        id: element.id,
+        position: { x: 0, y: 0 },
+        data: { label: task?.description ?? element.id },
+        style: {
+          background: getNodeColor?.(element.id),
+          backgroundImage:
+            pct !== undefined
+              ? `linear-gradient(to right, rgba(255,255,255,0.25) ${pct}%, rgba(0,0,0,0.15) ${pct}%)`
+              : undefined,
+        },
+      };
+    });
 
     const rawEdges: Edge[] = [];
     for (const element of selectedProcess.graph) {
@@ -107,7 +120,7 @@ export function ProcessViewerCanvas(props: ProcessViewerCanvasProps) {
     setEdges(layoutEdges);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedProcess, taskMap]);
+  }, [selectedProcess, taskMap, getNodeColor]);
 
   return (
     <Box w="100%" h="600px" {...rest}>
@@ -118,6 +131,11 @@ export function ProcessViewerCanvas(props: ProcessViewerCanvasProps) {
         onEdgesChange={onEdgesChange}
         colorMode={colorMode}
         fitView
+        onNodeDoubleClick={
+          onNodeDoubleClick
+            ? (_, node) => onNodeDoubleClick(node.id)
+            : undefined
+        }
       >
         <Background />
         <Controls />

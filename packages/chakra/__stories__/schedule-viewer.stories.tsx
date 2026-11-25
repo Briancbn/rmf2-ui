@@ -167,6 +167,9 @@ export const ProcessView: Story = {
   render: () => (
     <SchedulerViewer.Root schedule={DUMMY_SCHEDULE}>
       <SchedulerViewer.Process />
+      <SchedulerViewer.TaskDialog placement="center">
+        <SchedulerViewer.TaskDialogControlPanel />
+      </SchedulerViewer.TaskDialog>
     </SchedulerViewer.Root>
   ),
 };
