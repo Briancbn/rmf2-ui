@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react';
-import { chakra, useSlotRecipe } from '@chakra-ui/react';
+import { chakra } from '@chakra-ui/react';
 import { useSchedulerViewerGantt } from './use-scheduler-viewer';
 import { DataSet } from 'vis-data/esnext';
 import type { DataItem, DataGroup } from 'vis-timeline/esnext';
@@ -72,8 +72,6 @@ interface VisTimelineContext {
 export function SchedulerViewerGantt() {
   const { tasks, typeColorMap, setTypeColorMap, openTaskViewDialog } =
     useSchedulerViewerGantt();
-  const schedulerViewerRecipe = useSlotRecipe({ key: 'schedulerViewer' });
-  const styles = schedulerViewerRecipe();
   const visTimelineContext = useRef<VisTimelineContext>(null);
 
   const containerRef = useCallback((node: HTMLDivElement) => {
@@ -102,12 +100,7 @@ export function SchedulerViewerGantt() {
       return;
     }
 
-    const filteredTasks = tasks.filter(
-      (task) =>
-        task?.type !== 'ihi/dummy' && task?.type !== 'ihi/warehouse_task',
-    );
-
-    const types = Array.from(new Set(filteredTasks.map((t) => t.type)));
+    const types = Array.from(new Set(tasks.map((t) => t.type)));
     const colorMap = assignPresets(types, typeColorMap);
     if (Object.keys(colorMap).length !== Object.keys(typeColorMap).length) {
       setTypeColorMap(colorMap);
@@ -115,7 +108,7 @@ export function SchedulerViewerGantt() {
 
     const groupIds = new Set<string>();
     const taskIds = new Set<string>();
-    for (const task of filteredTasks) {
+    for (const task of tasks) {
       groupIds.add(task.resourceId ?? 'unassigned');
       taskIds.add(task.id);
     }
@@ -131,14 +124,14 @@ export function SchedulerViewerGantt() {
       id: index,
       content: groupId,
     }));
-    const newDataItems: DataItem[] = filteredTasks.map((task) => {
+    const newDataItems: DataItem[] = tasks.map((task) => {
       const pct = task.progress !== undefined ? task.progress * 100 : 0;
       return {
         id: task.id,
         content: task.description ?? '',
         start: task.startTime,
         end: task.endTime ?? new Date(task.startTime.getTime() + 20 * 1000),
-        className: `${styles.ganttItem} ${colorMap[task.type] ?? ''}`,
+        className: colorMap[task.type] ?? '',
         style: `background-image: linear-gradient(to right, rgba(255,255,255,0.25) ${pct}%, rgba(0,0,0,0.15) ${pct}%)`,
         group: groupMap[task.resourceId ?? 'unassigned'],
         title: `${task?.resourceId} \n@ ${task?.taskDetails?.resource_zone} zone`,

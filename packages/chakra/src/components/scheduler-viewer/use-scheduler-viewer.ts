@@ -35,6 +35,7 @@ export interface UseSchedulerViewerProps {
   schedule?: RTS.Schedule;
   live?: boolean;
   timeViewWindow?: TimeViewWindow;
+  filterTask?: (task: RTS.Task) => boolean;
 }
 
 export function useSchedulerViewer(props: UseSchedulerViewerProps) {
@@ -42,6 +43,7 @@ export function useSchedulerViewer(props: UseSchedulerViewerProps) {
     schedule,
     live: defaultLive,
     timeViewWindow: defaultTimeViewWindow,
+    filterTask,
   } = props;
   const [tabValue, setTabValue] = useState<string | null>('schedule');
   const [live, setLive] = useState<boolean>(defaultLive ?? false);
@@ -62,6 +64,7 @@ export function useSchedulerViewer(props: UseSchedulerViewerProps) {
 
   return {
     schedule,
+    filterTask,
     tabValue,
     setTabValue,
     live,
@@ -103,6 +106,7 @@ export function useSchedulerViewerTabsRoot() {
 export function useSchedulerViewerGantt() {
   const {
     schedule,
+    filterTask,
     setViewTask,
     setTaskDialogOpen,
     typeColorMap,
@@ -124,8 +128,15 @@ export function useSchedulerViewerGantt() {
     [schedule, setViewTask, setTaskDialogOpen],
   );
 
+  const tasks =
+    schedule === undefined
+      ? []
+      : filterTask !== undefined
+        ? schedule.tasks.filter(filterTask)
+        : schedule.tasks;
+
   return {
-    tasks: schedule === undefined ? [] : schedule.tasks,
+    tasks,
     typeColorMap,
     setTypeColorMap,
     openTaskViewDialog,
