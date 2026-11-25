@@ -28,6 +28,7 @@ const DUMMY_SCHEDULE: RTS.Schedule = {
       endTime: offset(35),
       resourceId: 'robot-2',
       status: '',
+      progress: 0,
       deadline: offset(40),
       taskDetails: { resource_zone: 'B', resource_type: 'AMR' },
     },

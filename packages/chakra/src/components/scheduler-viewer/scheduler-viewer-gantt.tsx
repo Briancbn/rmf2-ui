@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { chakra, useSlotRecipe } from '@chakra-ui/react';
-import type { SystemStyleObject } from '@chakra-ui/react';
 import { useSchedulerViewerGantt } from './use-scheduler-viewer';
 import { DataSet } from 'vis-data/esnext';
 import type { DataItem, DataGroup } from 'vis-timeline/esnext';
@@ -11,21 +10,25 @@ const OPTIONS = { height: '680px', orientation: 'top', zoomFriction: 0 };
 const DEFAULT_ZOOM_LEVEL = 30 * 60; // 30 min in seconds
 
 function ganttPresetsCss(
-  presetMap: Record<string, unknown>,
-): SystemStyleObject {
+  presetMap: Record<string, string>,
+): Record<string, unknown> {
   const result: Record<string, unknown> = {};
   for (const [preset, token] of Object.entries(presetMap)) {
     result[`& .vis-item.${preset}`] = {
       bg: token,
-    };
-    result[`& .vis-item.vis-selected.${preset}`] = {
+      color: '{colors.schedule-viewer.gantt.item.text}',
       borderColor: {
         base: `color-mix(in srgb, ${token} 70%, black)!`,
         _dark: `color-mix(in srgb, ${token} 70%, white)!`,
       },
-      borderWidth: '2px!',
+    };
+    result[`& .vis-item.vis-selected.${preset}`] = {
+      borderWidth: '2px',
       filter: { base: 'brightness(0.9)', _dark: 'brightness(1.3)' },
-      boxShadow: `0 0 8px 2px color-mix(in srgb, ${token} 60%, transparent)`,
+      boxShadow: {
+        base: `0 0 8px 2px color-mix(in srgb, ${token} 60%, transparent)`,
+        _dark: `0 0 8px 2px color-mix(in srgb, ${token} 85%, white)`,
+      },
     };
     result[`& .vis-item:not(.vis-selected).${preset}:hover`] = {
       filter: { base: 'brightness(0.93)', _dark: 'brightness(1.15)' },
@@ -129,17 +132,14 @@ export function SchedulerViewerGantt() {
       content: groupId,
     }));
     const newDataItems: DataItem[] = filteredTasks.map((task) => {
-      const pct = task.progress !== undefined ? task.progress * 100 : null;
+      const pct = task.progress !== undefined ? task.progress * 100 : 0;
       return {
         id: task.id,
         content: task.description ?? '',
         start: task.startTime,
         end: task.endTime ?? new Date(task.startTime.getTime() + 20 * 1000),
         className: `${styles.ganttItem} ${colorMap[task.type] ?? ''}`,
-        style:
-          pct !== null
-            ? `background-image: linear-gradient(to right, rgba(255,255,255,0.25) ${pct}%, rgba(0,0,0,0.3) ${pct}%)`
-            : undefined,
+        style: `background-image: linear-gradient(to right, rgba(255,255,255,0.25) ${pct}%, rgba(0,0,0,0.15) ${pct}%)`,
         group: groupMap[task.resourceId ?? 'unassigned'],
         title: `${task?.resourceId} \n@ ${task?.taskDetails?.resource_zone} zone`,
       };
@@ -205,10 +205,10 @@ export function SchedulerViewerGantt() {
       maxHeight="900px"
       css={{
         '& .vis-time-axis .vis-text': {
-          color: { base: '{colors.gray.700}', _dark: '{colors.white}' },
+          color: '{colors.schedule-viewer.gantt.axis.text}',
         },
         '& .vis-labelset .vis-label': {
-          color: { base: '{colors.gray.700}', _dark: '{colors.white}' },
+          color: '{colors.schedule-viewer.gantt.label.text}',
         },
         ...ganttPresetsCss(PRESET_COLORS),
       }}

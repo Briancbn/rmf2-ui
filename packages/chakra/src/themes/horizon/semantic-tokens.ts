@@ -26,13 +26,22 @@ export const semanticTokens = {
       value: { base: '{colors.purple.300}', _dark: '{colors.purple.700}' },
     },
     'schedule-viewer.gantt.preset3.bg': {
-      value: { base: '{colors.orange.200}', _dark: '{colors.orange.500}' },
+      value: { base: '{colors.orange.200}', _dark: '{colors.orange.600}' },
     },
     'schedule-viewer.gantt.preset4.bg': {
-      value: { base: '{colors.pink.300}', _dark: '{colors.pink.600}' },
+      value: { base: '{colors.pink.300}', _dark: '{colors.pink.700}' },
     },
     'schedule-viewer.gantt.preset5.bg': {
       value: { base: '{colors.cyan.300}', _dark: '{colors.teal.700}' },
+    },
+    'schedule-viewer.gantt.item.text': {
+      value: { base: '{colors.gray.700}', _dark: '{colors.white}' },
+    },
+    'schedule-viewer.gantt.axis.text': {
+      value: { base: '{colors.gray.700}', _dark: '{colors.white}' },
+    },
+    'schedule-viewer.gantt.label.text': {
+      value: { base: '{colors.gray.700}', _dark: '{colors.white}' },
     },
   },
   shadows: {
