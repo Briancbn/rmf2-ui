@@ -4,6 +4,7 @@ import {
   useContext,
   useState,
   useEffect,
+  useRef,
 } from 'react';
 import type { RTS } from '@rmf2-ui/data';
 
@@ -91,6 +92,8 @@ export function useSchedulerViewer(props: UseSchedulerViewerProps) {
     timeViewWindow: defaultTimeViewWindow,
     filterTask,
   } = props;
+  const rtsClientRef = useRef(rtsClient);
+  rtsClientRef.current = rtsClient;
   const [schedule, setSchedule] = useState<RTS.Schedule | undefined>(
     externalSchedule,
   );
@@ -118,7 +121,7 @@ export function useSchedulerViewer(props: UseSchedulerViewerProps) {
     if (externalSchedule !== undefined) return;
     setLoading(true);
     try {
-      const result = await rtsClient.getSchedule({
+      const result = await rtsClientRef.current.getSchedule({
         startTime: timeViewWindow?.start,
         endTime: timeViewWindow?.end,
       });
@@ -128,7 +131,7 @@ export function useSchedulerViewer(props: UseSchedulerViewerProps) {
     } finally {
       setLoading(false);
     }
-  }, [rtsClient, timeViewWindow, externalSchedule]);
+  }, [timeViewWindow, externalSchedule]);
 
   useEffect(() => {
     fetchSchedule();
@@ -142,14 +145,16 @@ export function useSchedulerViewer(props: UseSchedulerViewerProps) {
 
   const deleteTask = useCallback(
     (taskId: string) =>
-      rtsClient.editScheduleBatch([{ type: 'TASK_DELETE', id: taskId }]),
-    [rtsClient],
+      rtsClientRef.current.editScheduleBatch([
+        { type: 'TASK_DELETE', id: taskId },
+      ]),
+    [],
   );
 
   const optimize = useCallback(
     (optimizationDuration: number) =>
-      rtsClient.optimize({ optimizationDuration }),
-    [rtsClient],
+      rtsClientRef.current.optimize({ optimizationDuration }),
+    [],
   );
 
   const saveColors = useCallback(() => {
