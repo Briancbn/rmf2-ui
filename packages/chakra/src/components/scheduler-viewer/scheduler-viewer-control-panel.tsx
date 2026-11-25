@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { FlexProps, IconButtonProps } from '@chakra-ui/react';
 import { chakra, Flex, IconButton } from '@chakra-ui/react';
 import { LuRefreshCw, LuDownload, LuPlay, LuPause } from 'react-icons/lu';
@@ -7,6 +8,7 @@ import type { UseSchedulerViewerLiveToggleProps } from './use-scheduler-viewer';
 import {
   useSchedulerViewerLiveToggle,
   useSchedulerViewerRefreshButton,
+  useSchedulerViewerOptimizeButton,
 } from './use-scheduler-viewer';
 
 export function SchedulerViewerControlPanel(props: FlexProps) {
@@ -59,12 +61,12 @@ export function SchedulerViewerRefreshButton(
   props: SchedulerViewerRefreshButtonProps,
 ) {
   const { children, loading: loadingExternal, label: _label, ...rest } = props;
-  const { disabled, loading } = useSchedulerViewerRefreshButton();
+  const { loading, onClick } = useSchedulerViewerRefreshButton();
   return (
     <IconButton
       aria-label="refresh"
       variant="outline"
-      disabled={disabled}
+      onClick={onClick}
       loading={loading || loadingExternal}
       spinner={
         <chakra.div animation="spin 1s infinite linear">
@@ -89,7 +91,7 @@ export function SchedulerViewerLiveToggle(
   props: SchedulerViewerLiveToggleProps,
 ) {
   const { children, onToggleLive, label: _label, ...rest } = props;
-  const { live, setLive, disabled } = useSchedulerViewerLiveToggle(
+  const { live, setLive } = useSchedulerViewerLiveToggle(
     props as UseSchedulerViewerLiveToggleProps,
   );
 
@@ -97,7 +99,6 @@ export function SchedulerViewerLiveToggle(
     <IconButton
       aria-label="live-toggle"
       variant="outline"
-      disabled={disabled}
       onClick={() => {
         if (onToggleLive) {
           onToggleLive(!live);
@@ -112,17 +113,33 @@ export function SchedulerViewerLiveToggle(
 }
 
 export interface SchedulerViewerOptimizeButtonProps extends IconButtonProps {
+  optimizationDuration?: number;
   label?: string;
 }
 
 export function SchedulerViewerOptimizeButton(
   props: SchedulerViewerOptimizeButtonProps,
 ) {
-  const { children, label: _label, ...rest } = props;
+  const { children, optimizationDuration = 30, label: _label, ...rest } = props;
+  const { optimize, refetchSchedule } = useSchedulerViewerOptimizeButton();
+  const [loading, setLoading] = useState(false);
+
+  const handleOptimize = async () => {
+    setLoading(true);
+    try {
+      await optimize(optimizationDuration);
+      refetchSchedule();
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <IconButton
       aria-label="optimize"
       variant="outline"
+      loading={loading}
+      onClick={handleOptimize}
       spinner={
         <chakra.div animation="spin 1s infinite linear">
           <PiSpinnerBold />

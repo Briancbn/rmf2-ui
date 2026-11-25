@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import type { RTS } from '@rmf2-ui/data';
 
 export interface UseProcessViewerProps {
@@ -17,6 +17,12 @@ export function useProcessViewer({
   const [selectedProcessId, setSelectedProcessId] = useState<
     string | undefined
   >(processes[0]?.id);
+
+  useEffect(() => {
+    if (selectedProcessId === undefined && processes.length > 0) {
+      setSelectedProcessId(processes[0].id);
+    }
+  }, [processes, selectedProcessId]);
 
   return {
     processes,

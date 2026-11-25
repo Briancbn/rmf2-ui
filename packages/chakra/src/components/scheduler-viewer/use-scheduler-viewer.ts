@@ -7,6 +7,24 @@ import {
 } from 'react';
 import type { RTS } from '@rmf2-ui/data';
 
+export interface ScheduleAction {
+  type: string;
+  id?: string;
+  node_id?: string;
+  source_id?: string;
+  destination_id?: string;
+  edge_type?: string;
+}
+
+export interface IRTSClient {
+  getSchedule(params: {
+    startTime?: Date;
+    endTime?: Date;
+  }): Promise<RTS.Schedule>;
+  editScheduleBatch(actions: ScheduleAction[]): Promise<string>;
+  optimize(params: { optimizationDuration: number }): Promise<string>;
+}
+
 const LOCALSTORAGE_KEY = 'rmf2.gantt.typeColorMap';
 
 const PRESET_KEYS = [
@@ -50,12 +68,15 @@ function saveTypeColorMap(map: Record<string, string>) {
   }
 }
 
+const LIVE_POLL_INTERVAL_MS = 5000;
+
 interface TimeViewWindow {
   start: Date;
   end: Date;
 }
 
 export interface UseSchedulerViewerProps {
+  rtsClient: IRTSClient;
   schedule?: RTS.Schedule;
   live?: boolean;
   timeViewWindow?: TimeViewWindow;
@@ -64,11 +85,16 @@ export interface UseSchedulerViewerProps {
 
 export function useSchedulerViewer(props: UseSchedulerViewerProps) {
   const {
-    schedule,
+    rtsClient,
+    schedule: externalSchedule,
     live: defaultLive,
     timeViewWindow: defaultTimeViewWindow,
     filterTask,
   } = props;
+  const [schedule, setSchedule] = useState<RTS.Schedule | undefined>(
+    externalSchedule,
+  );
+  const [loading, setLoading] = useState(false);
   const [tabValue, setTabValue] = useState<string | null>('schedule');
   const [live, setLive] = useState<boolean>(defaultLive ?? false);
   const [timeViewWindow, setTimeViewWindow] = useState<
@@ -84,6 +110,47 @@ export function useSchedulerViewer(props: UseSchedulerViewerProps) {
   const [typeCustomColorMap, setTypeCustomColorMap] = useState<
     Record<string, string>
   >({});
+  useEffect(() => {
+    if (externalSchedule !== undefined) setSchedule(externalSchedule);
+  }, [externalSchedule]);
+
+  const fetchSchedule = useCallback(async () => {
+    if (externalSchedule !== undefined) return;
+    setLoading(true);
+    try {
+      const result = await rtsClient.getSchedule({
+        startTime: timeViewWindow?.start,
+        endTime: timeViewWindow?.end,
+      });
+      setSchedule(result);
+    } catch {
+      // keep previous schedule on error
+    } finally {
+      setLoading(false);
+    }
+  }, [rtsClient, timeViewWindow, externalSchedule]);
+
+  useEffect(() => {
+    fetchSchedule();
+  }, [fetchSchedule]);
+
+  useEffect(() => {
+    if (!live) return;
+    const id = setInterval(fetchSchedule, LIVE_POLL_INTERVAL_MS);
+    return () => clearInterval(id);
+  }, [live, fetchSchedule]);
+
+  const deleteTask = useCallback(
+    (taskId: string) =>
+      rtsClient.editScheduleBatch([{ type: 'TASK_DELETE', id: taskId }]),
+    [rtsClient],
+  );
+
+  const optimize = useCallback(
+    (optimizationDuration: number) =>
+      rtsClient.optimize({ optimizationDuration }),
+    [rtsClient],
+  );
 
   const saveColors = useCallback(() => {
     saveTypeColorMap(typeColorMap);
@@ -106,6 +173,10 @@ export function useSchedulerViewer(props: UseSchedulerViewerProps) {
 
   return {
     schedule,
+    loading,
+    fetchSchedule,
+    deleteTask,
+    optimize,
     filterTask,
     tabValue,
     setTabValue,
@@ -190,6 +261,8 @@ export function useSchedulerViewerTaskDialog() {
     typeCustomColorMap,
     setTypeCustomColorMap,
     saveColors,
+    deleteTask,
+    fetchSchedule,
   } = useSchedulerViewerContext();
   return {
     viewTask,
@@ -199,13 +272,30 @@ export function useSchedulerViewerTaskDialog() {
     typeCustomColorMap,
     setTypeCustomColorMap,
     saveColors,
+    deleteTask,
+    refetchSchedule: fetchSchedule,
   };
 }
 
 export function useSchedulerViewerControlPanel() {
-  const { schedule, live, setLive, timeViewWindow, setTimeViewWindow } =
-    useSchedulerViewerContext();
-  return { schedule, live, setLive, timeViewWindow, setTimeViewWindow };
+  const {
+    schedule,
+    loading,
+    fetchSchedule,
+    live,
+    setLive,
+    timeViewWindow,
+    setTimeViewWindow,
+  } = useSchedulerViewerContext();
+  return {
+    schedule,
+    loading,
+    fetchSchedule,
+    live,
+    setLive,
+    timeViewWindow,
+    setTimeViewWindow,
+  };
 }
 
 export interface UseSchedulerViewerLiveToggleProps {
@@ -215,7 +305,7 @@ export interface UseSchedulerViewerLiveToggleProps {
 export function useSchedulerViewerLiveToggle(
   props: UseSchedulerViewerLiveToggleProps,
 ) {
-  const { schedule, live, setLive } = useSchedulerViewerContext();
+  const { live, setLive } = useSchedulerViewerContext();
   const { live: liveExternal } = props;
 
   useEffect(() => {
@@ -229,12 +319,17 @@ export function useSchedulerViewerLiveToggle(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [liveExternal]);
 
-  return { disabled: schedule === undefined, live, setLive };
+  return { live, setLive };
 }
 
 export function useSchedulerViewerRefreshButton() {
-  const { schedule, live } = useSchedulerViewerContext();
-  return { disabled: schedule === undefined, loading: live };
+  const { loading, fetchSchedule } = useSchedulerViewerContext();
+  return { loading, onClick: fetchSchedule };
+}
+
+export function useSchedulerViewerOptimizeButton() {
+  const { optimize, fetchSchedule } = useSchedulerViewerContext();
+  return { optimize, refetchSchedule: fetchSchedule };
 }
 
 export function useSchedulerViewerProcess() {
@@ -264,4 +359,44 @@ export function useSchedulerViewerProcess() {
     openTaskViewDialog,
     typeColorMap,
   };
+}
+
+export class MockRTSClient implements IRTSClient {
+  private schedule: RTS.Schedule;
+
+  constructor(schedule: RTS.Schedule) {
+    this.schedule = { ...schedule, tasks: [...schedule.tasks] };
+  }
+
+  async getSchedule(_params: {
+    startTime?: Date;
+    endTime?: Date;
+  }): Promise<RTS.Schedule> {
+    return { ...this.schedule, tasks: [...this.schedule.tasks] };
+  }
+
+  async editScheduleBatch(actions: ScheduleAction[]): Promise<string> {
+    for (const action of actions) {
+      if (action.type === 'TASK_DELETE' && action.id) {
+        const task = this.schedule.tasks.find((t) => t.id === action.id);
+        if (!task || task.processId || task.seriesId) {
+          throw new Error('Task cannot be deleted');
+        }
+        this.schedule = {
+          ...this.schedule,
+          tasks: this.schedule.tasks.filter((t) => t.id !== action.id),
+        };
+      }
+    }
+    return 'Schedule updated successfully!';
+  }
+
+  async optimize(_params: { optimizationDuration: number }): Promise<string> {
+    return 'optimized';
+  }
+
+  reset(schedule?: RTS.Schedule): void {
+    const src = schedule ?? this.schedule;
+    this.schedule = { ...src, tasks: [...src.tasks] };
+  }
 }

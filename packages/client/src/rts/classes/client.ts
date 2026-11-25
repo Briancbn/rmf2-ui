@@ -7,8 +7,10 @@ import type { Task as TaskPayload } from '@/rts/generated/types.gen';
 import {
   readScheduleScheduleGet,
   deleteTaskTasksUuidDelete,
+  batchEditScheduleScheduleEditBatchPost,
   optimizeScheduleScheduleOptimizePost,
 } from '@/rts/generated/sdk.gen';
+import type { ScheduleAction as GeneratedScheduleAction } from '@/rts/generated/types.gen';
 import { createClient } from '@/rts/generated/client';
 
 export type ClientOptions = ClientOptionsGen;
@@ -101,6 +103,29 @@ export class Client {
     if (data === undefined) {
       throw ReferenceError('Error: data is undefined.');
     }
+    return data.message;
+  }
+
+  async editScheduleBatch(
+    actions: Array<{
+      type: string;
+      id?: string;
+      node_id?: string;
+      source_id?: string;
+      destination_id?: string;
+      edge_type?: string;
+    }>,
+  ): Promise<string> {
+    const { data } = await batchEditScheduleScheduleEditBatchPost({
+      client: this._client,
+      body: actions as GeneratedScheduleAction[],
+      query: { dry_run: false },
+    });
+
+    if (data === undefined) {
+      throw ReferenceError('Error: data is undefined.');
+    }
+
     return data.message;
   }
 

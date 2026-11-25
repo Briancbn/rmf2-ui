@@ -21,6 +21,8 @@ export {
 } from './scheduler-viewer-task-dialog';
 
 export type { SchedulerViewerRootProps } from './scheduler-viewer-root';
+export type { IRTSClient, ScheduleAction } from './use-scheduler-viewer';
+export { MockRTSClient } from './use-scheduler-viewer';
 export type {
   SchedulerViewerTabsRootProps,
   SchedulerViewerTabsControlProps,
@@ -29,7 +31,6 @@ export type { SchedulerViewerLiveToggleProps } from './scheduler-viewer-control-
 export type {
   SchedulerViewerTaskDialogProps,
   SchedulerViewerTaskDialogControlPanelProps,
-  DeleteEvent,
 } from './scheduler-viewer-task-dialog';
 
 export * as SchedulerViewer from './namespace';

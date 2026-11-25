@@ -29,5 +29,4 @@ export type { SchedulerViewerLiveToggleProps as LiveToggleProps } from './schedu
 export type {
   SchedulerViewerTaskDialogProps as TaskDialogProps,
   SchedulerViewerTaskDialogControlPanelProps as TaskDialogControlPanelProps,
-  DeleteEvent,
 } from './scheduler-viewer-task-dialog';

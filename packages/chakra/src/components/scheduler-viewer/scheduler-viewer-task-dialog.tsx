@@ -1,4 +1,5 @@
-import type { EventHandler, MouseEvent, ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import { useState } from 'react';
 import type { DialogRootProps } from '@chakra-ui/react';
 import {
   Button,
@@ -8,7 +9,6 @@ import {
   Portal,
   Tabs,
 } from '@chakra-ui/react';
-import type { RTS } from '@rmf2-ui/data';
 import { TaskViewerSummary, TaskViewerDetails } from '../task-viewer';
 import { useSchedulerViewerTaskDialog } from './use-scheduler-viewer';
 
@@ -71,21 +71,26 @@ export function SchedulerViewerTaskDialog(
   );
 }
 
-export interface DeleteEvent extends MouseEvent<HTMLButtonElement> {
-  task: RTS.Task;
-}
-
-export interface SchedulerViewerTaskDialogControlPanelProps {
-  onDelete?: EventHandler<DeleteEvent>;
-  isDeleting?: boolean;
-  deleteDisabled?: boolean;
-}
+export interface SchedulerViewerTaskDialogControlPanelProps {}
 
 export function SchedulerViewerTaskDialogControlPanel(
-  props: SchedulerViewerTaskDialogControlPanelProps,
+  _props: SchedulerViewerTaskDialogControlPanelProps,
 ) {
-  const { onDelete, isDeleting, deleteDisabled } = props;
-  const { viewTask } = useSchedulerViewerTaskDialog();
+  const { viewTask, deleteTask, setOpen, refetchSchedule } =
+    useSchedulerViewerTaskDialog();
+  const [loading, setLoading] = useState(false);
+
+  const handleDelete = async () => {
+    if (!viewTask) return;
+    setLoading(true);
+    try {
+      await deleteTask(viewTask.id);
+      setOpen(false);
+      refetchSchedule();
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -98,12 +103,9 @@ export function SchedulerViewerTaskDialogControlPanel(
             w="45%"
             colorPalette="red"
             variant="subtle"
-            onClick={(event) => {
-              if (onDelete === undefined) return;
-              onDelete({ task: viewTask, ...event });
-            }}
-            loading={isDeleting}
-            disabled={deleteDisabled}
+            onClick={handleDelete}
+            loading={loading}
+            disabled={!!(viewTask.processId || viewTask.seriesId)}
           >
             Delete
           </Button>
