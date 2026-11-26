@@ -25,20 +25,29 @@ export function SchedulePage() {
     invalidateSchedule,
   } = useRTSQuery({ client: rtsClient, toast: toaster });
 
+  const SEND_PRESET_TOAST_ID = 'send-preset-task';
   const { mutateAsync: sendPresetTaskMutation } = useMutation({
     mutationFn: sendPresetTask,
-    onSuccess: () => {
-      invalidateSchedule();
+    onMutate: () => {
       toaster.create({
+        id: SEND_PRESET_TOAST_ID,
+        title: 'Sending Preset Task',
+        description: 'Please wait...',
+        type: 'loading',
+      });
+    },
+    onSuccess: () => {
+      toaster.update(SEND_PRESET_TOAST_ID, {
         title: 'Successfully Send Task',
         description: 'Work Order',
         type: 'success',
         duration: 5000,
         closable: true,
       });
+      invalidateSchedule();
     },
     onError: (error) => {
-      toaster.create({
+      toaster.update(SEND_PRESET_TOAST_ID, {
         title: 'Error Send Task',
         description: `${(error as Error).name}: ${(error as Error).message}`,
         type: 'error',
