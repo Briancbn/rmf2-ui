@@ -85,7 +85,7 @@ type Story = StoryObj;
 export const Default: Story = {
   render: () => (
     <ProcessViewer.Root processes={DUMMY_PROCESSES} tasks={DUMMY_TASKS}>
-      <ProcessViewer.ControlPanel mb="10px" />
+      <ProcessViewer.DefaultControls mb="10px" />
       <ProcessViewer.Canvas />
     </ProcessViewer.Root>
   ),
@@ -103,7 +103,7 @@ export const WithDoubleClick: Story = {
           tasks={DUMMY_TASKS}
           onNodeDoubleClick={setLastClicked}
         >
-          <ProcessViewer.ControlPanel mb="10px" />
+          <ProcessViewer.DefaultControls mb="10px" />
           <ProcessViewer.Canvas />
         </ProcessViewer.Root>
         <p style={{ marginTop: 8, fontSize: 12, color: 'gray' }}>

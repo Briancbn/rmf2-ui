@@ -1,6 +1,5 @@
-import type { BoxProps, ComboboxRootProps } from '@chakra-ui/react';
+import type { ComboboxRootProps, FlexProps } from '@chakra-ui/react';
 import {
-  Box,
   Combobox,
   Field,
   Flex,
@@ -10,6 +9,20 @@ import {
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useProcessViewerControlPanel } from './use-process-viewer';
+
+export function ProcessViewerControlPanel(props: FlexProps) {
+  const { children, ...rest } = props;
+  return (
+    <Flex
+      justify="end"
+      direction={{ base: 'column', sm: 'row' }}
+      gap="5px"
+      {...rest}
+    >
+      {children}
+    </Flex>
+  );
+}
 
 export interface ProcessViewerProcessSelectorProps
   extends Omit<
@@ -85,21 +98,17 @@ export function ProcessViewerProcessSelector(
   );
 }
 
-export interface ProcessViewerControlPanelProps
-  extends Omit<BoxProps, 'children'> {}
+export interface ProcessViewerDefaultControlsProps extends FlexProps {}
 
-export function ProcessViewerControlPanel(
-  props: ProcessViewerControlPanelProps,
+export function ProcessViewerDefaultControls(
+  props: ProcessViewerDefaultControlsProps,
 ) {
-  const { ...rest } = props;
   return (
-    <Box {...rest}>
+    <ProcessViewerControlPanel {...props}>
       <Field.Root>
         <Field.Label>Process ID</Field.Label>
-        <Flex alignItems="center" gap="10px">
-          <ProcessViewerProcessSelector w="350px" />
-        </Flex>
+        <ProcessViewerProcessSelector w="350px" />
       </Field.Root>
-    </Box>
+    </ProcessViewerControlPanel>
   );
 }
