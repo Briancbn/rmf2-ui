@@ -10,7 +10,11 @@ import {
 import { useEffect, useState } from 'react';
 import { useProcessViewerControlPanel } from './use-process-viewer';
 
-export function ProcessViewerControlPanel(props: FlexProps) {
+export interface ProcessViewerControlPanelProps extends FlexProps {}
+
+export function ProcessViewerControlPanel(
+  props: ProcessViewerControlPanelProps,
+) {
   const { children, ...rest } = props;
   return (
     <Flex
@@ -104,7 +108,7 @@ export function ProcessViewerDefaultControls(
   props: ProcessViewerDefaultControlsProps,
 ) {
   return (
-    <ProcessViewerControlPanel {...props}>
+    <ProcessViewerControlPanel mb="10px" {...props}>
       <Field.Root>
         <Field.Label>Process ID</Field.Label>
         <ProcessViewerProcessSelector w="350px" />

@@ -39,7 +39,7 @@ export function SchedulerViewerProcess(props: SchedulerViewerProcessProps) {
         onNodeDoubleClick={openTaskViewDialog}
         getNodeColor={getNodeColor}
       >
-        <ProcessViewer.DefaultControls mb="10px" />
+        <ProcessViewer.DefaultControls />
         <ProcessViewer.Canvas />
       </ProcessViewer.Root>
     </Box>
