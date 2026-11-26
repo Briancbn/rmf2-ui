@@ -123,7 +123,7 @@ export function ProcessViewerCanvas(props: ProcessViewerCanvasProps) {
   }, [selectedProcess, taskMap, getNodeColor]);
 
   return (
-    <Box w="100%" h="600px" {...rest}>
+    <Box w="100%" h="min(600px, 70vh)" {...rest}>
       <ReactFlow
         nodes={nodes}
         edges={edges}

@@ -8,24 +8,6 @@ import {
 } from 'react';
 import type { RTS } from '@rmf2-ui/data';
 
-export interface ScheduleAction {
-  type: string;
-  id?: string;
-  node_id?: string;
-  source_id?: string;
-  destination_id?: string;
-  edge_type?: string;
-}
-
-export interface IRTSClient {
-  getSchedule(params: {
-    startTime?: Date;
-    endTime?: Date;
-  }): Promise<RTS.Schedule>;
-  editScheduleBatch(actions: ScheduleAction[]): Promise<string>;
-  optimize(params: { optimizationDuration: number }): Promise<string>;
-}
-
 const LOCALSTORAGE_KEY = 'rmf2.gantt.typeColorMap';
 
 const PRESET_KEYS = [
@@ -77,7 +59,7 @@ interface TimeViewWindow {
 }
 
 export interface UseSchedulerViewerProps {
-  rtsClient: IRTSClient;
+  rtsClient: RTS.IClient;
   schedule?: RTS.Schedule;
   live?: boolean;
   timeViewWindow?: TimeViewWindow;
@@ -371,44 +353,4 @@ export function useSchedulerViewerProcess() {
     openTaskViewDialog,
     typeColorMap,
   };
-}
-
-export class MockRTSClient implements IRTSClient {
-  private schedule: RTS.Schedule;
-
-  constructor(schedule: RTS.Schedule) {
-    this.schedule = { ...schedule, tasks: [...schedule.tasks] };
-  }
-
-  async getSchedule(_params: {
-    startTime?: Date;
-    endTime?: Date;
-  }): Promise<RTS.Schedule> {
-    return { ...this.schedule, tasks: [...this.schedule.tasks] };
-  }
-
-  async editScheduleBatch(actions: ScheduleAction[]): Promise<string> {
-    for (const action of actions) {
-      if (action.type === 'TASK_DELETE' && action.id) {
-        const task = this.schedule.tasks.find((t) => t.id === action.id);
-        if (!task || task.processId || task.seriesId) {
-          throw new Error('Task cannot be deleted');
-        }
-        this.schedule = {
-          ...this.schedule,
-          tasks: this.schedule.tasks.filter((t) => t.id !== action.id),
-        };
-      }
-    }
-    return 'Schedule updated successfully!';
-  }
-
-  async optimize(_params: { optimizationDuration: number }): Promise<string> {
-    return 'optimized';
-  }
-
-  reset(schedule?: RTS.Schedule): void {
-    const src = schedule ?? this.schedule;
-    this.schedule = { ...src, tasks: [...src.tasks] };
-  }
 }

@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { chakra } from '@chakra-ui/react';
+import type { BoxProps } from '@chakra-ui/react';
 import { useSchedulerViewerGantt } from './use-scheduler-viewer';
 import { DataSet } from 'vis-data/esnext';
 import type { DataItem, DataGroup } from 'vis-timeline/esnext';
 import { Timeline } from 'vis-timeline/esnext';
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css';
 
-const OPTIONS = { height: '680px', orientation: 'top', zoomFriction: 0 };
+const OPTIONS = { orientation: 'top', zoomFriction: 0 };
 const DEFAULT_ZOOM_LEVEL = 30 * 60; // 30 min in seconds
 
 function ganttPresetsCss(
@@ -51,7 +52,7 @@ interface VisTimelineContext {
   timeline: Timeline;
 }
 
-export function SchedulerViewerGantt() {
+export function SchedulerViewerGantt(props: BoxProps) {
   const { tasks, typeColorMap, openTaskViewDialog, live } =
     useSchedulerViewerGantt();
   const visTimelineContext = useRef<VisTimelineContext>(null);
@@ -205,12 +206,28 @@ export function SchedulerViewerGantt() {
       }
     });
   }, [openTaskViewDialog]);
+  const wrapperRef = useCallback((node: HTMLDivElement | null) => {
+    if (!node) return;
+    const ro = new ResizeObserver(([entry]) => {
+      const h = entry.contentRect.height;
+      if (h > 0) visTimelineContext.current?.timeline.setOptions({ height: h });
+    });
+    ro.observe(node);
+  }, []);
+
   return (
-    <chakra.div position="relative">
+    <chakra.div
+      ref={wrapperRef}
+      position="relative"
+      h="100%"
+      w="100%"
+      minH="70vh"
+      {...props}
+    >
       <chakra.div
         ref={containerRef}
-        minHeight="700px"
-        maxHeight="900px"
+        h="100%"
+        w="100%"
         css={{
           '& .vis-time-axis .vis-text': {
             color: '{colors.schedule-viewer.gantt.axis.text}',

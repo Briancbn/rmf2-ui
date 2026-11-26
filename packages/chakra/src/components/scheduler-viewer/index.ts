@@ -21,8 +21,6 @@ export {
 } from './scheduler-viewer-task-dialog';
 
 export type { SchedulerViewerRootProps } from './scheduler-viewer-root';
-export type { IRTSClient, ScheduleAction } from './use-scheduler-viewer';
-export { MockRTSClient } from './use-scheduler-viewer';
 export type {
   SchedulerViewerTabsRootProps,
   SchedulerViewerTabsControlProps,

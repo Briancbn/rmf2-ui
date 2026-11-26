@@ -1,4 +1,4 @@
-import type { RTS } from '@rmf2-ui/data';
+import type { RTS, IRTSClient, ScheduleAction } from '@rmf2-ui/data';
 import type {
   Client as ClientGen,
   ClientOptions as ClientOptionsGen,
@@ -15,7 +15,7 @@ import { createClient } from '@/rts/generated/client';
 
 export type ClientOptions = ClientOptionsGen;
 
-export class Client {
+export class Client implements IRTSClient {
   private _client: ClientGen;
 
   constructor(options: ClientOptions) {
@@ -106,16 +106,7 @@ export class Client {
     return data.message;
   }
 
-  async editScheduleBatch(
-    actions: Array<{
-      type: string;
-      id?: string;
-      node_id?: string;
-      source_id?: string;
-      destination_id?: string;
-      edge_type?: string;
-    }>,
-  ): Promise<string> {
+  async editScheduleBatch(actions: ScheduleAction[]): Promise<string> {
     const { data } = await batchEditScheduleScheduleEditBatchPost({
       client: this._client,
       body: actions as GeneratedScheduleAction[],

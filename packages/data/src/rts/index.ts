@@ -6,4 +6,7 @@ export type {
   Schedule as RTSSchedule,
 } from './classes';
 
+export type { IClient as IRTSClient, ScheduleAction } from './classes';
+export { MockClient as RTSMockClient } from './classes';
+
 export * as RTS from './namespace';
