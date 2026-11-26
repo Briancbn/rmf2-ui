@@ -19,19 +19,19 @@ export const semanticTokens = {
     'banner.button.bg': { value: '{colors.orange.400}' },
     'banner.button.color': { value: '{colors.black}' },
     'banner.button.hover.bg': { value: '{colors.whiteAlpha.900}' },
-    'schedule-viewer.gantt.preset1.bg': {
+    'schedule-viewer.preset1.bg': {
       value: { base: '{colors.brand.200}', _dark: '{colors.brand.700}' },
     },
-    'schedule-viewer.gantt.preset2.bg': {
+    'schedule-viewer.preset2.bg': {
       value: { base: '#FF9AE8', _dark: '#66004E' },
     },
-    'schedule-viewer.gantt.preset3.bg': {
+    'schedule-viewer.preset3.bg': {
       value: { base: '#FF9DBE', _dark: '#610020' },
     },
-    'schedule-viewer.gantt.preset4.bg': {
+    'schedule-viewer.preset4.bg': {
       value: { base: '#FFB291', _dark: '#702200' },
     },
-    'schedule-viewer.gantt.preset5.bg': {
+    'schedule-viewer.preset5.bg': {
       value: { base: '#FFD470', _dark: '#8F6400' },
     },
     'schedule-viewer.gantt.item.text': {

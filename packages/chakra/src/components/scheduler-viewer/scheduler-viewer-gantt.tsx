@@ -39,11 +39,11 @@ function ganttPresetsCss(
 }
 
 const PRESET_COLORS: Record<string, string> = {
-  preset_1: '{colors.schedule-viewer.gantt.preset1.bg}',
-  preset_2: '{colors.schedule-viewer.gantt.preset2.bg}',
-  preset_3: '{colors.schedule-viewer.gantt.preset3.bg}',
-  preset_4: '{colors.schedule-viewer.gantt.preset4.bg}',
-  preset_5: '{colors.schedule-viewer.gantt.preset5.bg}',
+  preset_1: '{colors.schedule-viewer.preset1.bg}',
+  preset_2: '{colors.schedule-viewer.preset2.bg}',
+  preset_3: '{colors.schedule-viewer.preset3.bg}',
+  preset_4: '{colors.schedule-viewer.preset4.bg}',
+  preset_5: '{colors.schedule-viewer.preset5.bg}',
 };
 
 interface VisTimelineContext {

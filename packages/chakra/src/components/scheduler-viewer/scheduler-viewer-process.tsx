@@ -5,7 +5,7 @@ import { useSchedulerViewerProcess } from './use-scheduler-viewer';
 import { ProcessViewer } from '../process-viewer';
 
 function presetToCssVar(preset: string): string {
-  return `var(--chakra-colors-schedule-viewer\\.gantt\\.${preset.replace('_', '')}\\.bg)`;
+  return `var(--chakra-colors-schedule-viewer\\.${preset.replace('_', '')}\\.bg)`;
 }
 
 export interface SchedulerViewerProcessProps extends BoxProps {}
