@@ -93,7 +93,6 @@ export const Default: Story = {
 
 export const WithDoubleClick: Story = {
   render: () => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [lastClicked, setLastClicked] = useState<string | undefined>(
       undefined,
     );

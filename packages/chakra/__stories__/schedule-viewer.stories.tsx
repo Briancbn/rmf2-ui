@@ -161,7 +161,6 @@ class TrackingRTSClient extends RTS.MockClient {
 
 export const WithLiveToggle: Story = {
   render: () => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const lastRefetchSpanRef = React.useRef<HTMLSpanElement>(null);
     const client = new TrackingRTSClient(createDummySchedule());
     client.onRefetch = () => {
