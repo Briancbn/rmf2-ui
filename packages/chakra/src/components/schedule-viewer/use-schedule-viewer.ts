@@ -58,7 +58,7 @@ interface TimeViewWindow {
   end: Date;
 }
 
-export interface UseSchedulerViewerProps {
+export interface UseScheduleViewerProps {
   rtsClient: RTS.IClient;
   schedule?: RTS.Schedule;
   live?: boolean;
@@ -66,7 +66,7 @@ export interface UseSchedulerViewerProps {
   filterTask?: (task: RTS.Task) => boolean;
 }
 
-export function useSchedulerViewer(props: UseSchedulerViewerProps) {
+export function useScheduleViewer(props: UseScheduleViewerProps) {
   const {
     rtsClient,
     schedule: externalSchedule,
@@ -185,28 +185,28 @@ export function useSchedulerViewer(props: UseSchedulerViewerProps) {
   };
 }
 
-export type UseSchedulerViewerReturn = ReturnType<typeof useSchedulerViewer>;
+export type UseScheduleViewerReturn = ReturnType<typeof useScheduleViewer>;
 
-export const SchedulerViewerContext = createContext<
-  UseSchedulerViewerReturn | undefined
+export const ScheduleViewerContext = createContext<
+  UseScheduleViewerReturn | undefined
 >(undefined);
 
-const useSchedulerViewerContext = () => {
-  const ctx = useContext(SchedulerViewerContext);
+const useScheduleViewerContext = () => {
+  const ctx = useContext(ScheduleViewerContext);
   if (ctx === undefined) {
     throw new Error(
-      'useSchedulerViewerContext must be inside a SchedulerViewerContext.Provider',
+      'useScheduleViewerContext must be inside a ScheduleViewerContext.Provider',
     );
   }
   return ctx;
 };
 
-export function useSchedulerViewerTabsRoot() {
-  const { tabValue, setTabValue } = useSchedulerViewerContext();
+export function useScheduleViewerTabsRoot() {
+  const { tabValue, setTabValue } = useScheduleViewerContext();
   return { tabValue, setTabValue };
 }
 
-export function useSchedulerViewerGantt() {
+export function useScheduleViewerGantt() {
   const {
     schedule,
     filterTask,
@@ -214,7 +214,7 @@ export function useSchedulerViewerGantt() {
     setTaskDialogOpen,
     typeColorMap,
     live,
-  } = useSchedulerViewerContext();
+  } = useScheduleViewerContext();
 
   const openTaskViewDialog = useCallback(
     (taskId: string) => {
@@ -246,7 +246,7 @@ export function useSchedulerViewerGantt() {
   };
 }
 
-export function useSchedulerViewerTaskDialog() {
+export function useScheduleViewerTaskDialog() {
   const {
     viewTask,
     taskDialogOpen,
@@ -257,7 +257,7 @@ export function useSchedulerViewerTaskDialog() {
     saveColors,
     deleteTask,
     fetchSchedule,
-  } = useSchedulerViewerContext();
+  } = useScheduleViewerContext();
   return {
     viewTask,
     open: taskDialogOpen,
@@ -271,7 +271,7 @@ export function useSchedulerViewerTaskDialog() {
   };
 }
 
-export function useSchedulerViewerControlPanel() {
+export function useScheduleViewerControlPanel() {
   const {
     schedule,
     loading,
@@ -280,7 +280,7 @@ export function useSchedulerViewerControlPanel() {
     setLive,
     timeViewWindow,
     setTimeViewWindow,
-  } = useSchedulerViewerContext();
+  } = useScheduleViewerContext();
   return {
     schedule,
     loading,
@@ -292,14 +292,14 @@ export function useSchedulerViewerControlPanel() {
   };
 }
 
-export interface UseSchedulerViewerLiveToggleProps {
+export interface UseScheduleViewerLiveToggleProps {
   live?: boolean;
 }
 
-export function useSchedulerViewerLiveToggle(
-  props: UseSchedulerViewerLiveToggleProps,
+export function useScheduleViewerLiveToggle(
+  props: UseScheduleViewerLiveToggleProps,
 ) {
-  const { live, setLive } = useSchedulerViewerContext();
+  const { live, setLive } = useScheduleViewerContext();
   const { live: liveExternal } = props;
 
   useEffect(() => {
@@ -316,17 +316,17 @@ export function useSchedulerViewerLiveToggle(
   return { live, setLive };
 }
 
-export function useSchedulerViewerRefreshButton() {
-  const { loading, fetchSchedule, live } = useSchedulerViewerContext();
+export function useScheduleViewerRefreshButton() {
+  const { loading, fetchSchedule, live } = useScheduleViewerContext();
   return { loading: loading || live, onClick: fetchSchedule };
 }
 
-export function useSchedulerViewerOptimizeButton() {
-  const { optimize, fetchSchedule } = useSchedulerViewerContext();
+export function useScheduleViewerOptimizeButton() {
+  const { optimize, fetchSchedule } = useScheduleViewerContext();
   return { optimize, refetchSchedule: fetchSchedule };
 }
 
-export function useSchedulerViewerProcess() {
+export function useScheduleViewerProcess() {
   const {
     schedule,
     viewProcess,
@@ -334,7 +334,7 @@ export function useSchedulerViewerProcess() {
     setViewTask,
     setTaskDialogOpen,
     typeColorMap,
-  } = useSchedulerViewerContext();
+  } = useScheduleViewerContext();
 
   const openTaskViewDialog = useCallback(
     (taskId: string) => {

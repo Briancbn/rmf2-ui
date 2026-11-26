@@ -4,14 +4,14 @@ import { chakra, Flex, IconButton } from '@chakra-ui/react';
 import { LuRefreshCw, LuDownload, LuPlay, LuPause } from 'react-icons/lu';
 import { IoAdd } from 'react-icons/io5';
 import { PiSpinnerBold } from 'react-icons/pi';
-import type { UseSchedulerViewerLiveToggleProps } from './use-scheduler-viewer';
+import type { UseScheduleViewerLiveToggleProps } from './use-schedule-viewer';
 import {
-  useSchedulerViewerLiveToggle,
-  useSchedulerViewerRefreshButton,
-  useSchedulerViewerOptimizeButton,
-} from './use-scheduler-viewer';
+  useScheduleViewerLiveToggle,
+  useScheduleViewerRefreshButton,
+  useScheduleViewerOptimizeButton,
+} from './use-schedule-viewer';
 
-export function SchedulerViewerControlPanel(props: FlexProps) {
+export function ScheduleViewerControlPanel(props: FlexProps) {
   const { children, ...rest } = props;
   return (
     <Flex
@@ -25,11 +25,11 @@ export function SchedulerViewerControlPanel(props: FlexProps) {
   );
 }
 
-export interface SchedulerViewerAddButtonProps extends IconButtonProps {
+export interface ScheduleViewerAddButtonProps extends IconButtonProps {
   label?: string;
 }
 
-export function SchedulerViewerAddButton(props: SchedulerViewerAddButtonProps) {
+export function ScheduleViewerAddButton(props: ScheduleViewerAddButtonProps) {
   const { children, label: _label, ...rest } = props;
   return (
     <IconButton aria-label="add-task" variant="outline" {...rest}>
@@ -38,12 +38,12 @@ export function SchedulerViewerAddButton(props: SchedulerViewerAddButtonProps) {
   );
 }
 
-export interface SchedulerViewerDownloadButtonProps extends IconButtonProps {
+export interface ScheduleViewerDownloadButtonProps extends IconButtonProps {
   label?: string;
 }
 
-export function SchedulerViewerDownloadButton(
-  props: SchedulerViewerDownloadButtonProps,
+export function ScheduleViewerDownloadButton(
+  props: ScheduleViewerDownloadButtonProps,
 ) {
   const { children, label: _label, ...rest } = props;
   return (
@@ -53,15 +53,15 @@ export function SchedulerViewerDownloadButton(
   );
 }
 
-export interface SchedulerViewerRefreshButtonProps extends IconButtonProps {
+export interface ScheduleViewerRefreshButtonProps extends IconButtonProps {
   label?: string;
 }
 
-export function SchedulerViewerRefreshButton(
-  props: SchedulerViewerRefreshButtonProps,
+export function ScheduleViewerRefreshButton(
+  props: ScheduleViewerRefreshButtonProps,
 ) {
   const { children, loading: loadingExternal, label: _label, ...rest } = props;
-  const { loading, onClick } = useSchedulerViewerRefreshButton();
+  const { loading, onClick } = useScheduleViewerRefreshButton();
   return (
     <IconButton
       aria-label="refresh"
@@ -80,19 +80,17 @@ export function SchedulerViewerRefreshButton(
   );
 }
 
-export interface SchedulerViewerLiveToggleProps
+export interface ScheduleViewerLiveToggleProps
   extends IconButtonProps,
-    UseSchedulerViewerLiveToggleProps {
+    UseScheduleViewerLiveToggleProps {
   onToggleLive?: (live: boolean) => void;
   label?: string | ((live: boolean) => string);
 }
 
-export function SchedulerViewerLiveToggle(
-  props: SchedulerViewerLiveToggleProps,
-) {
+export function ScheduleViewerLiveToggle(props: ScheduleViewerLiveToggleProps) {
   const { children, onToggleLive, label: _label, ...rest } = props;
-  const { live, setLive } = useSchedulerViewerLiveToggle(
-    props as UseSchedulerViewerLiveToggleProps,
+  const { live, setLive } = useScheduleViewerLiveToggle(
+    props as UseScheduleViewerLiveToggleProps,
   );
 
   return (
@@ -112,16 +110,16 @@ export function SchedulerViewerLiveToggle(
   );
 }
 
-export interface SchedulerViewerOptimizeButtonProps extends IconButtonProps {
+export interface ScheduleViewerOptimizeButtonProps extends IconButtonProps {
   optimizationDuration?: number;
   label?: string;
 }
 
-export function SchedulerViewerOptimizeButton(
-  props: SchedulerViewerOptimizeButtonProps,
+export function ScheduleViewerOptimizeButton(
+  props: ScheduleViewerOptimizeButtonProps,
 ) {
   const { children, optimizationDuration = 30, label: _label, ...rest } = props;
-  const { optimize, refetchSchedule } = useSchedulerViewerOptimizeButton();
+  const { optimize, refetchSchedule } = useScheduleViewerOptimizeButton();
   const [loading, setLoading] = useState(false);
 
   const handleOptimize = async () => {

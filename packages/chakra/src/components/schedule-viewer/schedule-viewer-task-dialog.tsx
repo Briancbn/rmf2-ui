@@ -10,18 +10,16 @@ import {
   Tabs,
 } from '@chakra-ui/react';
 import { TaskViewerSummary, TaskViewerDetails } from '../task-viewer';
-import { useSchedulerViewerTaskDialog } from './use-scheduler-viewer';
+import { useScheduleViewerTaskDialog } from './use-schedule-viewer';
 
-export interface SchedulerViewerTaskDialogProps
+export interface ScheduleViewerTaskDialogProps
   extends Omit<DialogRootProps, 'children'> {
   children?: ReactNode;
 }
 
-export function SchedulerViewerTaskDialog(
-  props: SchedulerViewerTaskDialogProps,
-) {
+export function ScheduleViewerTaskDialog(props: ScheduleViewerTaskDialogProps) {
   const { children, ...rest } = props;
-  const { viewTask, open, setOpen } = useSchedulerViewerTaskDialog();
+  const { viewTask, open, setOpen } = useScheduleViewerTaskDialog();
 
   return (
     <Dialog.Root
@@ -71,13 +69,13 @@ export function SchedulerViewerTaskDialog(
   );
 }
 
-export interface SchedulerViewerTaskDialogControlPanelProps {}
+export interface ScheduleViewerTaskDialogControlPanelProps {}
 
-export function SchedulerViewerTaskDialogControlPanel(
-  _props: SchedulerViewerTaskDialogControlPanelProps,
+export function ScheduleViewerTaskDialogControlPanel(
+  _props: ScheduleViewerTaskDialogControlPanelProps,
 ) {
   const { viewTask, deleteTask, setOpen, refetchSchedule } =
-    useSchedulerViewerTaskDialog();
+    useScheduleViewerTaskDialog();
   const [loading, setLoading] = useState(false);
 
   const handleDelete = async () => {

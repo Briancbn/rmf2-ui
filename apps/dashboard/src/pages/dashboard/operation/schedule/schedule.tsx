@@ -1,5 +1,5 @@
 import { Button, Flex, Spacer, Stack, Text } from '@chakra-ui/react';
-import { Card, Pending, SchedulerViewer } from '@rmf2-ui/chakra';
+import { Card, Pending, ScheduleViewer } from '@rmf2-ui/chakra';
 import type { RTS } from '@rmf2-ui/data';
 import { sendPresetTask } from './send-preset-task';
 import { toaster } from '@/components/ui/toaster';
@@ -107,7 +107,7 @@ export function SchedulePage() {
           </Flex>
         </Flex>
         {/* Schedule Viewer */}
-        <SchedulerViewer.Root
+        <ScheduleViewer.Root
           schedule={schedule}
           rtsClient={{ getSchedule, editScheduleBatch, optimize }}
           flex="1"
@@ -116,42 +116,42 @@ export function SchedulePage() {
           flexDirection="column"
         >
           {/* Schedule Tabs */}
-          <SchedulerViewer.TabsRoot
+          <ScheduleViewer.TabsRoot
             flex="1"
             minH="0"
             display="flex"
             flexDirection="column"
           >
             {/* Schedule Tabs Control */}
-            <SchedulerViewer.TabsControl />
+            <ScheduleViewer.TabsControl />
 
             {/* Schedule Tabs Schedule Display */}
-            <SchedulerViewer.TabsContentSchedule
+            <ScheduleViewer.TabsContentSchedule
               flex="1"
               minH="0"
               display="flex"
               flexDirection="column"
             >
               {/* Control Panel */}
-              <SchedulerViewer.ControlPanel>
-                <SchedulerViewer.AddButton
+              <ScheduleViewer.ControlPanel>
+                <ScheduleViewer.AddButton
                   disabled={schedule === undefined || isErrorGetSchedule}
                 />
-                <SchedulerViewer.DownloadButton
+                <ScheduleViewer.DownloadButton
                   onClick={downloadCSV}
                   disabled={schedule === undefined || isErrorGetSchedule}
                 />
-                <SchedulerViewer.RefreshButton
+                <ScheduleViewer.RefreshButton
                   onClick={() => refresh()}
                   loading={refreshPending}
                 />
-                <SchedulerViewer.LiveToggle
+                <ScheduleViewer.LiveToggle
                   onToggleLive={(live) =>
                     setRefetchInterval(live ? 1000 : false)
                   }
                   disabled={isErrorGetSchedule}
                 />
-                <SchedulerViewer.OptimizeButton
+                <ScheduleViewer.OptimizeButton
                   onClick={() =>
                     optimize({ optimizationDuration: 60 * 60 * 24 })
                   }
@@ -160,20 +160,20 @@ export function SchedulePage() {
                 />
                 <Spacer />
                 <DateTimeSelector currentDate={currentDate} />
-              </SchedulerViewer.ControlPanel>
-              <SchedulerViewer.Gantt flex="1" minH="50vh" />
-            </SchedulerViewer.TabsContentSchedule>
+              </ScheduleViewer.ControlPanel>
+              <ScheduleViewer.Gantt flex="1" minH="50vh" />
+            </ScheduleViewer.TabsContentSchedule>
 
             {/* Schedule Tabs Process Display */}
-            <SchedulerViewer.TabsContentProcess>
-              <SchedulerViewer.Process />
-            </SchedulerViewer.TabsContentProcess>
-          </SchedulerViewer.TabsRoot>
+            <ScheduleViewer.TabsContentProcess>
+              <ScheduleViewer.Process />
+            </ScheduleViewer.TabsContentProcess>
+          </ScheduleViewer.TabsRoot>
 
-          <SchedulerViewer.TaskDialog placement="center">
-            <SchedulerViewer.TaskDialogControlPanel />
-          </SchedulerViewer.TaskDialog>
-        </SchedulerViewer.Root>
+          <ScheduleViewer.TaskDialog placement="center">
+            <ScheduleViewer.TaskDialogControlPanel />
+          </ScheduleViewer.TaskDialog>
+        </ScheduleViewer.Root>
         {isPendingGetSchedule && (
           <Pending.Root>
             <Pending.Overlay />

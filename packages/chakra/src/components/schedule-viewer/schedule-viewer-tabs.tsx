@@ -1,13 +1,13 @@
 import { useEffect } from 'react';
 import type { BoxProps } from '@chakra-ui/react';
 import { Tabs, Box } from '@chakra-ui/react';
-import { useSchedulerViewerTabsRoot } from './use-scheduler-viewer';
+import { useScheduleViewerTabsRoot } from './use-schedule-viewer';
 
-export interface SchedulerViewerTabsRootProps extends Tabs.RootProps {}
+export interface ScheduleViewerTabsRootProps extends Tabs.RootProps {}
 
-export function SchedulerViewerTabsRoot(props: Tabs.RootProps) {
+export function ScheduleViewerTabsRoot(props: Tabs.RootProps) {
   const { children, value, onValueChange, ...rest } = props;
-  const { tabValue, setTabValue } = useSchedulerViewerTabsRoot();
+  const { tabValue, setTabValue } = useScheduleViewerTabsRoot();
 
   useEffect(() => {
     if (value === undefined) {
@@ -45,7 +45,7 @@ interface ScheduleTabLayoutConfig {
   description?: string;
 }
 
-export interface SchedulerViewerTabsControlProps extends BoxProps {
+export interface ScheduleViewerTabsControlProps extends BoxProps {
   tabsLayout?: ScheduleTabLayoutConfig[];
 }
 
@@ -54,8 +54,8 @@ const DEFAULT_SCHEDULE_TABS_LAYOUT: ScheduleTabLayoutConfig[] = [
   { value: 'process', description: 'Process' },
 ];
 
-export function SchedulerViewerTabsControl(
-  props: SchedulerViewerTabsControlProps,
+export function ScheduleViewerTabsControl(
+  props: ScheduleViewerTabsControlProps,
 ) {
   const { tabsLayout: defaultTabsLayout, children, ...rest } = props;
 
@@ -76,7 +76,7 @@ export function SchedulerViewerTabsControl(
   );
 }
 
-export function SchedulerViewerTabsContentSchedule(
+export function ScheduleViewerTabsContentSchedule(
   props: Omit<Tabs.ContentProps, 'value'>,
 ) {
   const { children, ...rest } = props;
@@ -87,7 +87,7 @@ export function SchedulerViewerTabsContentSchedule(
   );
 }
 
-export function SchedulerViewerTabsContentProcess(
+export function ScheduleViewerTabsContentProcess(
   props: Omit<Tabs.ContentProps, 'value'>,
 ) {
   const { children, ...rest } = props;

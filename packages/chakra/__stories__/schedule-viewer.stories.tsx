@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { RTS } from '@rmf2-ui/data';
-import { SchedulerViewer } from '../src/components/scheduler-viewer';
+import { ScheduleViewer } from '../src/components/schedule-viewer';
 
 const createDummySchedule = (): RTS.Schedule => {
   const base = new Date();
@@ -117,7 +117,7 @@ const ResetButton = ({ onClick }: { onClick: () => void }) => (
 );
 
 const meta = {
-  title: 'RMF2-UI/SchedulerViewer',
+  title: 'RMF2-UI/ScheduleViewer',
   tags: ['autodocs'],
   parameters: {
     backgrounds: { disable: true },
@@ -132,15 +132,15 @@ export const GanttView: Story = {
     const client = new RTS.MockClient(createDummySchedule());
     return (
       <>
-        <SchedulerViewer.Root rtsClient={client}>
-          <SchedulerViewer.ControlPanel mb="8px">
-            <SchedulerViewer.RefreshButton />
-          </SchedulerViewer.ControlPanel>
-          <SchedulerViewer.Gantt />
-          <SchedulerViewer.TaskDialog placement="center">
-            <SchedulerViewer.TaskDialogControlPanel />
-          </SchedulerViewer.TaskDialog>
-        </SchedulerViewer.Root>
+        <ScheduleViewer.Root rtsClient={client}>
+          <ScheduleViewer.ControlPanel mb="8px">
+            <ScheduleViewer.RefreshButton />
+          </ScheduleViewer.ControlPanel>
+          <ScheduleViewer.Gantt />
+          <ScheduleViewer.TaskDialog placement="center">
+            <ScheduleViewer.TaskDialogControlPanel />
+          </ScheduleViewer.TaskDialog>
+        </ScheduleViewer.Root>
         <ResetButton onClick={() => client.reset(createDummySchedule())} />
       </>
     );
@@ -171,19 +171,19 @@ export const WithLiveToggle: Story = {
     };
     return (
       <>
-        <SchedulerViewer.Root rtsClient={client}>
-          <SchedulerViewer.ControlPanel mb="8px">
-            <SchedulerViewer.RefreshButton />
-            <SchedulerViewer.LiveToggle />
-          </SchedulerViewer.ControlPanel>
-          <SchedulerViewer.Gantt />
-          <SchedulerViewer.TaskDialog placement="center">
-            <SchedulerViewer.TaskDialogControlPanel />
-          </SchedulerViewer.TaskDialog>
+        <ScheduleViewer.Root rtsClient={client}>
+          <ScheduleViewer.ControlPanel mb="8px">
+            <ScheduleViewer.RefreshButton />
+            <ScheduleViewer.LiveToggle />
+          </ScheduleViewer.ControlPanel>
+          <ScheduleViewer.Gantt />
+          <ScheduleViewer.TaskDialog placement="center">
+            <ScheduleViewer.TaskDialogControlPanel />
+          </ScheduleViewer.TaskDialog>
           <p style={{ marginTop: 8, fontSize: 12, color: 'gray' }}>
             Last refetch: <span ref={lastRefetchSpanRef}>never</span>
           </p>
-        </SchedulerViewer.Root>
+        </ScheduleViewer.Root>
         <ResetButton onClick={() => client.reset(createDummySchedule())} />
       </>
     );
@@ -194,12 +194,12 @@ export const DownloadView: Story = {
   render: () => {
     const mockRTSClient = new RTS.MockClient(createDummySchedule());
     return (
-      <SchedulerViewer.Root rtsClient={mockRTSClient}>
-        <SchedulerViewer.ControlPanel mb="8px">
-          <SchedulerViewer.DownloadButton />
-        </SchedulerViewer.ControlPanel>
-        <SchedulerViewer.Gantt />
-      </SchedulerViewer.Root>
+      <ScheduleViewer.Root rtsClient={mockRTSClient}>
+        <ScheduleViewer.ControlPanel mb="8px">
+          <ScheduleViewer.DownloadButton />
+        </ScheduleViewer.ControlPanel>
+        <ScheduleViewer.Gantt />
+      </ScheduleViewer.Root>
     );
   },
 };
@@ -208,12 +208,12 @@ export const EmptySchedule: Story = {
   render: () => {
     const emptyRTSClient = new RTS.MockClient(EMPTY_SCHEDULE);
     return (
-      <SchedulerViewer.Root rtsClient={emptyRTSClient}>
-        <SchedulerViewer.ControlPanel mb="8px">
-          <SchedulerViewer.RefreshButton />
-        </SchedulerViewer.ControlPanel>
-        <SchedulerViewer.Gantt />
-      </SchedulerViewer.Root>
+      <ScheduleViewer.Root rtsClient={emptyRTSClient}>
+        <ScheduleViewer.ControlPanel mb="8px">
+          <ScheduleViewer.RefreshButton />
+        </ScheduleViewer.ControlPanel>
+        <ScheduleViewer.Gantt />
+      </ScheduleViewer.Root>
     );
   },
 };
@@ -222,12 +222,12 @@ export const ProcessView: Story = {
   render: () => {
     const mockRTSClient = new RTS.MockClient(createDummySchedule());
     return (
-      <SchedulerViewer.Root rtsClient={mockRTSClient}>
-        <SchedulerViewer.Process />
-        <SchedulerViewer.TaskDialog placement="center">
-          <SchedulerViewer.TaskDialogControlPanel />
-        </SchedulerViewer.TaskDialog>
-      </SchedulerViewer.Root>
+      <ScheduleViewer.Root rtsClient={mockRTSClient}>
+        <ScheduleViewer.Process />
+        <ScheduleViewer.TaskDialog placement="center">
+          <ScheduleViewer.TaskDialogControlPanel />
+        </ScheduleViewer.TaskDialog>
+      </ScheduleViewer.Root>
     );
   },
 };
@@ -236,27 +236,27 @@ export const WithTabs: Story = {
   render: () => {
     const mockRTSClient = new RTS.MockClient(createDummySchedule());
     return (
-      <SchedulerViewer.Root rtsClient={mockRTSClient}>
-        <SchedulerViewer.TabsRoot>
-          <SchedulerViewer.TabsControl />
-          <SchedulerViewer.TabsContentSchedule>
-            <SchedulerViewer.ControlPanel mb="8px">
-              <SchedulerViewer.AddButton disabled />
-              <SchedulerViewer.DownloadButton disabled />
-              <SchedulerViewer.RefreshButton disabled />
-              <SchedulerViewer.LiveToggle disabled />
-              <SchedulerViewer.OptimizeButton disabled />
-            </SchedulerViewer.ControlPanel>
-            <SchedulerViewer.Gantt />
-          </SchedulerViewer.TabsContentSchedule>
-          <SchedulerViewer.TabsContentProcess>
-            <SchedulerViewer.Process />
-          </SchedulerViewer.TabsContentProcess>
-        </SchedulerViewer.TabsRoot>
-        <SchedulerViewer.TaskDialog placement="center">
-          <SchedulerViewer.TaskDialogControlPanel />
-        </SchedulerViewer.TaskDialog>
-      </SchedulerViewer.Root>
+      <ScheduleViewer.Root rtsClient={mockRTSClient}>
+        <ScheduleViewer.TabsRoot>
+          <ScheduleViewer.TabsControl />
+          <ScheduleViewer.TabsContentSchedule>
+            <ScheduleViewer.ControlPanel mb="8px">
+              <ScheduleViewer.AddButton disabled />
+              <ScheduleViewer.DownloadButton disabled />
+              <ScheduleViewer.RefreshButton disabled />
+              <ScheduleViewer.LiveToggle disabled />
+              <ScheduleViewer.OptimizeButton disabled />
+            </ScheduleViewer.ControlPanel>
+            <ScheduleViewer.Gantt />
+          </ScheduleViewer.TabsContentSchedule>
+          <ScheduleViewer.TabsContentProcess>
+            <ScheduleViewer.Process />
+          </ScheduleViewer.TabsContentProcess>
+        </ScheduleViewer.TabsRoot>
+        <ScheduleViewer.TaskDialog placement="center">
+          <ScheduleViewer.TaskDialogControlPanel />
+        </ScheduleViewer.TaskDialog>
+      </ScheduleViewer.Root>
     );
   },
 };

@@ -1,19 +1,19 @@
 import { useMemo } from 'react';
 import type { BoxProps } from '@chakra-ui/react';
 import { Box } from '@chakra-ui/react';
-import { useSchedulerViewerProcess } from './use-scheduler-viewer';
+import { useScheduleViewerProcess } from './use-schedule-viewer';
 import { ProcessViewer } from '../process-viewer';
 
 function presetToCssVar(preset: string): string {
   return `var(--chakra-colors-schedule-viewer\\.${preset.replace('_', '')}\\.bg)`;
 }
 
-export interface SchedulerViewerProcessProps extends BoxProps {}
+export interface ScheduleViewerProcessProps extends BoxProps {}
 
-export function SchedulerViewerProcess(props: SchedulerViewerProcessProps) {
+export function ScheduleViewerProcess(props: ScheduleViewerProcessProps) {
   const { ...rest } = props;
   const { schedule, openTaskViewDialog, typeColorMap } =
-    useSchedulerViewerProcess();
+    useScheduleViewerProcess();
 
   const taskTypeMap = useMemo(() => {
     const map: Record<string, string> = {};

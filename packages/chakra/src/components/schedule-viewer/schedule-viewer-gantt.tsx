@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { chakra } from '@chakra-ui/react';
 import type { BoxProps } from '@chakra-ui/react';
-import { useSchedulerViewerGantt } from './use-scheduler-viewer';
+import { useScheduleViewerGantt } from './use-schedule-viewer';
 import { DataSet } from 'vis-data/esnext';
 import type { DataItem, DataGroup } from 'vis-timeline/esnext';
 import { Timeline } from 'vis-timeline/esnext';
@@ -52,9 +52,9 @@ interface VisTimelineContext {
   timeline: Timeline;
 }
 
-export function SchedulerViewerGantt(props: BoxProps) {
+export function ScheduleViewerGantt(props: BoxProps) {
   const { tasks, typeColorMap, openTaskViewDialog, live } =
-    useSchedulerViewerGantt();
+    useScheduleViewerGantt();
   const visTimelineContext = useRef<VisTimelineContext>(null);
   const containerNodeRef = useRef<HTMLDivElement | null>(null);
   const liveRef = useRef(live);

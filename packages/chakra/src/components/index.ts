@@ -8,5 +8,5 @@ export * from './separator';
 export * from './sidebar';
 export * from './theme-switcher';
 export * from './process-viewer';
-export * from './scheduler-viewer';
+export * from './schedule-viewer';
 export * from './task-viewer';
