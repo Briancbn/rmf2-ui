@@ -18,6 +18,7 @@ export function ScheduleViewerControlPanel(props: FlexProps) {
       justify="end"
       direction={{ base: 'column', sm: 'row' }}
       gap="5px"
+      mb="8px"
       {...rest}
     >
       {children}

@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { RTS } from '@rmf2-ui/data';
 import { ScheduleViewer } from '../src/components/schedule-viewer';
 
+/** Create a dummy schedule based on the current time */
 const createDummySchedule = (): RTS.Schedule => {
   const base = new Date();
   const offset = (minutes: number) =>
@@ -127,13 +128,14 @@ const meta = {
 export default meta;
 type Story = StoryObj;
 
+/** Default view with Gantt Display and dummy schedule */
 export const GanttView: Story = {
   render: () => {
     const client = new RTS.MockClient(createDummySchedule());
     return (
       <>
         <ScheduleViewer.Root rtsClient={client}>
-          <ScheduleViewer.ControlPanel mb="8px">
+          <ScheduleViewer.ControlPanel>
             <ScheduleViewer.RefreshButton />
           </ScheduleViewer.ControlPanel>
           <ScheduleViewer.Gantt />
@@ -147,6 +149,7 @@ export const GanttView: Story = {
   },
 };
 
+/** Custom Mock Client with a hook for refetch to display the last refetch time */
 class TrackingRTSClient extends RTS.MockClient {
   lastRefetch: Date | null = null;
   onRefetch: (() => void) | null = null;
@@ -163,6 +166,7 @@ export const WithLiveToggle: Story = {
   render: () => {
     const lastRefetchSpanRef = React.useRef<HTMLSpanElement>(null);
     const client = new TrackingRTSClient(createDummySchedule());
+
     client.onRefetch = () => {
       if (lastRefetchSpanRef.current && client.lastRefetch) {
         lastRefetchSpanRef.current.textContent =
@@ -172,7 +176,7 @@ export const WithLiveToggle: Story = {
     return (
       <>
         <ScheduleViewer.Root rtsClient={client}>
-          <ScheduleViewer.ControlPanel mb="8px">
+          <ScheduleViewer.ControlPanel>
             <ScheduleViewer.RefreshButton />
             <ScheduleViewer.LiveToggle />
           </ScheduleViewer.ControlPanel>
@@ -195,7 +199,7 @@ export const DownloadView: Story = {
     const mockRTSClient = new RTS.MockClient(createDummySchedule());
     return (
       <ScheduleViewer.Root rtsClient={mockRTSClient}>
-        <ScheduleViewer.ControlPanel mb="8px">
+        <ScheduleViewer.ControlPanel>
           <ScheduleViewer.DownloadButton />
         </ScheduleViewer.ControlPanel>
         <ScheduleViewer.Gantt />
@@ -209,7 +213,7 @@ export const EmptySchedule: Story = {
     const emptyRTSClient = new RTS.MockClient(EMPTY_SCHEDULE);
     return (
       <ScheduleViewer.Root rtsClient={emptyRTSClient}>
-        <ScheduleViewer.ControlPanel mb="8px">
+        <ScheduleViewer.ControlPanel>
           <ScheduleViewer.RefreshButton />
         </ScheduleViewer.ControlPanel>
         <ScheduleViewer.Gantt />
@@ -240,7 +244,7 @@ export const WithTabs: Story = {
         <ScheduleViewer.TabsRoot>
           <ScheduleViewer.TabsControl />
           <ScheduleViewer.TabsContentSchedule>
-            <ScheduleViewer.ControlPanel mb="8px">
+            <ScheduleViewer.ControlPanel>
               <ScheduleViewer.AddButton disabled />
               <ScheduleViewer.DownloadButton disabled />
               <ScheduleViewer.RefreshButton disabled />

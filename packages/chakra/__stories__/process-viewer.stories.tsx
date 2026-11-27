@@ -82,6 +82,7 @@ const meta = {
 export default meta;
 type Story = StoryObj;
 
+/** Default ProcessViewer with dummy process. */
 export const Default: Story = {
   render: () => (
     <ProcessViewer.Root processes={DUMMY_PROCESSES} tasks={DUMMY_TASKS}>
@@ -91,6 +92,7 @@ export const Default: Story = {
   ),
 };
 
+/** With configurable double-click hook */
 export const WithDoubleClick: Story = {
   render: () => {
     const [lastClicked, setLastClicked] = useState<string | undefined>(
