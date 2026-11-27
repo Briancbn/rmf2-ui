@@ -45,8 +45,8 @@
     "happy-dom": "^15.11.7",
     "typescript": "~5.8.3",
     "vite": "^7.0.3",
-    "vite-plugin-dts": "^4.5.4",
     "vite-tsconfig-paths": "^5.1.4",
+    "vite-plugin-dts": "^4.5.4",
     "vitest": "^3.2.4"
   }
 }
