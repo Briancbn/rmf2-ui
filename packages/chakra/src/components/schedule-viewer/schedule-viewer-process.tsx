@@ -12,6 +12,8 @@ export function ScheduleViewerProcess(props: ScheduleViewerProcessProps) {
   const { schedule, openTaskViewDialog, typeColorMap } =
     useScheduleViewerProcess();
 
+  // Avoid rebuilding the taskId->type lookup on every render; only recompute
+  // when the tasks array reference changes (i.e. a new schedule is fetched).
   const taskTypeMap = useMemo(() => {
     const map: Record<string, string> = {};
     for (const task of schedule?.tasks ?? []) {
@@ -20,6 +22,8 @@ export function ScheduleViewerProcess(props: ScheduleViewerProcessProps) {
     return map;
   }, [schedule?.tasks]);
 
+  // getNodeColor is passed as a prop to ProcessViewer.Root, which forwards it
+  // to every React Flow node.
   const getNodeColor = useMemo(
     () => (taskId: string) => {
       const preset = typeColorMap[taskTypeMap[taskId] ?? ''];
