@@ -7,6 +7,10 @@ function escapeCell(value: unknown): string {
   return `"${String(value ?? '').replace(/"/g, '""')}"`;
 }
 
+// Convert nested fields to be compatible with CSV
+// e.g. { "taskDetails": { "myData": "value" } }
+//   -> { "taskDetails.myData": "value" }
+// TODO(anyone): make this recursive?
 function flattenTask(task: RTS.Task): Record<string, unknown> {
   const result: Record<string, unknown> = {};
   for (const [key, value] of Object.entries(task)) {
@@ -46,6 +50,12 @@ function scheduleToCsv(schedule: RTS.Schedule): string {
   return [headers.join(','), ...rows].join('\n');
 }
 
+/**
+ * Serializes the schedule to the given format and triggers a browser file download.
+ *
+ * @param schedule - The schedule to export.
+ * @param format - `'json'` for a JSON file, `'csv'` for a CSV file.
+ */
 export function triggerDownload(
   schedule: RTS.Schedule,
   format: DownloadFormat,
