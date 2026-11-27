@@ -20,9 +20,12 @@ import { useProcessViewerCanvas } from './use-process-viewer';
 export type ProcessViewerCanvasProps = BoxProps;
 
 const getLayoutElements = (nodes: Node[], edges: Edge[], direction = 'LR') => {
+  // TODO(anyone): default node width and height
   const defaultNodeWidth = 172;
   const defaultNodeHeight = 36;
   const isHorizontal = direction === 'LR';
+
+  // Use dagre to generate layout
   const dagreGraph = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
   dagreGraph.setGraph({ rankdir: direction });
   edges.forEach((edge) => dagreGraph.setEdge(edge.source, edge.target));
@@ -61,6 +64,8 @@ export function ProcessViewerCanvas(props: ProcessViewerCanvasProps) {
   const { ...rest } = props;
   const { selectedProcess, tasks, onNodeDoubleClick, getNodeColor } =
     useProcessViewerCanvas();
+
+  // sync theme with xyflow
   const { resolvedTheme, forcedTheme } = useTheme();
   const colorMode = (forcedTheme || resolvedTheme) as 'light' | 'dark';
 
@@ -75,6 +80,7 @@ export function ProcessViewerCanvas(props: ProcessViewerCanvasProps) {
     return map;
   }, [tasks]);
 
+  // generate nodes for display
   useEffect(() => {
     if (selectedProcess === undefined) {
       setNodes([]);
@@ -92,6 +98,7 @@ export function ProcessViewerCanvas(props: ProcessViewerCanvasProps) {
         data: { label: task?.description ?? element.id },
         style: {
           background: getNodeColor?.(element.id),
+          // display progress as backgroundImage
           backgroundImage:
             pct !== undefined
               ? `linear-gradient(to right, rgba(255,255,255,0.25) ${pct}%, rgba(0,0,0,0.15) ${pct}%)`

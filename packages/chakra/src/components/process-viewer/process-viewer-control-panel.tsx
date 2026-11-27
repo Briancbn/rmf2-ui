@@ -21,6 +21,7 @@ export function ProcessViewerControlPanel(
       justify="end"
       direction={{ base: 'column', sm: 'row' }}
       gap="5px"
+      mb="10px"
       {...rest}
     >
       {children}
@@ -57,12 +58,16 @@ export function ProcessViewerProcessSelector(
 
   const [inputValue, setInputValue] = useState(selectedProcessId ?? '');
 
+  // Hook for changes in `processes` data
   useEffect(() => {
     setCollection(processes.map((p) => p.id));
   }, [processes, setCollection]);
 
+  // Hook when a process id is selected
   useEffect(() => {
+    // Clear the filter
     filter('');
+    // display the processId as input
     setInputValue(selectedProcessId ?? '');
   }, [selectedProcessId, filter]);
 
@@ -108,7 +113,7 @@ export function ProcessViewerDefaultControls(
   props: ProcessViewerDefaultControlsProps,
 ) {
   return (
-    <ProcessViewerControlPanel mb="10px" {...props}>
+    <ProcessViewerControlPanel {...props}>
       <Field.Root>
         <Field.Label>Process ID</Field.Label>
         <ProcessViewerProcessSelector w="350px" />

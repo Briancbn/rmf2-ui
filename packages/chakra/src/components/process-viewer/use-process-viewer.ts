@@ -18,6 +18,7 @@ export function useProcessViewer({
     string | undefined
   >(processes[0]?.id);
 
+  // re-hydrate when process is loaded at a later time
   useEffect(() => {
     if (selectedProcessId === undefined && processes.length > 0) {
       setSelectedProcessId(processes[0].id);
