@@ -11,7 +11,11 @@ import {
   useScheduleViewerOptimizeButton,
 } from './use-schedule-viewer';
 
-export function ScheduleViewerControlPanel(props: FlexProps) {
+export interface ScheduleViewerControlPanelProps extends FlexProps {}
+
+export function ScheduleViewerControlPanel(
+  props: ScheduleViewerControlPanelProps,
+) {
   const { children, ...rest } = props;
   return (
     <Flex

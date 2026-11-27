@@ -5,6 +5,7 @@ import { useScheduleViewerTabsRoot } from './use-schedule-viewer';
 
 export interface ScheduleViewerTabsRootProps extends Tabs.RootProps {}
 
+/** Override tab root to use ScheduleViewer managed state by default */
 export function ScheduleViewerTabsRoot(props: Tabs.RootProps) {
   const { children, value, onValueChange, ...rest } = props;
   const { tabValue, setTabValue } = useScheduleViewerTabsRoot();
@@ -46,6 +47,7 @@ interface ScheduleTabLayoutConfig {
 }
 
 export interface ScheduleViewerTabsControlProps extends BoxProps {
+  /** Custom tab layout, default: schedule and process tab */
   tabsLayout?: ScheduleTabLayoutConfig[];
 }
 
@@ -76,8 +78,11 @@ export function ScheduleViewerTabsControl(
   );
 }
 
+export interface ScheduleViewerTabsContentScheduleProps
+  extends Omit<Tabs.ContentProps, 'value'> {}
+
 export function ScheduleViewerTabsContentSchedule(
-  props: Omit<Tabs.ContentProps, 'value'>,
+  props: ScheduleViewerTabsContentScheduleProps,
 ) {
   const { children, ...rest } = props;
   return (
@@ -87,8 +92,11 @@ export function ScheduleViewerTabsContentSchedule(
   );
 }
 
+export interface ScheduleViewerTabsContentProcessProps
+  extends Omit<Tabs.ContentProps, 'value'> {}
+
 export function ScheduleViewerTabsContentProcess(
-  props: Omit<Tabs.ContentProps, 'value'>,
+  props: ScheduleViewerTabsContentProcessProps,
 ) {
   const { children, ...rest } = props;
   return (

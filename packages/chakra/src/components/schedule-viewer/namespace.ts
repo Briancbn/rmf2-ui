@@ -21,11 +21,22 @@ export {
 } from './schedule-viewer-task-dialog';
 
 export type { ScheduleViewerRootProps as RootProps } from './schedule-viewer-root';
+export type { ScheduleViewerGanttProps as GanttProps } from './schedule-viewer-gantt';
+export type {
+  ScheduleViewerControlPanelProps as ControlPanelProps,
+  ScheduleViewerAddButtonProps as AddButtonProps,
+  ScheduleViewerDownloadButtonProps as DownloadButtonProps,
+  ScheduleViewerRefreshButtonProps as RefreshButtonProps,
+  ScheduleViewerOptimizeButtonProps as OptimizeButtonProps,
+  ScheduleViewerLiveToggleProps as LiveToggleProps,
+} from './schedule-viewer-control-panel';
 export type {
   ScheduleViewerTabsRootProps as TabsRootProps,
   ScheduleViewerTabsControlProps as TabsControlProps,
+  ScheduleViewerTabsContentScheduleProps as TabsContentScheduleProps,
+  ScheduleViewerTabsContentProcessProps as TabsContentProcessProps,
 } from './schedule-viewer-tabs';
-export type { ScheduleViewerLiveToggleProps as LiveToggleProps } from './schedule-viewer-control-panel';
+export type { ScheduleViewerProcessProps as ProcessProps } from './schedule-viewer-process';
 export type {
   ScheduleViewerTaskDialogProps as TaskDialogProps,
   ScheduleViewerTaskDialogControlPanelProps as TaskDialogControlPanelProps,

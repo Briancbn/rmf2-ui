@@ -10,11 +10,20 @@ import 'vis-timeline/styles/vis-timeline-graph2d.min.css';
 const OPTIONS = { orientation: 'top', zoomFriction: 0 };
 const DEFAULT_ZOOM_LEVEL = 30 * 60; // 30 min in seconds
 
-function ganttPresetsCss(
-  presetMap: Record<string, string>,
+/**
+ * Converts a colorMap of `{ colorName: colorToken }` entries into Chakra-compatible
+ * CSS-in-JS rules that style vis-timeline items by their color class name.
+ *
+ * `colorToken` must be a resolved CSS color value (e.g. a hex `#rrggbb`, `rgb(...)`,
+ * or a Chakra semantic token reference like `{colors.schedule-viewer.preset1.bg}`).
+ * Chakra token references are resolved at build time; plain CSS values are used as-is
+ * and are required for `color-mix()` calls which cannot accept unresolved token syntax.
+ */
+function generateVisItemsCss(
+  colorMap: Record<string, string>,
 ): Record<string, unknown> {
   const result: Record<string, unknown> = {};
-  for (const [preset, token] of Object.entries(presetMap)) {
+  for (const [preset, token] of Object.entries(colorMap)) {
     result[`& .vis-item.${preset}`] = {
       bg: token,
       color: '{colors.schedule-viewer.gantt.item.text}',
@@ -46,20 +55,27 @@ const PRESET_COLORS: Record<string, string> = {
   preset_5: '{colors.schedule-viewer.preset5.bg}',
 };
 
+// Context including data types for VisTimeline
 interface VisTimelineContext {
   dataGroups: DataSet<DataGroup>;
   dataItems: DataSet<DataItem>;
   timeline: Timeline;
 }
 
-export function ScheduleViewerGantt(props: BoxProps) {
+export interface ScheduleViewerGanttProps extends Omit<BoxProps, 'children'> {}
+
+export function ScheduleViewerGantt(props: ScheduleViewerGanttProps) {
+  // hooks from parent context
   const { tasks, typeColorMap, openTaskViewDialog, live } =
     useScheduleViewerGantt();
+
+  // refs needed for visTimeline rendering
   const visTimelineContext = useRef<VisTimelineContext>(null);
   const containerNodeRef = useRef<HTMLDivElement | null>(null);
   const liveRef = useRef(live);
   const [rollingPaused, setRollingPaused] = useState(false);
 
+  // Initialize VisTimeline on container creation
   const containerRef = useCallback((node: HTMLDivElement) => {
     containerNodeRef.current = node;
     if (visTimelineContext.current !== null) {
@@ -69,7 +85,10 @@ export function ScheduleViewerGantt(props: BoxProps) {
     if (node !== null) {
       const dataGroups: DataSet<DataGroup> = new DataSet();
       const dataItems: DataSet<DataItem> = new DataSet();
+
+      // Clear previous render if any
       node.innerHTML = '';
+
       visTimelineContext.current = {
         dataGroups,
         dataItems,
@@ -83,11 +102,13 @@ export function ScheduleViewerGantt(props: BoxProps) {
     }
   }, []);
 
+  // Update items in VisTimeline when tasks or colorMap gets updated
   useEffect(() => {
     if (!visTimelineContext.current) {
       return;
     }
 
+    // Extract group info based on resourceId first
     const groupIds = new Set<string>();
     const taskIds = new Set<string>();
     for (const task of tasks) {
@@ -102,27 +123,32 @@ export function ScheduleViewerGantt(props: BoxProps) {
       return acc;
     }, groupMap);
 
+    // Construct new data for VisTimeline
     const newDataGroups: DataGroup[] = sortedGroupIds.map((groupId, index) => ({
       id: index,
       content: groupId,
     }));
     const newDataItems: DataItem[] = tasks.map((task) => {
       const pct = task.progress !== undefined ? task.progress * 100 : 0;
+      // TODO(anyone): remove hardcoded minimal length and use a dot instead?
       return {
         id: task.id,
         content: task.description ?? '',
         start: task.startTime,
         end: task.endTime ?? new Date(task.startTime.getTime() + 20 * 1000),
         className: typeColorMap[task.type] ?? '',
+        // display progress as a background image
         style: `background-image: linear-gradient(to right, rgba(255,255,255,0.25) ${pct}%, rgba(0,0,0,0.15) ${pct}%)`,
         group: groupMap[task.resourceId ?? 'unassigned'],
-        title: `${task?.resourceId} \n@ ${task?.taskDetails?.resource_zone} zone`,
+        title: `${task?.resourceId} \n@ ${task?.taskDetails?.resource_zone}`,
       };
     });
 
+    // Leverage VisTimeline DataSet to efficiently re-render items
     visTimelineContext.current.dataGroups.update(newDataGroups);
     visTimelineContext.current.dataItems.update(newDataItems);
 
+    // Delete stale items too
     const deletedDataItems = visTimelineContext.current.dataItems
       .getIds()
       .reduce((acc: (number | string)[], cur) => {
@@ -139,6 +165,8 @@ export function ScheduleViewerGantt(props: BoxProps) {
 
     visTimelineContext.current.dataItems.remove(deletedDataItems);
 
+    // hooks for DateTimeSelector
+    // TODO(anyone): switch to using react hooks instead.
     const todayButton = document.getElementById('todayId');
     if (!todayButton) {
       return;
@@ -162,17 +190,32 @@ export function ScheduleViewerGantt(props: BoxProps) {
     });
   }, [tasks, typeColorMap]);
 
+  // Hooks to sync rolling with live
   useEffect(() => {
+    // add listener to Esc key press when rolling paused in live mode
+    if (live && rollingPaused) {
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape')
+          visTimelineContext.current?.timeline.toggleRollingMode();
+      };
+      window.addEventListener('keydown', handleKeyDown);
+      return () => window.removeEventListener('keydown', handleKeyDown);
+    }
+
+    // from here on, only `live` changes trigger the hook
     if (liveRef.current === live) return;
     liveRef.current = live;
-    if (!live && rollingPaused) return;
+
+    // if rolling already paused, do nothing.
+    // the other hook, will cleanup the rolling pause button
+    if (!live && rollingPaused) {
+      setRollingPaused(false);
+      return;
+    }
     visTimelineContext.current?.timeline.toggleRollingMode();
   }, [live, rollingPaused]);
 
-  useEffect(() => {
-    if (!live) setRollingPaused(false);
-  }, [live]);
-
+  // Observe the `.vis-rolling-mode-btn` component to track whether rollingMode is paused.
   useEffect(() => {
     const btn = containerNodeRef.current?.querySelector(
       '.vis-rolling-mode-btn',
@@ -185,16 +228,7 @@ export function ScheduleViewerGantt(props: BoxProps) {
     return () => observer.disconnect();
   }, []);
 
-  useEffect(() => {
-    if (!live || !rollingPaused) return;
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape')
-        visTimelineContext.current?.timeline.toggleRollingMode();
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [live, rollingPaused]);
-
+  // Open TaskViewDialog on double click
   useEffect(() => {
     if (!visTimelineContext.current) {
       return;
@@ -206,6 +240,8 @@ export function ScheduleViewerGantt(props: BoxProps) {
       }
     });
   }, [openTaskViewDialog]);
+
+  // sync height with the parent container
   const wrapperRef = useCallback((node: HTMLDivElement | null) => {
     if (!node) return;
     const ro = new ResizeObserver(([entry]) => {
@@ -236,10 +272,11 @@ export function ScheduleViewerGantt(props: BoxProps) {
             color: '{colors.schedule-viewer.gantt.label.text}',
           },
           '& .vis-rolling-mode-btn': { display: 'none' },
-          ...ganttPresetsCss(PRESET_COLORS),
+          ...generateVisItemsCss(PRESET_COLORS),
         }}
       />
       {live && rollingPaused && (
+        /* TODO(anyone): make this a proper component */
         <chakra.div
           position="absolute"
           bottom="12px"
