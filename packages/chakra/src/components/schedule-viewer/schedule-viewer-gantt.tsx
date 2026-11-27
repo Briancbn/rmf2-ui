@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { chakra } from '@chakra-ui/react';
 import type { BoxProps } from '@chakra-ui/react';
 import { useScheduleViewerGantt } from './use-schedule-viewer';
+import { getPresetColor } from './preset-colors-helper';
 import { DataSet } from 'vis-data/esnext';
 import type { DataItem, DataGroup } from 'vis-timeline/esnext';
 import { Timeline } from 'vis-timeline/esnext';
@@ -46,14 +47,6 @@ function generateVisItemsCss(
   }
   return result;
 }
-
-const PRESET_COLORS: Record<string, string> = {
-  preset_1: '{colors.schedule-viewer.preset1.bg}',
-  preset_2: '{colors.schedule-viewer.preset2.bg}',
-  preset_3: '{colors.schedule-viewer.preset3.bg}',
-  preset_4: '{colors.schedule-viewer.preset4.bg}',
-  preset_5: '{colors.schedule-viewer.preset5.bg}',
-};
 
 // Context including data types for VisTimeline
 interface VisTimelineContext {
@@ -251,6 +244,12 @@ export function ScheduleViewerGantt(props: ScheduleViewerGanttProps) {
     ro.observe(node);
   }, []);
 
+  const colorMap: Record<string, string> = {};
+  for (const presetKey of Object.values(typeColorMap)) {
+    const color = getPresetColor(presetKey);
+    if (color !== undefined) colorMap[presetKey] = color;
+  }
+
   return (
     <chakra.div
       ref={wrapperRef}
@@ -272,7 +271,7 @@ export function ScheduleViewerGantt(props: ScheduleViewerGanttProps) {
             color: '{colors.schedule-viewer.gantt.label.text}',
           },
           '& .vis-rolling-mode-btn': { display: 'none' },
-          ...generateVisItemsCss(PRESET_COLORS),
+          ...generateVisItemsCss(colorMap),
         }}
       />
       {live && rollingPaused && (

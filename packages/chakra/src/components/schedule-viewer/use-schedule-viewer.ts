@@ -7,32 +7,9 @@ import {
   useRef,
 } from 'react';
 import type { RTS } from '@rmf2-ui/data';
+import { assignPresets } from './preset-colors-helper';
 
 const LOCALSTORAGE_KEY = 'rmf2.gantt.typeColorMap';
-
-const PRESET_KEYS = [
-  'preset_1',
-  'preset_2',
-  'preset_3',
-  'preset_4',
-  'preset_5',
-];
-
-function assignPresets(
-  types: string[],
-  existing: Record<string, string>,
-): Record<string, string> {
-  const updated = { ...existing };
-  let nextIndex = Object.keys(updated).length;
-  for (const type of types) {
-    if (updated[type] === undefined) {
-      updated[type] =
-        PRESET_KEYS[nextIndex % PRESET_KEYS.length] ?? PRESET_KEYS[0];
-      nextIndex++;
-    }
-  }
-  return updated;
-}
 
 function loadTypeColorMap(): Record<string, string> {
   try {
@@ -92,9 +69,6 @@ export function useScheduleViewer(props: UseScheduleViewerProps) {
   const [taskDialogOpen, setTaskDialogOpen] = useState<boolean>(false);
   const [typeColorMap, setTypeColorMap] =
     useState<Record<string, string>>(loadTypeColorMap);
-  const [typeCustomColorMap, setTypeCustomColorMap] = useState<
-    Record<string, string>
-  >({});
   useEffect(() => {
     if (externalSchedule !== undefined) setSchedule(externalSchedule);
   }, [externalSchedule]);
@@ -179,8 +153,6 @@ export function useScheduleViewer(props: UseScheduleViewerProps) {
     setTaskDialogOpen,
     typeColorMap,
     setTypeColorMap,
-    typeCustomColorMap,
-    setTypeCustomColorMap,
     saveColors,
   };
 }
@@ -252,8 +224,6 @@ export function useScheduleViewerTaskDialog() {
     taskDialogOpen,
     setTaskDialogOpen,
     typeColorMap,
-    typeCustomColorMap,
-    setTypeCustomColorMap,
     saveColors,
     deleteTask,
     fetchSchedule,
@@ -263,8 +233,6 @@ export function useScheduleViewerTaskDialog() {
     open: taskDialogOpen,
     setOpen: setTaskDialogOpen,
     typeColorMap,
-    typeCustomColorMap,
-    setTypeCustomColorMap,
     saveColors,
     deleteTask,
     refetchSchedule: fetchSchedule,

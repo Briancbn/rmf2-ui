@@ -2,11 +2,8 @@ import { useMemo } from 'react';
 import type { BoxProps } from '@chakra-ui/react';
 import { Box } from '@chakra-ui/react';
 import { useScheduleViewerProcess } from './use-schedule-viewer';
+import { getPresetColor } from './preset-colors-helper';
 import { ProcessViewer } from '../process-viewer';
-
-function presetToCssVar(preset: string): string {
-  return `var(--chakra-colors-schedule-viewer\\.${preset.replace('_', '')}\\.bg)`;
-}
 
 export interface ScheduleViewerProcessProps extends BoxProps {}
 
@@ -26,7 +23,7 @@ export function ScheduleViewerProcess(props: ScheduleViewerProcessProps) {
   const getNodeColor = useMemo(
     () => (taskId: string) => {
       const preset = typeColorMap[taskTypeMap[taskId] ?? ''];
-      return preset !== undefined ? presetToCssVar(preset) : undefined;
+      return preset !== undefined ? getPresetColor(preset) : undefined;
     },
     [typeColorMap, taskTypeMap],
   );
