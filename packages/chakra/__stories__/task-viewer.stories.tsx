@@ -2,10 +2,7 @@ import React from 'react';
 import { Badge } from '@chakra-ui/react';
 import type { Meta, StoryObj } from '@storybook/react';
 import type { RTS } from '@rmf2-ui/data';
-import {
-  TaskViewerSummary,
-  TaskViewerDetails,
-} from '../src/components/task-viewer';
+import { TaskViewer } from '../src/components/task-viewer';
 
 const now = new Date();
 const offset = (minutes: number) =>
@@ -35,16 +32,16 @@ export default meta;
 type Story = StoryObj;
 
 export const Summary: Story = {
-  render: () => <TaskViewerSummary task={DUMMY_TASK} />,
+  render: () => <TaskViewer.Summary task={DUMMY_TASK} />,
 };
 
 export const Details: Story = {
-  render: () => <TaskViewerDetails task={DUMMY_TASK} />,
+  render: () => <TaskViewer.Details task={DUMMY_TASK} />,
 };
 
 export const SummaryWithFieldExtra: Story = {
   render: () => (
-    <TaskViewerSummary
+    <TaskViewer.Summary
       task={DUMMY_TASK}
       renderFieldExtra={(fieldLabel) => {
         if (fieldLabel === 'Type') {

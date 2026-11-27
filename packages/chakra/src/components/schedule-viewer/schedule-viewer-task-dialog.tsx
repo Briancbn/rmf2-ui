@@ -9,7 +9,7 @@ import {
   Portal,
   Tabs,
 } from '@chakra-ui/react';
-import { TaskViewerSummary, TaskViewerDetails } from '../task-viewer';
+import { TaskViewer } from '@/components/task-viewer';
 import { useScheduleViewerTaskDialog } from './use-schedule-viewer';
 
 export interface ScheduleViewerTaskDialogProps
@@ -49,10 +49,10 @@ export function ScheduleViewerTaskDialog(props: ScheduleViewerTaskDialogProps) {
                       <Tabs.Trigger value="details">Details</Tabs.Trigger>
                     </Tabs.List>
                     <Tabs.Content value="summary" ms="3">
-                      <TaskViewerSummary task={viewTask} />
+                      <TaskViewer.Summary task={viewTask} />
                     </Tabs.Content>
                     <Tabs.Content value="details" ms="3">
-                      <TaskViewerDetails task={viewTask} />
+                      <TaskViewer.Details task={viewTask} />
                     </Tabs.Content>
                   </Tabs.Root>
                 )}

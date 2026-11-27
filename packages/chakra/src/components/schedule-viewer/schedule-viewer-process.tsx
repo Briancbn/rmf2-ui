@@ -3,7 +3,7 @@ import type { BoxProps } from '@chakra-ui/react';
 import { Box } from '@chakra-ui/react';
 import { useScheduleViewerProcess } from './use-schedule-viewer';
 import { getPresetColor } from './preset-colors-helper';
-import { ProcessViewer } from '../process-viewer';
+import { ProcessViewer } from '@/components/process-viewer';
 
 export interface ScheduleViewerProcessProps extends BoxProps {}
 
