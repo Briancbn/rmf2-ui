@@ -9,7 +9,7 @@ import { useRTSQuery } from './hooks/use-rts-query';
 import { useMutation } from '@tanstack/react-query';
 
 export function SchedulePage() {
-  const currentDate = new Date();
+  // Hooks for API clients
   const rtsClient = useRTSClient();
   const {
     schedule,
@@ -25,6 +25,10 @@ export function SchedulePage() {
     invalidateSchedule,
   } = useRTSQuery({ client: rtsClient, toast: toaster });
 
+  // TODO(anyone): move this to DateTimeSelector instead?
+  const currentDate = new Date();
+
+  // Additional functions for sendPresetTask
   const SEND_PRESET_TOAST_ID = 'send-preset-task';
   const { mutateAsync: sendPresetTaskMutation } = useMutation({
     mutationFn: sendPresetTask,
@@ -57,6 +61,8 @@ export function SchedulePage() {
     },
   });
 
+  // Helper for the download button
+  // TODO(anyone): move these to the button component
   const convertToCSV = (tasks: RTS.Task[]) => {
     if (tasks.length === 0) return '';
     const header = Object.keys(tasks[0]);
@@ -93,13 +99,12 @@ export function SchedulePage() {
       >
         <Flex justifyContent="space-between" align="center">
           <Flex align="center" gap="20px">
-            <Text fontSize="22px" fontWeight="700" lineHeight="100%">
+            <Text fontSize="22px" fontWeight="700">
               Schedule Viewer
             </Text>
             <Button
               onClick={() => sendPresetTaskMutation()}
-              colorPalette="blue"
-              variant="solid"
+              variant="brand"
               disabled={isErrorGetSchedule}
             >
               Send Preset Task
@@ -161,19 +166,25 @@ export function SchedulePage() {
                 <Spacer />
                 <DateTimeSelector currentDate={currentDate} />
               </ScheduleViewer.ControlPanel>
+
+              {/* Gantt Display */}
               <ScheduleViewer.Gantt flex="1" minH="50vh" />
             </ScheduleViewer.TabsContentSchedule>
 
             {/* Schedule Tabs Process Display */}
             <ScheduleViewer.TabsContentProcess>
+              {/* Process Display */}
               <ScheduleViewer.Process />
             </ScheduleViewer.TabsContentProcess>
           </ScheduleViewer.TabsRoot>
 
+          {/* Task Detail Dialog Window*/}
           <ScheduleViewer.TaskDialog placement="center">
             <ScheduleViewer.TaskDialogControlPanel />
           </ScheduleViewer.TaskDialog>
         </ScheduleViewer.Root>
+
+        {/* Loading Sceen for schedule */}
         {isPendingGetSchedule && (
           <Pending.Root>
             <Pending.Overlay />

@@ -8,6 +8,7 @@ export const RTSClientOptions: RTSAPI.ClientOptions = {
 const now = new Date();
 const h = (offset: number) => new Date(now.getTime() + offset * 60 * 60 * 1000);
 
+// Dummy schedule for mock RTS client
 const DUMMY_SCHEDULE: RTS.Schedule = {
   tasks: [
     // proc-001: delivery chain
@@ -188,6 +189,13 @@ const DUMMY_SCHEDULE: RTS.Schedule = {
   ],
 };
 
+/**
+ * Hooks to retrieve RTS API Client
+ *
+ * Allow switching to mock rts client from environment variable.
+ * Returns a mock client when `VITE_RTS_MOCK=true`,
+ * otherwise the real RTS API client.
+ */
 export function useRTSClient(): RTS.IClient {
   if (import.meta.env.VITE_RTS_MOCK === 'true') {
     return new RTS.MockClient(DUMMY_SCHEDULE);

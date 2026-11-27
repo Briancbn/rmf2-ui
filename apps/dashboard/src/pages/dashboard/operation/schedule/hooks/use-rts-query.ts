@@ -3,14 +3,34 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { RTS } from '@rmf2-ui/data';
 import type { CreateToasterReturn } from '@chakra-ui/react';
 
+// Default key used by useQuery for caching
 const DEFAULT_QUERY_KEY = ['RTSSchedule'];
 
 export interface UseRTSQueryProps {
   client: RTS.IClient;
   toast: CreateToasterReturn;
+  /** Overwrite the default cache key `['RTSSchedule']` */
   queryKey?: unknown[];
 }
 
+/**
+ * Manages RTS schedule data fetching and mutations via React Query.
+ *
+ * These add caching and toast notification to the original RTSClient
+ *
+ * @returns
+ * - `schedule`: the latest fetched schedule, or `undefined` while loading
+ * - `isPendingGetSchedule`: true on the initial fetch before data arrives
+ * - `isErrorGetSchedule`: true if the last fetch failed
+ * - `setRefetchInterval`: set to a ms interval to enable polling, `false` to stop
+ * - `refresh`: manually trigger a refetch
+ * - `refreshPending`: true while a manual refresh is in flight
+ * - `editScheduleBatch`: apply a batch of schedule actions
+ * - `optimize`: trigger schedule optimization
+ * - `optimizePending`: true while optimization is in flight
+ * - `getSchedule`: the raw client `getSchedule` method bound to the client
+ * - `invalidateSchedule`: invalidate the query cache to force a refetch
+ */
 export function useRTSQuery({
   client,
   toast,
@@ -88,6 +108,8 @@ export function useRTSQuery({
       }),
   });
 
+  // TODO(anyone): investigate if this is any different from using
+  // `refetchGetSchedule`.
   const invalidateSchedule = () => queryClient.invalidateQueries({ queryKey });
 
   return {
