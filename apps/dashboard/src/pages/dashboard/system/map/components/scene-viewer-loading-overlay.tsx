@@ -1,6 +1,6 @@
 import type { HTMLChakraProps } from '@chakra-ui/react';
 import { Stack, Text } from '@chakra-ui/react';
-import { Pending } from '@/components/pending';
+import { Pending } from '@rmf2-ui/chakra';
 import { useSceneViewerLoadingOverlay } from './use-scene-viewer';
 
 export interface SceneViewerLoadingOverlayProps extends HTMLChakraProps<'div'> {

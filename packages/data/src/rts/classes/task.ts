@@ -7,8 +7,9 @@ export interface Task {
   seriesId?: string;
   processId?: string;
   resourceId?: string;
-  // deadline?: number
+  deadline?: Date;
   status: string;
+  progress?: number;
   plannedStartTime?: Date;
   plannedEndTime?: Date;
   // estimatedDuration?: number
