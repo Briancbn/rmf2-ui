@@ -508,9 +508,9 @@ describe('ScheduleViewerTaskDialogControlPanel', () => {
     await waitFor(() => expect(screen.getByText('Delete')).toBeInTheDocument());
     const deleteBtn = screen.getByText('Delete').closest('button')!;
     await user.click(deleteBtn);
-    expect(deleteSpy).toHaveBeenCalledWith([
-      { type: 'TASK_DELETE', id: PENDING_TASK.id },
-    ]);
+    expect(deleteSpy).toHaveBeenCalledWith({
+      actions: [{ type: 'TASK_DELETE', id: PENDING_TASK.id }],
+    });
   });
 
   it('does not show buttons when task has non-empty status', async () => {
