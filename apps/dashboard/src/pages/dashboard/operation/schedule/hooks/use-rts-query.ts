@@ -73,8 +73,8 @@ export function useRTSQuery({
   });
 
   const { mutateAsync: editScheduleBatch } = useMutation({
-    mutationFn: (actions: RTS.ScheduleAction[]) =>
-      client.editScheduleBatch(actions),
+    mutationFn: (params: { actions: RTS.ScheduleAction[]; dryRun?: boolean }) =>
+      client.editScheduleBatch(params),
     onSuccess: () => queryClient.invalidateQueries({ queryKey }),
     onError: (error) =>
       toast.create({

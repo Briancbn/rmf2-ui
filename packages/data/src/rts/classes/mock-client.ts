@@ -38,10 +38,11 @@ export class MockClient implements IClient {
     return { ...this.schedule, tasks };
   }
 
-  async editScheduleBatch(
-    actions: ScheduleAction[],
-    _dryRun?: boolean,
-  ): Promise<string> {
+  async editScheduleBatch(params: {
+    actions: ScheduleAction[];
+    dryRun?: boolean;
+  }): Promise<string> {
+    const { actions } = params;
     for (const action of actions) {
       if (action.type === 'TASK_DELETE' && action.id) {
         const task = this.schedule.tasks.find((t: Task) => t.id === action.id);

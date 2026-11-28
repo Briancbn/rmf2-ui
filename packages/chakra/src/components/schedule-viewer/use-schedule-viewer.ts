@@ -102,9 +102,9 @@ export function useScheduleViewer(props: UseScheduleViewerProps) {
 
   const deleteTask = useCallback(
     (taskId: string) =>
-      rtsClientRef.current.editScheduleBatch([
-        { type: 'TASK_DELETE', id: taskId },
-      ]),
+      rtsClientRef.current.editScheduleBatch({
+        actions: [{ type: 'TASK_DELETE', id: taskId }],
+      }),
     [],
   );
 

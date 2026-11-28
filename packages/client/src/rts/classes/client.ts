@@ -108,10 +108,11 @@ export class Client implements RTS.IClient {
     return data.message;
   }
 
-  async editScheduleBatch(
-    actions: RTS.ScheduleAction[],
-    dryRun?: boolean,
-  ): Promise<string> {
+  async editScheduleBatch(params: {
+    actions: RTS.ScheduleAction[];
+    dryRun?: boolean;
+  }): Promise<string> {
+    const { actions, dryRun } = params;
     const { data } = await batchEditScheduleScheduleEditBatchPost({
       client: this._client,
       body: actions as ScheduleActionGen[],
