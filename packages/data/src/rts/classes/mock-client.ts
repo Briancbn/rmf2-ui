@@ -8,6 +8,7 @@ export class MockClient implements IClient {
   private originalSchedule: Schedule;
 
   constructor(schedule: Schedule) {
+    // keep a backup for reset
     this.originalSchedule = structuredClone(schedule);
     this.schedule = structuredClone(schedule);
   }
@@ -23,6 +24,8 @@ export class MockClient implements IClient {
       if (!t.startTime || !t.endTime) return t;
       const start = t.startTime.getTime();
       const end = t.endTime.getTime();
+
+      // Update the task progress based on the current time
       if (now < start) {
         return { ...t, status: '', progress: 0 };
       } else if (now >= end) {
@@ -43,6 +46,7 @@ export class MockClient implements IClient {
     dryRun?: boolean;
   }): Promise<string> {
     const { actions } = params;
+    // TODO(anyone): add support for other action types (e.g. TASK_CREATE, TASK_UPDATE)
     for (const action of actions) {
       if (action.type === 'TASK_DELETE' && action.id) {
         const task = this.schedule.tasks.find((t: Task) => t.id === action.id);

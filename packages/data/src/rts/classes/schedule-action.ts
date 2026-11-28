@@ -1,3 +1,4 @@
+// TODO(anyone): add fields for other action types (e.g. task, process, edge payloads)
 export interface ScheduleAction {
   type: string;
   id?: string;
