@@ -63,7 +63,9 @@ export default defineConfig([
   {
     // Note: there should be no other properties in this object
     ignores: [
+      '**/node_modules',
       'coverage',
+      'storybook-static',
       '**/public',
       '**/dist',
       '**/generated',
