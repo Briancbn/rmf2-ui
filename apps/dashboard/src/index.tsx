@@ -5,6 +5,9 @@ import { Toaster } from '@/components/ui/toaster';
 import { Cypress, Horizon } from '@rmf2-ui/chakra';
 import App from './App.tsx';
 
+// Import component styles
+import '@rmf2-ui/chakra/dist/chakra.css';
+
 // Import fonts
 import '@fontsource/dm-sans/400.css';
 import '@fontsource/dm-sans/500.css';

@@ -1,6 +1,6 @@
 import { defineSlotRecipe } from '@chakra-ui/react';
 
-export const bannerRecipe = defineSlotRecipe({
+export const bannerSlotRecipe = defineSlotRecipe({
   slots: ['button'],
   base: {
     button: {

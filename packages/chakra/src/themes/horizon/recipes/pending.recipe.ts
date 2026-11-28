@@ -1,6 +1,6 @@
 import { defineSlotRecipe } from '@chakra-ui/react';
 
-export const pendingRecipe = defineSlotRecipe({
+export const pendingSlotRecipe = defineSlotRecipe({
   slots: ['spinner'],
   base: {
     spinner: {

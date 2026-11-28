@@ -1,6 +1,6 @@
 import { defineSlotRecipe } from '@chakra-ui/react';
 
-export const sidebarRecipe = defineSlotRecipe({
+export const sidebarSlotRecipe = defineSlotRecipe({
   slots: ['positioner', 'itemRoot', 'itemIcon', 'itemLabel', 'itemIndicator'],
   base: {
     positioner: {

@@ -17,12 +17,7 @@ export function DateTimeSelector(props: { currentDate: Date }) {
 
   return (
     <>
-      <Button
-        id="todayId"
-        m={1}
-        mb={3}
-        onClick={() => setSelectedDatetime(resetDatetime)}
-      >
+      <Button id="todayId" onClick={() => setSelectedDatetime(resetDatetime)}>
         Today
       </Button>
 
@@ -33,7 +28,7 @@ export function DateTimeSelector(props: { currentDate: Date }) {
         size="md"
         type="datetime-local"
         width={280}
-        m={1}
+        ms="8px"
         rounded="2xl"
         onChange={(event) => setSelectedDatetime(event.target.value)}
       />
