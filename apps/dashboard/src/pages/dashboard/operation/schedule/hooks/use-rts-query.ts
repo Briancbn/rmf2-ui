@@ -47,6 +47,7 @@ export function useRTSQuery({
     refetch: refetchGetSchedule,
   } = useQuery({
     queryKey,
+    // TODO(anyone): add pagination support (offset/limit) for large schedules
     queryFn: () => client.getSchedule({ offset: 0, limit: 100 }),
     staleTime: 5 * 1000,
     gcTime: 0,

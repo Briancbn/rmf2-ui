@@ -77,6 +77,7 @@ export function useScheduleViewer(props: UseScheduleViewerProps) {
     if (externalSchedule !== undefined) return;
     setLoading(true);
     try {
+      // TODO(anyone): add pagination support (offset/limit) for large schedules
       const result = await rtsClientRef.current.getSchedule({
         startTime: timeViewWindow?.start,
         endTime: timeViewWindow?.end,
