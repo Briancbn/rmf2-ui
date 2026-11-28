@@ -8,6 +8,9 @@ export interface IClient {
     offset?: number;
     limit?: number;
   }): Promise<Schedule>;
-  editScheduleBatch(actions: ScheduleAction[]): Promise<string>;
+  editScheduleBatch(
+    actions: ScheduleAction[],
+    dryRun?: boolean,
+  ): Promise<string>;
   optimize(params: { optimizationDuration: number }): Promise<string>;
 }

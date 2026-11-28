@@ -4,9 +4,9 @@ export type {
   GraphElement as RTSGraphElement,
   Dependency as RTSDependency,
   Schedule as RTSSchedule,
+  IClient as IRTSClient,
+  ScheduleAction as RTSScheduleAction,
 } from './classes';
-
-export type { IClient as IRTSClient, ScheduleAction } from './classes';
 export { MockClient as RTSMockClient } from './classes';
 
 export * as RTS from './namespace';

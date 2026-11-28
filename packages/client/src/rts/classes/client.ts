@@ -1,21 +1,23 @@
-import type { RTS, IRTSClient, ScheduleAction } from '@rmf2-ui/data';
+import type { RTS } from '@rmf2-ui/data';
 import type {
   Client as ClientGen,
   ClientOptions as ClientOptionsGen,
 } from '@/rts/generated/client';
-import type { Task as TaskPayload } from '@/rts/generated/types.gen';
+import type {
+  Task as TaskGen,
+  ScheduleAction as ScheduleActionGen,
+} from '@/rts/generated/types.gen';
 import {
   readScheduleScheduleGet,
   deleteTaskTasksUuidDelete,
   batchEditScheduleScheduleEditBatchPost,
   optimizeScheduleScheduleOptimizePost,
 } from '@/rts/generated/sdk.gen';
-import type { ScheduleAction as GeneratedScheduleAction } from '@/rts/generated/types.gen';
 import { createClient } from '@/rts/generated/client';
 
 export type ClientOptions = ClientOptionsGen;
 
-export class Client implements IRTSClient {
+export class Client implements RTS.IClient {
   private _client: ClientGen;
 
   constructor(options: ClientOptions) {
@@ -23,7 +25,7 @@ export class Client implements IRTSClient {
   }
 
   // TODO(anyone): define reusable casting
-  private fromTaskPayload(payload: TaskPayload): RTS.Task {
+  private fromTaskPayload(payload: TaskGen): RTS.Task {
     const task: RTS.Task = {
       id: payload.id,
       type: payload.type,
@@ -106,11 +108,14 @@ export class Client implements IRTSClient {
     return data.message;
   }
 
-  async editScheduleBatch(actions: ScheduleAction[]): Promise<string> {
+  async editScheduleBatch(
+    actions: RTS.ScheduleAction[],
+    dryRun?: boolean,
+  ): Promise<string> {
     const { data } = await batchEditScheduleScheduleEditBatchPost({
       client: this._client,
-      body: actions as GeneratedScheduleAction[],
-      query: { dry_run: false },
+      body: actions as ScheduleActionGen[],
+      query: { dry_run: dryRun ?? false },
     });
 
     if (data === undefined) {
